@@ -1,7 +1,6 @@
-package com.vipapp.obfuscated.server;
+package com.vipapp.appmark2.server;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.vipapp.appmark2.callbacks.PushCallback;
 import com.vipapp.appmark2.utils.Json;

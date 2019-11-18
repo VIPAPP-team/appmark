@@ -23,7 +23,7 @@ import com.vipapp.appmark2.utils.wrapper.mSharedPreferences;
 import com.vipapp.appmark2.utils.wrapper.Str;
 import com.vipapp.appmark2.widget.RecyclerView;
 import com.vipapp.appmark2.widget.TextView;
-import com.vipapp.obfuscated.server.Server;
+import com.vipapp.appmark2.server.Server;
 
 import java.io.File;
 import java.util.Objects;

@@ -9,7 +9,7 @@ import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.items.setting.type.loadable.SimpleNetLoadableSetting;
 import com.vipapp.appmark2.utils.wrapper.Str;
 import com.vipapp.appmark2.widget.TextView;
-import com.vipapp.obfuscated.server.Server;
+import com.vipapp.appmark2.server.Server;
 
 public class ServerStatus extends LoadableItem {
 

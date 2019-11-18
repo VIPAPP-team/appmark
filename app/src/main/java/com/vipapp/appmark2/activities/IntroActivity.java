@@ -1,17 +1,15 @@
 package com.vipapp.appmark2.activities;
 
 import android.os.Bundle;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.utils.Animation;
-import com.vipapp.appmark2.utils.Const;
 import com.vipapp.appmark2.utils.ContextUtils;
 import com.vipapp.appmark2.utils.Permissions;
 import com.vipapp.appmark2.utils.Thread;
 import com.vipapp.appmark2.utils.thread.IntroductionThread;
-import com.vipapp.obfuscated.compiler.Compiler;
+import com.vipapp.appmark2.compiler.Compiler;
 
 public class IntroActivity extends BaseActivity {
     ImageView rotatable;

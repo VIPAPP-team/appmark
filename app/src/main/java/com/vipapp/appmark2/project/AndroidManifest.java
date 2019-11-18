@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import com.vipapp.appmark2.utils.CallableThreadLoader;
 import com.vipapp.appmark2.utils.Const;
 import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.obfuscated.xml.XMLObject;
+import com.vipapp.appmark2.xml.XMLObject;
 
 import java.io.File;
 

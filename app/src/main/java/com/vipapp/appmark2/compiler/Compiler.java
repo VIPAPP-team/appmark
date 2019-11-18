@@ -1,4 +1,4 @@
-package com.vipapp.obfuscated.compiler;
+package com.vipapp.appmark2.compiler;
 
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.project.ProjectSettings;

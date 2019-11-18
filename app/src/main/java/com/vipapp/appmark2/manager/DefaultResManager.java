@@ -4,8 +4,8 @@ import com.vipapp.appmark2.items.FileLocale;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.utils.ArrayUtils;
 import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.obfuscated.xml.XMLArray;
-import com.vipapp.obfuscated.xml.XMLObject;
+import com.vipapp.appmark2.xml.XMLArray;
+import com.vipapp.appmark2.xml.XMLObject;
 
 import java.io.File;
 import java.util.ArrayList;

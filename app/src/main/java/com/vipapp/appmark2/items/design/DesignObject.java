@@ -1,30 +1,21 @@
 package com.vipapp.appmark2.items.design;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.vipapp.appmark2.items.Method;
-import com.vipapp.appmark2.items.design.attribute.BackgroundAttribute;
 import com.vipapp.appmark2.items.design.attribute.HeightAttribute;
 import com.vipapp.appmark2.items.design.attribute.WidthAttribute;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.project.Res;
-import com.vipapp.appmark2.utils.ArrayUtils;
 import com.vipapp.appmark2.utils.AttributesUtils;
 import com.vipapp.appmark2.utils.ClassUtils;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.Toast;
 import com.vipapp.appmark2.utils.wrapper.mContext;
-import com.vipapp.obfuscated.xml.XMLAttribute;
-import com.vipapp.obfuscated.xml.XMLObject;
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.vipapp.appmark2.xml.XMLAttribute;
+import com.vipapp.appmark2.xml.XMLObject;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import static com.vipapp.appmark2.utils.Const.ATTRIBUTES;
 

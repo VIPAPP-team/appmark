@@ -1,7 +1,6 @@
 package com.vipapp.appmark2.root;
 
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Process;
@@ -12,15 +11,9 @@ import com.vipapp.appmark2.utils.Const;
 import com.vipapp.appmark2.utils.ContextUtils;
 import com.vipapp.appmark2.utils.ExceptionUtils;
 import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.obfuscated.compiler.Compiler;
-import com.vipapp.obfuscated.server.Server;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import com.vipapp.appmark2.server.Server;
 
 import androidx.multidex.MultiDexApplication;
-
-import static com.vipapp.appmark2.utils.Const.COMPILER_STORAGE;
 
 public class App extends MultiDexApplication {
 

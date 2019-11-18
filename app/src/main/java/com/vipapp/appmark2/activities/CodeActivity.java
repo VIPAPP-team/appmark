@@ -41,7 +41,7 @@ import com.vipapp.appmark2.widget.FileActionButton;
 import com.vipapp.appmark2.widget.RecyclerView;
 import com.vipapp.appmark2.widget.TextView;
 import com.vipapp.fjc.ApkBuilderCallBack;
-import com.vipapp.obfuscated.compiler.Compiler;
+import com.vipapp.appmark2.compiler.Compiler;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,8 +1,6 @@
 package com.vipapp.appmark2.manager.res;
 
 import com.vipapp.appmark2.manager.DefaultResManager;
-import com.vipapp.obfuscated.xml.XMLArray;
-import com.vipapp.obfuscated.xml.XMLObject;
 
 import java.io.File;
 

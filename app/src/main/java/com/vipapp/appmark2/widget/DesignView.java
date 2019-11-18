@@ -9,7 +9,7 @@ import com.vipapp.appmark2.items.design.DesignObject;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.utils.ExceptionUtils;
 import com.vipapp.appmark2.utils.Toast;
-import com.vipapp.obfuscated.xml.XMLObject;
+import com.vipapp.appmark2.xml.XMLObject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

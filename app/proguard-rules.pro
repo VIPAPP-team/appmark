@@ -22,5 +22,3 @@
 
 
 -ignorewarnings
-
--keep class !com.vipapp.obfuscated.**, ** { *; }

@@ -2,7 +2,6 @@ package com.vipapp.appmark2.activities;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.vipapp.appmark2.R;
@@ -10,7 +9,7 @@ import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.utils.FileUtils;
 import com.vipapp.appmark2.widget.DesignView;
 import com.vipapp.appmark2.widget.TextView;
-import com.vipapp.obfuscated.xml.XMLObject;
+import com.vipapp.appmark2.xml.XMLObject;
 
 import java.io.File;
 

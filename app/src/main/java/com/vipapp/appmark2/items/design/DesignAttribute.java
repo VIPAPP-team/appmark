@@ -3,7 +3,7 @@ package com.vipapp.appmark2.items.design;
 import android.view.View;
 
 import com.vipapp.appmark2.project.Res;
-import com.vipapp.obfuscated.xml.XMLObject;
+import com.vipapp.appmark2.xml.XMLObject;
 
 @SuppressWarnings("WeakerAccess")
 public abstract class DesignAttribute {

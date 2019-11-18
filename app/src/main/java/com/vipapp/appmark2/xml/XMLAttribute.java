@@ -1,4 +1,4 @@
-package com.vipapp.obfuscated.xml;
+package com.vipapp.appmark2.xml;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
