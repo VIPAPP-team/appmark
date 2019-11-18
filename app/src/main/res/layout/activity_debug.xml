@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:padding="30.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<com.vipapp.appmark2.widget.TextView
+		android:textAppearance="?android:textAppearanceLarge"
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/debug_activity_title" />
+
+	<com.vipapp.appmark2.widget.TextView
+		android:id="@+id/subtitle"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10.0dip"
+		android:text="@string/tap_to_copy"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginTop="10.0dip">
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			<com.vipapp.appmark2.widget.TextView
+				android:id="@id/error"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:textIsSelectable="true" />
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

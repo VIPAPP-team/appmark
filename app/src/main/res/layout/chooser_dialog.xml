@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
+
+    <com.vipapp.appmark2.widget.TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Title"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <com.vipapp.appmark2.widget.RecyclerView
+        android:id="@+id/chooser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:default_view="@layout/chooser_default"
+        app:holder="ChooserHolder"
+        app:menuClass="ChooserMenu"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="@style/CommonTheme" />
+
+    <style name="CommonTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+</resources>

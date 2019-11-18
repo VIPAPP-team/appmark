@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50.0dip"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/add"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackground"
+        android:padding="5.0dip"
+        android:src="@drawable/create"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/main_linear"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <com.vipapp.appmark2.widget.EditText
+            android:id="@+id/name"
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="#ffffffff"
+            android:cursorVisible="true"
+            android:hint="@string/string_name"
+            android:padding="10.0dip"
+            android:singleLine="true" />
+
+        <View
+            android:layout_width="1.0dip"
+            android:layout_height="match_parent"
+            android:background="#ffcecece" />
+
+        <com.vipapp.appmark2.widget.EditText
+            android:id="@+id/value"
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="#ffffffff"
+            android:hint="@string/string_value"
+            android:padding="10.0dip"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.0dip"
+        android:background="#ffcecece" />
+</LinearLayout>

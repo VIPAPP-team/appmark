@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="35.0dip"
+    android:background="#ffefefef"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.vipapp.appmark2.widget.TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/undo_on_back_title"
+        android:textColor="#ff666666" />
+</LinearLayout>
