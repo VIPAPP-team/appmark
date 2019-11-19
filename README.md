@@ -9,7 +9,16 @@ support: https://unikalni4elovek.000webhostapp.com/donate
 SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
 
     -activities  # activity storage 
-
+      
+      /**
+      *    ACTIVITY ARCHITECTURE:
+      *  onCreate(...) - setContentView(...) call
+      *  findViews() - findViewById(...) calls
+      *  setCallnacks() - set all callbacks
+      *  setupVars() - set default values for variables
+      *  setupViews() - set default state for views
+      **/
+      
       BaseActivity:  # main activity class 
 
         > callbacks: ArrayList<PushCallback<ActivityResult>>  # list with all onActivityResult callbacks
@@ -22,11 +31,21 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *addOnLoadCallback(callback: ...) -> add callback to 'onLoadCallback'
         
         - Overridable -
-        *onLoadCallback(item: OnLoadItem): onLoad(...)
+        *onLoadCallback(item: OnLoadItem) in onLoad(...)
+        *findViews() in onCreate(...)
+        *setCallbacks() in onCreate(...)
+        *setupVars() in onCreate(...)
+        *setupViews() in onCreate(...)
         
         - Overriden -
-        *onCreate(...) -> set default orientation
+        *onCreate(...) -> set default orientation and call architecture methods
         *onRequestPermissionResult(...) -> exit from app if any permission rejected or recreate activity
         *onActivityResult(...) -> call all 'callbacks'
         
-    
+      IntroActivity(BaseActivity) -> activity with introduce animation and permission requiesting
+        ...
+        *initCompilier(...) -> init compilier if need
+        ...
+        
+      DebugActivity(BaseActivity) -> activity with error view
+        
