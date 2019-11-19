@@ -50,7 +50,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         
       IntroActivity(BaseActivity) -> activity with introduce animation and permission requiesting
         ...
-        *initCompilier(...) -> init compilier if need
+        *initCompiler(...) -> init compiler if need
         ...
         
       DebugActivity(BaseActivity) -> activity with error view
