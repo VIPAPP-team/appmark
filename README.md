@@ -15,7 +15,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       *  onCreateView() -> int - return argument that will be passed in setContentView()
       *  createView() - additional method to set view
       *  findViews() - findViewById(...) calls
-      *  setCallnacks() - set all callbacks
+      *  setCallbacks() - set all callbacks
       *  init() - set default values for variables
       *  setup() - set default state for views
       **/
@@ -47,11 +47,41 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *onRequestPermissionResult(...) -> exit from app if any permission rejected or recreate activity
         *onActivityResult(...) -> call all 'callbacks'
         *findViewById(...) -> marked as deprecated to do not forgot use f()
-        
-      IntroActivity(BaseActivity) -> activity with introduce animation and permission requiesting
-        ...
-        *initCompiler(...) -> init compiler if need
-        ...
-        
+
+      IntroActivity(BaseActivity) -> activity with introduce animation and permission requesting
+      CodeActivity(BaseActivity) -> activity with code editor and file manager
+      MainActivity(BaseActivity) -> activity with project manager
       DebugActivity(BaseActivity) -> activity with error view
-        
+
+      StringEditorActivity(BaseActivity)
+      SettingsActivity(BaseActivity)
+      ViewDesignActivity(BaseActivity)
+
+    -adapter  # adapters storage;
+
+      # it's recommended to use DefaultMenu class to work with recycler
+      DefaultAdapter:  # main adapter class that uses DefaultMenu class as support for build
+
+        > menu: DefaultMenu  # support class
+        > viewHolderName: String  # view holder class name
+        > list: ArrayList  # list with elements
+        > xml_source: int  # layout resource
+        > recyclerView: RecyclerView  # parent recycler
+        > callbacks: ArrayList<PushCallback<Item>>  # item push callbacks
+
+        *pushArray(...) -> support methods to push array from menu to recycler
+        *transferObjectToMenu(item: Item) -> support method to push item from recycler to menu
+        *onPush(item: Item) -> support method to push item from recycler to menu (execs all 'callbacks')
+
+        *addOnPushCallback(callback: PushCallback<Item>) -> add 'callback' to 'callbacks'
+
+        *onRecyclerPushed(recycler: RecyclerView) -> connect recycler with adapter
+
+        *update() -> update recycler view list by getting new one from menu
+
+        - Overriden -
+        *onCreateViewHolder(...) -> set view holder from 'viewHolderName'
+        *onBindViewHolder(...) -> call menu.bind(...)
+        *getItemViewType(...) -> call menu.getItemViewType(...)
+        *getItemCount(...) -> call list.size()
+
