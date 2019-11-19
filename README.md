@@ -12,11 +12,12 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       
       /**
       *    ACTIVITY ARCHITECTURE:
-      *  onCreate(...) - setContentView(...) call
+      *  onCreateView() -> int - return argument that will be passed in setContentView()
+      *  createView() - additional method to set view
       *  findViews() - findViewById(...) calls
       *  setCallnacks() - set all callbacks
-      *  setupVars() - set default values for variables
-      *  setupViews() - set default state for views
+      *  init() - set default values for variables
+      *  setup() - set default state for views
       **/
       
       BaseActivity:  # main activity class 
@@ -30,17 +31,22 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *addOnActivityResultCallback(callback: ...) -> add callback to 'callbacks'
         *addOnLoadCallback(callback: ...) -> add callback to 'onLoadCallback'
         
+        *f(id: int) -> findViewById(id)
+        
         - Overridable -
         *onLoadCallback(item: OnLoadItem) in onLoad(...)
+        *onCreateView() in onCreate(...)
+        *createView() in onCreate(...)
         *findViews() in onCreate(...)
         *setCallbacks() in onCreate(...)
-        *setupVars() in onCreate(...)
-        *setupViews() in onCreate(...)
+        *init() in onCreate(...)
+        *setup() in onCreate(...)
         
         - Overriden -
         *onCreate(...) -> set default orientation and call architecture methods
         *onRequestPermissionResult(...) -> exit from app if any permission rejected or recreate activity
         *onActivityResult(...) -> call all 'callbacks'
+        *findViewById(...) -> marked as deprecated to do not forgot use f()
         
       IntroActivity(BaseActivity) -> activity with introduce animation and permission requiesting
         ...
