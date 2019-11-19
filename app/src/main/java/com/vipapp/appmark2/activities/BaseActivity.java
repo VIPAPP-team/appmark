@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +17,7 @@ import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callbacks.PushCallback;
 import com.vipapp.appmark2.items.ActivityResult;
 import com.vipapp.appmark2.items.OnLoadItem;
+import com.vipapp.appmark2.utils.ContextUtils;
 import com.vipapp.appmark2.utils.DisplayUtils;
 import com.vipapp.appmark2.utils.Permissions;
 import com.vipapp.appmark2.utils.Thread;
@@ -26,11 +31,30 @@ public class BaseActivity extends AppCompatActivity {
     ArrayList<PushCallback<OnLoadItem>> onLoadCallbacks = new ArrayList<>();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public final void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContextUtils.updateActivity(this);
         setRequestedOrientation(DisplayUtils.isTablet(this)?
                         ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Integer resId = onCreateView();
+        if(resId != null)
+            setContentView(resId);
+
+        createView();
+        findViews();
+        init();
+        setCallbacks();
+        setup();
+
+    }
+
+    // Marked as deprecated to do not forgot use f()
+    @Override
+    @Deprecated
+    public <T extends View> T findViewById(int id) {
+        return super.findViewById(id);
     }
 
     @Override
@@ -77,11 +101,24 @@ public class BaseActivity extends AppCompatActivity {
     // Method to override
     public void onLoadCallback(OnLoadItem item){}
 
+    // Architecture methods
+    @LayoutRes
+    public Integer onCreateView(){ return null; }
+    public void createView(){}
+    public void findViews(){}
+    public void setCallbacks(){}
+    public void init(){}
+    public void setup(){}
+
     public void addOnActivityResultCallback(PushCallback<ActivityResult> callback){
         callbacks.add(callback);
     }
     public void addOnLoadCallback(PushCallback<OnLoadItem> callback){
         onLoadCallbacks.add(callback);
+    }
+
+    public <T extends View> T f(@IdRes int resId){
+        return super.findViewById(resId);
     }
 
 }

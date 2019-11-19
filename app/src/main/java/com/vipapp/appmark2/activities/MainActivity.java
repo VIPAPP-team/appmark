@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity {
     };
 
     PushCallback[] loadCallbacks = new PushCallback[]{
-            // ??? (on projects loaded)
+            // on projects loaded
             none -> setState(STATE_RUNNING),
             // when projects not found
             none -> setState(STATE_NO_PROJECTS),
@@ -80,15 +80,14 @@ public class MainActivity extends BaseActivity {
             },
             // changelog button clicked
             none -> {
-                NetInfoDialog dialog = new NetInfoDialog(R.string.changelog, callback -> {
-                    Server.getChangelog(string -> {
-                        if(string != null){
-                            callback.onComplete(string);
-                        } else {
-                            callback.onComplete(Str.get(R.string.offline));
-                        }
-                    });
-                });
+                NetInfoDialog dialog = new NetInfoDialog(R.string.changelog, callback ->
+                        Server.getChangelog(string -> {
+                    if(string != null){
+                        callback.onComplete(string);
+                    } else {
+                        callback.onComplete(Str.get(R.string.offline));
+                    }
+                }));
                 dialog.show();
                 closeMenu();
             },
@@ -97,20 +96,57 @@ public class MainActivity extends BaseActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        findViews();
-        setCallbacks();
-        checkNewVersion();
+    public Integer onCreateView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void findViews(){
+        projectRecycler = f(R.id.project_recycler);
+        create_new = f(R.id.create_new);
+        no_projects = f(R.id.no_projects);
+        menu_container = f(R.id.menu_container);
+        title_container = f(R.id.title_container);
+    }
+
+    @Override
+    public void setCallbacks(){
+        create_new.setOnClickListener(view -> {
+            if(state != STATE_LOADING) CreateProjectFirstDialog.show(this::insertFirstProject,
+                    name -> !manager.existsWithName(name));
+        });
+        title_container.setOnClickListener(view -> openMenu());
+        menu_container.setOnClickListener(view -> closeMenu());
+    }
+
+    @Override
+    public void setup() {
         setupProjectManager();
         openLastProject();
+        checkNewVersion();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setupProjectManager();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        projectRecycler.update();
+    }
+
+    @Override
+    public void onLoadCallback(OnLoadItem item) {
+        int what = item.getId();
+        loadCallbacks[what].onComplete(item.getObject());
+    }
+
+    public void setupProjectManager(){
+        manager = new ProjectManager(Const.PROJECT_STORAGE);
+        projectRecycler.pushValue(PROJECT_MANAGER, manager);
     }
 
     public void checkNewVersion(){
@@ -130,28 +166,6 @@ public class MainActivity extends BaseActivity {
             i.putExtra("opened_last", true);
             startActivity(i);
         }
-    }
-
-    public void findViews(){
-        projectRecycler = findViewById(R.id.project_recycler);
-        create_new = findViewById(R.id.create_new);
-        no_projects = findViewById(R.id.no_projects);
-        menu_container = findViewById(R.id.menu_container);
-        title_container = findViewById(R.id.title_container);
-    }
-
-    public void setupProjectManager(){
-        manager = new ProjectManager(Const.PROJECT_STORAGE);
-        projectRecycler.pushValue(PROJECT_MANAGER, manager);
-    }
-
-    public void setCallbacks(){
-        create_new.setOnClickListener(view -> {
-            if(state != STATE_LOADING) CreateProjectFirstDialog.show(this::insertFirstProject,
-                    name -> !manager.existsWithName(name));
-        });
-        title_container.setOnClickListener(view -> openMenu());
-        menu_container.setOnClickListener(view -> closeMenu());
     }
 
     public void insertFirstProject(Project project){
@@ -186,17 +200,6 @@ public class MainActivity extends BaseActivity {
         stateCallbacks[state].onComplete(null);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        projectRecycler.update();
-    }
-
-    @Override
-    public void onLoadCallback(OnLoadItem item) {
-        int what = item.getId();
-        loadCallbacks[what].onComplete(item.getObject());
-    }
     public void hideAll(){
         projectRecycler.setVisibility(View.GONE);
         no_projects.setVisibility(View.GONE);

@@ -15,23 +15,28 @@ public class IntroActivity extends BaseActivity {
     ImageView rotatable;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ContextUtils.updateActivity(this);
-        setContentView(R.layout.activity_intro);
+    public Integer onCreateView() {
+        return R.layout.activity_intro;
+    }
 
-        if(Permissions.check(this))
-            Thread.startThread(IntroductionThread.class);
+    @Override
+    public void findViews(){
+        rotatable = f(R.id.rotatable);
+    }
 
-        findViews();
-        animateIcon();
-
+    @Override
+    public void init() {
         initCompiler();
     }
 
-    public void findViews(){
-        rotatable = findViewById(R.id.rotatable);
+    @Override
+    public void setup() {
+        if(Permissions.check(this))
+            Thread.startThread(IntroductionThread.class);
+
+        animateIcon();
     }
+
     public void animateIcon(){
         Animation.rotate(rotatable, 600, 0f, 180f);
     }

@@ -36,39 +36,21 @@ public class StringEditorActivity extends BaseActivity {
     RecyclerView strings_recycler;
     TextView title;
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_string_editor);
-        findViews();
-        initVars();
-        setCallbacks();
-        setupViews();
-        setupAnimation();
+    @Override
+    public Integer onCreateView() {
+        return R.layout.activity_string_editor;
     }
 
-    protected void onPause() {
-        super.onPause();
-        this.strings.save();
-    }
-
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
+    @Override
     public void findViews() {
-        this.error = findViewById(R.id.error);
-        this.loading = findViewById(R.id.loading);
-        this.title = findViewById(R.id.title);
-        this.change_locale = findViewById(R.id.change_locale);
-        this.strings_recycler = findViewById(R.id.strings_recycler);
+        this.error = f(R.id.error);
+        this.loading = f(R.id.loading);
+        this.title = f(R.id.title);
+        this.change_locale = f(R.id.change_locale);
+        this.strings_recycler = f(R.id.strings_recycler);
     }
 
-    public void initVars() {
-        this.file = (File) getIntent().getSerializableExtra("file");
-        this.project = (Project) getIntent().getSerializableExtra("project");
-        this.strings = new StringsManager(this.file);
-    }
-
+    @Override
     public void setCallbacks() {
         this.strings.exec(strings_list -> {
             this.strings_list = strings_list;
@@ -78,6 +60,30 @@ public class StringEditorActivity extends BaseActivity {
             this.locales = strings.getLocales(project);
             this.change_locale.setOnClickListener(view -> showLocaleChooser());
         });
+    }
+
+    @Override
+    public void init() {
+        this.file = (File) getIntent().getSerializableExtra("file");
+        this.project = (Project) getIntent().getSerializableExtra("project");
+        this.strings = new StringsManager(this.file);
+    }
+
+    @Override
+    public void setup() {
+        setupViews();
+        setupAnimation();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.strings.save();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void showLocaleChooser() {

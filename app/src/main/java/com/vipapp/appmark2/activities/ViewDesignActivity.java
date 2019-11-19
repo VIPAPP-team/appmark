@@ -30,25 +30,28 @@ public class ViewDesignActivity extends BaseActivity {
     TextView title;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_design);
-        findViews();
-        setupVars();
-        load();
-        setupViews();
+    public Integer onCreateView() {
+        return R.layout.activity_view_design;
     }
 
-    private void setupVars(){
+    @Override
+    public void findViews(){
+        view = f(R.id.design);
+        progress = f(R.id.progress);
+        error = f(R.id.error);
+        title = f(R.id.title);
+    }
+
+    @Override
+    public void init(){
         project = (Project) getIntent().getSerializableExtra("project");
         file = (File) getIntent().getSerializableExtra("file");
     }
 
-    private void findViews(){
-        view = findViewById(R.id.design);
-        progress = findViewById(R.id.progress);
-        error = findViewById(R.id.error);
-        title = findViewById(R.id.title);
+    @Override
+    public void setup() {
+        load();
+        setupViews();
     }
 
     private void load(){

@@ -14,26 +14,27 @@ public class DebugActivity extends BaseActivity {
     TextView error;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_debug);
-        error_text = getIntent().getStringExtra("error");
-        findViews();
-        setupViews();
-        setCallbacks();
+    public Integer onCreateView() {
+        return R.layout.activity_debug;
     }
-
+    @Override
     public void findViews(){
-        error = findViewById(R.id.error);
+        error = f(R.id.error);
     }
-    public void setupViews(){
-        error.setText(error_text);
-    }
+    @Override
     public void setCallbacks(){
         error.setOnClickListener(view -> {
             TextUtils.copyToClipboard(error_text);
             Toast.show(R.string.successfully_copied);
         });
+    }
+    @Override
+    public void init() {
+        error_text = getIntent().getStringExtra("error");
+    }
+    @Override
+    public void setup(){
+        error.setText(error_text);
     }
 
 }

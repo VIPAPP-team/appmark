@@ -107,19 +107,77 @@ public class CodeActivity extends BaseActivity {
             }
     };
 
+    @Override
+    public Integer onCreateView() {
+        return R.layout.activity_code;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void findViews(){
+        title = f(R.id.title);
+        files = f(R.id.files);
+        menu = f(R.id.menu);
+        drawerLayout = f(R.id.drawer_layout);
+        file_recycler = f(R.id.file_recycler);
+        insert_symbol = f(R.id.insert_symbol);
+        path = f(R.id.path);
+        content = f(R.id.content);
+        main = f(R.id.main);
+        actionButton = f(R.id.actionButton);
+    }
+
+    @Override
+    public void setCallbacks(){
+        files.setOnClickListener(view -> {
+            if(drawerLayout.isDrawerOpen(GravityCompat.START))
+                drawerLayout.closeDrawer(GravityCompat.START);
+            else
+                drawerLayout.openDrawer(GravityCompat.START);
+        });
+        file_recycler.addOnPushCallback(item -> {
+            switch(item.getType()){
+                case Const.PATH:
+                    path.setText((String)item.getInstance());
+                    break;
+                case Const.FILE_SELECTED:
+                    openFile((File)item.getInstance());
+                    break;
+            }
+        });
+        insert_symbol.addOnPushCallback(item -> {
+            if(item.getType() == SYMBOL_INSERTED){
+                Objects.requireNonNull(content.getText())
+                        .insert(content.getSelectionStart(), (CharSequence) item.getInstance());
+            }
+        });
+        path.setOnClickListener(view -> {
+            StringChooser chooser = new StringChooser(item -> {
+                File to_open = history.get(item.getType());
+                history.remove(item.getType());
+                openFile(to_open);
+            });
+            chooser.setTitle(getString(R.string.recent_files));
+            chooser.setArray(convertToItemArray(history));
+            chooser.show();
+        });
+        menu.setOnClickListener(view -> {
+            //noinspection unchecked
+            StringChooser chooser = new StringChooser(item -> callbacks[item.getType()].onComplete(null));
+            chooser.setTitle(R.string.select_action);
+            chooser.setArray(Const.code_menu_chooser);
+            chooser.show();
+        });
+        setCodeWatcher();
+    }
+
+    @Override
+    public void setup() {
         overrideTransition();
-        setContentView(R.layout.activity_code);
-        ContextUtils.updateActivity(this);
         lock_screen();
-        findViews();
-        setCallbacks();
         setupDrawer();
         setupProject();
     }
+
     @Override
     public void onBackPressed() {
         // Check settings
@@ -198,61 +256,6 @@ public class CodeActivity extends BaseActivity {
                 isOpened.onComplete(false);
             }
         });
-    }
-
-    public void findViews(){
-        title = findViewById(R.id.title);
-        files = findViewById(R.id.files);
-        menu = findViewById(R.id.menu);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        file_recycler = findViewById(R.id.file_recycler);
-        insert_symbol = findViewById(R.id.insert_symbol);
-        path = findViewById(R.id.path);
-        content = findViewById(R.id.content);
-        main = findViewById(R.id.main);
-        actionButton = findViewById(R.id.actionButton);
-    }
-    public void setCallbacks(){
-        files.setOnClickListener(view -> {
-            if(drawerLayout.isDrawerOpen(GravityCompat.START))
-                drawerLayout.closeDrawer(GravityCompat.START);
-            else
-                drawerLayout.openDrawer(GravityCompat.START);
-        });
-        file_recycler.addOnPushCallback(item -> {
-            switch(item.getType()){
-                case Const.PATH:
-                    path.setText((String)item.getInstance());
-                    break;
-                case Const.FILE_SELECTED:
-                    openFile((File)item.getInstance());
-                    break;
-            }
-        });
-        insert_symbol.addOnPushCallback(item -> {
-            if(item.getType() == SYMBOL_INSERTED){
-                Objects.requireNonNull(content.getText())
-                        .insert(content.getSelectionStart(), (CharSequence) item.getInstance());
-            }
-        });
-        path.setOnClickListener(view -> {
-            StringChooser chooser = new StringChooser(item -> {
-                File to_open = history.get(item.getType());
-                history.remove(item.getType());
-                openFile(to_open);
-            });
-            chooser.setTitle(getString(R.string.recent_files));
-            chooser.setArray(convertToItemArray(history));
-            chooser.show();
-        });
-        menu.setOnClickListener(view -> {
-            //noinspection unchecked
-            StringChooser chooser = new StringChooser(item -> callbacks[item.getType()].onComplete(null));
-            chooser.setTitle(R.string.select_action);
-            chooser.setArray(Const.code_menu_chooser);
-            chooser.show();
-        });
-        setCodeWatcher();
     }
 
     public void overrideTransition(){

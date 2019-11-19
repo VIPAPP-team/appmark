@@ -5,11 +5,13 @@ import com.vipapp.appmark2.utils.Const;
 import com.vipapp.appmark2.R;
 
 public class SettingsActivity extends BaseActivity {
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.activity_settings);
+
+    @Override
+    public Integer onCreateView() {
+        return R.layout.activity_settings;
     }
 
+    @Override
     protected void onPause() {
         super.onPause();
         Const.initSettingsConst();
