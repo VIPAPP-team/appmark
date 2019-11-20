@@ -1,13 +1,12 @@
 package com.vipapp.appmark2.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.alert.CreateProjectFirstDialog;
-import com.vipapp.appmark2.alert.NetInfoDialog;
+import com.vipapp.appmark2.alert.CreateProjectDialog;
+import com.vipapp.appmark2.alert.LoadableInfoDialog;
 import com.vipapp.appmark2.callbacks.PushCallback;
 import com.vipapp.appmark2.items.OnLoadItem;
 import com.vipapp.appmark2.items.OnProjectEdited;
@@ -80,7 +79,7 @@ public class MainActivity extends BaseActivity {
             },
             // changelog button clicked
             none -> {
-                NetInfoDialog dialog = new NetInfoDialog(R.string.changelog, callback ->
+                LoadableInfoDialog dialog = new LoadableInfoDialog(R.string.changelog, callback ->
                         Server.getChangelog(string -> {
                     if(string != null){
                         callback.onComplete(string);
@@ -112,7 +111,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void setCallbacks(){
         create_new.setOnClickListener(view -> {
-            if(state != STATE_LOADING) CreateProjectFirstDialog.show(this::insertFirstProject,
+            if(state != STATE_LOADING) CreateProjectDialog.show(this::insertFirstProject,
                     name -> !manager.existsWithName(name));
         });
         title_container.setOnClickListener(view -> openMenu());

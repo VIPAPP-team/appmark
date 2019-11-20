@@ -12,7 +12,7 @@ import com.vipapp.appmark2.utils.wrapper.Str;
 import com.vipapp.appmark2.widget.AlertDialog;
 import com.vipapp.appmark2.widget.TextView;
 
-public class NetInfoDialog extends AlertDialog {
+public class LoadableInfoDialog extends AlertDialog {
 
     private TextView title;
     private TextView content;
@@ -20,14 +20,15 @@ public class NetInfoDialog extends AlertDialog {
     private ProgressBar progressBar;
 
     // callback with callback to push String
-    public NetInfoDialog(String title, PushCallback<PushCallback<String>> callback){
+    @SuppressWarnings("WeakerAccess")
+    public LoadableInfoDialog(String title, PushCallback<PushCallback<String>> callback){
         setView(R.layout.net_info_dialog);
         findViews(getView());
         setCallbacks(callback);
         this.title.setText(title);
     }
 
-    public NetInfoDialog(@StringRes int title_res, PushCallback<PushCallback<String>> callback){
+    public LoadableInfoDialog(@StringRes int title_res, PushCallback<PushCallback<String>> callback){
         this(Str.get(title_res), callback);
     }
 

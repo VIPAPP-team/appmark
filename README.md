@@ -5,10 +5,10 @@ This is android app where you can build your own apps using Java
 
 support: https://unikalni4elovek.000webhostapp.com/donate
 
-# struct:
+# struct (IN DEVELOPING):
 SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
 
-    -activities  # activity storage 
+    -activities  # activities storage 
       
       /**
       *    ACTIVITY ARCHITECTURE:
@@ -57,7 +57,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       SettingsActivity(BaseActivity)
       ViewDesignActivity(BaseActivity)
 
-    -adapter  # adapters storage;
+    -adapter  # adapters storage
 
       # it's recommended to use DefaultMenu class to work with recycler
       DefaultAdapter:  # main adapter class that uses DefaultMenu class as support for build
@@ -84,4 +84,38 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *onBindViewHolder(...) -> call menu.bind(...)
         *getItemViewType(...) -> call menu.getItemViewType(...)
         *getItemCount(...) -> call list.size()
+        
+    -alert  # alert dialogs storage
+      
+      -confirm  # confirm alerts dialog storage
+      
+        DeleteFileDialog(ConfirmDialog) -> dialog with file delete confirmation
+        DeleteProject(ConfirmDialog) -> dialog with project delete confirmation
+      
+      -strings_list_editor  # strings list editor dialogs storage
+      
+        ProjectSettingsDialog -> dialog with project settings editor
+        
+      ConfirmDialog:  # dialog with agree and decline button
+      
+        # show dialog with title 'title_text', button-agree with text 'text_confirm',
+        # button-decline with text 'text_cancel' that pushes result into 'result'.onComplete()
+        *show(title_text: String, text_confirm: String, text_cancel: String, result: PushCallback<Boolean>) 
+        
+      LoadableInfoDialog(AlertDialog):  # dialog with loadable information 
+        # create dialog with title as 'title' that loading until callback that is pushing in
+        # 'callback' do not receive loaded string
+        *LoadableInfoDialog(title: String or string-res, callback: PushCallback<PushCallback<String>>)
+        
+      InfoDialog(LoadableInfoDialog):  # dialog that shows information
+        *InfoDialog(title: String, message: String) -> immidiately push 'message' in LoadableInfoDialog
+        
+      LoadingDialog:  # loading dialog
+        *show(...) -> hide previous dialog and show new one on current activity with '...' args
+        *hide() -> hide previous dialog
+        *setTitle(title: String or string-res) -> set dialog title as 'title'
+        
+      CreateProjectDialog -> dialog with project creation
+      EditProject -> dialog with project edition
 
+ 

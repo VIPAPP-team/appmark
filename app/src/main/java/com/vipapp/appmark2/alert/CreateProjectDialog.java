@@ -25,7 +25,7 @@ import java.io.File;
 import java.net.URLEncoder;
 import java.util.Objects;
 
-public class CreateProjectFirstDialog {
+public class CreateProjectDialog {
     public static void show(PushCallback<Project> onCreateProject, Predicate<String> checkName){
         ProjectPicker picker = new ProjectPicker(project ->
                 startProjectCreating(project.getName(), project.getPackage(), project.getVersionName(),

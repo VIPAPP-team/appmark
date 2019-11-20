@@ -1,16 +1,13 @@
 package com.vipapp.appmark2.alert;
 
 import androidx.annotation.StringRes;
-import android.view.View;
+
 import android.widget.ProgressBar;
 
-import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
 import com.vipapp.appmark2.utils.wrapper.Str;
-import com.vipapp.appmark2.widget.AlertDialog;
 import com.vipapp.appmark2.widget.TextView;
 
-public class InfoDialog extends NetInfoDialog {
+public class InfoDialog extends LoadableInfoDialog {
 
     private TextView title;
     private TextView content;
@@ -18,6 +15,7 @@ public class InfoDialog extends NetInfoDialog {
     private ProgressBar progressBar;
 
     // callback with callback to push String
+    @SuppressWarnings("WeakerAccess")
     public InfoDialog(String title, String message){
         super(title, callback -> callback.onComplete(message));
     }
