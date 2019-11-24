@@ -117,5 +117,18 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         
       CreateProjectDialog -> dialog with project creation
       EditProject -> dialog with project edition
+      
+    -callbacks  # callbacks storage
+    
+      ActivityLifecycleCallback(ActivityLifecycleCallbacks) -> actiity lifecycle callback with updating context in ContextUtils
+      
+      Mapper<FirstType, SecondType>:  # SecondType from FirstType converter
+        *abstract map(item: FirstType) -> SecondType
+        
+      Predicate<Type>:  # check object of type Type
+        *abstract test(object: Type) -> boolean
+      
+      PushCallback<Type>:  # callback to push object of type Type
+        *onComplete(object: Type)
 
  

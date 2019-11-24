@@ -1,5 +1,5 @@
 package com.vipapp.appmark2.callbacks;
 
-public interface PushCallback<T> {
-    void onComplete(T result);
+public interface PushCallback<Type> {
+    void onComplete(Type object);
 }
