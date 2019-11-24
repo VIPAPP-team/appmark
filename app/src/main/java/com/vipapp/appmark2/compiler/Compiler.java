@@ -11,6 +11,7 @@ import java.io.File;
 import static com.vipapp.appmark2.utils.Const.AAPT_STORAGE;
 import static com.vipapp.appmark2.utils.Const.ANDROID_JAR_STORAGE;
 
+@SuppressWarnings("WeakerAccess")
 public class Compiler {
 
     public static ApkBuilderInit get(){
@@ -25,15 +26,16 @@ public class Compiler {
         return !new File(ANDROID_JAR_STORAGE).exists();
     }
 
-    public static void compileDebug(Project project, ApkBuilderCallBack callBack){
-        compileRelease(project, null, callBack);
-    }
-    public static void compileRelease(Project project, ApkBuilderCert cert, ApkBuilderCallBack callBack){
+    public static void compileRelease(Project project, ApkBuilderCert cert, ApkBuilderCallBack callback){
         ProjectSettings settings = project.getSettings();
         ApkBuilderConfig config = new ApkBuilderConfig(AAPT_STORAGE, ANDROID_JAR_STORAGE,
                 settings.get("src"), settings.get("res"), settings.get("assets"),
                 settings.get("manifest"), null, null, settings.get("build"), cert);
-        new ApkBuilder(config, callBack).build();
+        new ApkBuilder(config, callback).build();
+    }
+
+    public static void compileDebug(Project project, ApkBuilderCallBack callback){
+        compileRelease(project, null, callback);
     }
 
 }

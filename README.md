@@ -115,6 +115,11 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *hide() -> hide previous dialog
         *setTitle(title: String or string-res) -> set dialog title as 'title'
         
+      (1): ArrayList<TransformedItem<String, String>>>
+      StringsListEditor:  # dialog with strings list editor
+        # show list editor with default values
+        *show(title: String, strings: (1), callback: PushCallback<(1)>)
+        
       CreateProjectDialog -> dialog with project creation
       EditProject -> dialog with project edition
       
@@ -131,4 +136,32 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       PushCallback<Type>:  # callback to push object of type Type
         *onComplete(object: Type)
 
- 
+    -compiler  # package with compiler wrapper
+    
+      Compiler:  # com.vipapp.fjc.ApkBuilder wrapper
+        *init() -> initialize Aapt and androidJar with ApkBuilder
+        *needInit() -> boolean; check if androidJar already exists
+        
+        # call compileRelease('project', 'null', 'callback') and
+        # compile without certificate (now AppMark uses only it)
+        *compileDebug(project: Project, callback: ApkBuilderCallBack)
+        
+        # compile apk with ApkBuilder
+        *compileRelease(project: Project, certificate: ApkBuilderCert, callback: ApkBuilderCallBack)
+        
+    -exception  # package with AppMark exceptions
+    
+      IncorrectAIFName(Exception):  # throws when .aif file name is incorrect
+        IncorrectAIFName(name: String) -> name setup]
+        
+    -holder  # directory with view holders
+    
+      ChooserHolder(ViewHolder) -> view holder in dialog chooser
+      EmptyHolder(ViewHolder) -> empty view holder (using for create holders in runtime)
+      FileHolder(ViewHolder) -> view holder in file manager
+      ImageHolder(ViewHolder) -> view holder in gallery
+      InsertSymbolHolder(ViewHolder) -> view holder in "fast symbols" in CodeActivity
+      MainMenuHolder(ViewHolder) -> view holder in menu in MainActivity
+      ProjectHolder(ViewHolder) -> view holder in projects list in MainActivity
+      StringsHolder(ViewHolder) -> view holder in strings list in StringEditorActivity
+      StringListEditorHolder(ViewHolder) -> view holder in StringsListEditorDialog
