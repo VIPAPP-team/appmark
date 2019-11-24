@@ -1,5 +1,6 @@
 ---
 name: Bug report
+about: Add bug to fix
 ---
 
 **Describe the bug**
