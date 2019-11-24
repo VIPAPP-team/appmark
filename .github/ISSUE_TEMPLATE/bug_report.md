@@ -20,7 +20,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Smartphone**
-- Android OS versio
+- Android OS version
 - Shell and it's version (e.g. MiUi 11, TouchWiz 6.0, ...)
 - Phone model (e.g. Samsung, Xiaomi, Huawei, ...)
 
