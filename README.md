@@ -3,6 +3,8 @@ Mobile Android IDE
 
 This is android app where you can build your own apps using Java
 
+project: https://github.com/orgs/VIPAPP-team/projects/1
+
 support: https://unikalni4elovek.000webhostapp.com/donate
 
 # struct (IN DEVELOPING):
