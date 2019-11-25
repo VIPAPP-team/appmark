@@ -4,11 +4,11 @@ import android.content.SharedPreferences;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.items.SettingType;
+import com.vipapp.appmark2.items.SettingsType;
 import com.vipapp.appmark2.items.SettingsItem;
 import com.vipapp.appmark2.widget.TextView;
 
-public class LabelSetting extends SettingType<SettingsItem<String>> {
+public class LabelSetting extends SettingsType<SettingsItem<String>> {
     public LabelSetting() {
         super(R.layout.setting_label);
     }

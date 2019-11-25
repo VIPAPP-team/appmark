@@ -2,15 +2,14 @@ package com.vipapp.appmark2.items.setting.type;
 
 import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.items.SettingType;
+import com.vipapp.appmark2.items.SettingsType;
 import com.vipapp.appmark2.items.SettingsItem;
 import com.vipapp.appmark2.widget.TextView;
 
-public class BooleanSetting extends SettingType<SettingsItem<Boolean>> {
+public class BooleanSetting extends SettingsType<SettingsItem<Boolean>> {
     public BooleanSetting() {
         super(R.layout.setting_boolean_default);
     }

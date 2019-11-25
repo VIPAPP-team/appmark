@@ -1,7 +1,6 @@
 package com.vipapp.appmark2.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,7 +23,7 @@ import java.util.Collections;
 
 import static com.vipapp.appmark2.utils.Const.ADD_LOCALE;
 
-public class StringEditorActivity extends BaseActivity {
+public class StringsEditorActivity extends BaseActivity {
     ImageView change_locale;
     TextView error;
     File file;
@@ -106,7 +105,7 @@ public class StringEditorActivity extends BaseActivity {
         picker.show();
     }
     private void gotoLocaledFile(String locale){
-        Intent i = new Intent(this, StringEditorActivity.class);
+        Intent i = new Intent(this, StringsEditorActivity.class);
         i.putExtra("file", strings.getLocaled(project, locale).getFile());
         i.putExtra("project", this.project);
         i.putExtra("recreate", true);

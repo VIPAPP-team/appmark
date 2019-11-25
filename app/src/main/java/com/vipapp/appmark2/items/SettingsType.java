@@ -4,12 +4,12 @@ import android.content.SharedPreferences;
 import androidx.annotation.LayoutRes;
 import android.view.View;
 
-public abstract class SettingType<SettingsItemType extends SettingsItem> {
+public abstract class SettingsType<SettingsItemType extends SettingsItem> {
 
     @LayoutRes
     private int xml_resource;
 
-    public SettingType(@LayoutRes int xml_resource){
+    public SettingsType(@LayoutRes int xml_resource){
         this.xml_resource = xml_resource;
     }
 

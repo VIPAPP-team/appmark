@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.activities.StringEditorActivity;
+import com.vipapp.appmark2.activities.StringsEditorActivity;
 import com.vipapp.appmark2.activities.ViewDesignActivity;
 import com.vipapp.appmark2.items.FileActionItem;
 import com.vipapp.appmark2.project.Project;
@@ -40,7 +40,7 @@ public class FileActionButton extends TextView implements View.OnClickListener {
     },
             new FileActionItem() {
         public void action(File file) {
-            Intent i = new Intent(getContext(), StringEditorActivity.class);
+            Intent i = new Intent(getContext(), StringsEditorActivity.class);
             i.putExtra("file", file);
             i.putExtra("project", project);
             mActivity.get().startActivity(i);

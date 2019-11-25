@@ -3,8 +3,6 @@ package com.vipapp.appmark2.items.setting.item;
 import android.content.Context;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.activities.BaseActivity;
-import com.vipapp.appmark2.items.SettingType;
 import com.vipapp.appmark2.items.SettingsItem;
 import com.vipapp.appmark2.items.setting.type.BooleanSetting;
 

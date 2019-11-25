@@ -4,12 +4,13 @@ import android.content.SharedPreferences;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.items.SettingType;
+import com.vipapp.appmark2.items.SettingsType;
 import com.vipapp.appmark2.items.SettingsItem;
 import com.vipapp.appmark2.picker.Picker;
 import com.vipapp.appmark2.widget.TextView;
 
-public abstract class PickableSetting<T> extends SettingType<SettingsItem<T>> {
+@SuppressWarnings("WeakerAccess")
+public abstract class PickableSetting<T> extends SettingsType<SettingsItem<T>> {
 
     public SettingsItem<T> item;
 

@@ -2,6 +2,7 @@ package com.vipapp.appmark2.items;
 
 import com.vipapp.appmark2.utils.ClassUtils;
 
+@SuppressWarnings("UnusedReturnValue")
 public class Method {
 
     private Object parent;

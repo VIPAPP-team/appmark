@@ -55,7 +55,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       MainActivity(BaseActivity) -> activity with project manager
       DebugActivity(BaseActivity) -> activity with error view
 
-      StringEditorActivity(BaseActivity)
+      StringsEditorActivity(BaseActivity)
       SettingsActivity(BaseActivity)
       ViewDesignActivity(BaseActivity)
 
@@ -154,7 +154,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
     -exception  # package with AppMark exceptions
     
       IncorrectAIFName(Exception):  # throws when .aif file name is incorrect
-        IncorrectAIFName(name: String) -> name setup]
+        IncorrectAIFName(name: String) -> name setup
         
     -holder  # directory with view holders
     
@@ -167,3 +167,58 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       ProjectHolder(ViewHolder) -> view holder in projects list in MainActivity
       StringsHolder(ViewHolder) -> view holder in strings list in StringEditorActivity
       StringListEditorHolder(ViewHolder) -> view holder in StringsListEditorDialog
+      
+    -items
+    
+      -design
+      
+        -attribute -> directory with all xml attributes for design viewer
+        
+        DesignAttribute:  # support class to build attribute for view
+          *DesignAttribute(name: String) -> setup name
+          *apply(view: View, object: XMLObject, resources: Res) -> uses in DesignObject to apply attribute
+          *abstract applyAction(view: View, resources: Res) -> uses in (? extends DesignAttribute) to apply attribute
+            
+        DesignObject:  # support class to build design
+          
+          > object: XMLObject  # source widget to build
+          > availablePackages: String[]  # packages to inflate android view
+          > availableArgs: Class[]  # args to apply attribute
+          
+          *getName() -> String  # get class name without package
+          *getFullName() -> String  # get full class name
+          
+          *getView() -> View  # create instance of view
+          
+          *setupChildren() -> get children of XMLObject and add it to main view
+          
+          *applyInvokableAttributes(...) -> try to invoke set[attribute name] with 'availableArgs' args
+          *applyAttributes(...) -> apply all attributes from Const.ATTRIBUTES and call applyInvokableAttributes(...)
+          
+          # get view with getView() and setup with applyAttributes() and if View is instance of ViewGroup
+          # call setupChildren()
+          *setupView(object: XMLObject, project: Project) -> View
+      
+      -setting  # directory with setting types and items (used in SettingMenu to build settings)
+      
+      Item<Type> -> simple item of class type Type and type 'type'
+        *Item([type: int,] instance: Type) -> setup 'type' and 'instance'
+      
+      ActivityResult -> used in BaseActivity.addOnActivityResultCallback to push activity result
+      OnLoadItem -> used in BaseActivity.addOnActivityResultCallback to push
+      CallbackObject -> used in DefaultMenu to push items
+      FileActionItem -> used in FileActionButton as onClick
+      FileItem -> used in FileMenu to create top buttons ('goto...', 'create...', ...)
+      FileLocale -> used in StringsEditorActivity to change locale
+      OnProjectEdited -> used in EditProject to notify about project editing
+      ProjectItem -> used in CreateProjectDialog to notify about project creating
+      SettingsItem + SettingsType -> used to build settings
+      SpanItem -> used to store spans
+      StringDara -> used in CodeActivity to save text state
+      TransformedItem<T1, T2> -> used to store 2 objects with types T1 and T2
+      
+      ClassItem -> Class wrapper
+      Image -> Bitmap wrapper  
+      Method -> method wrapper
+      
+    

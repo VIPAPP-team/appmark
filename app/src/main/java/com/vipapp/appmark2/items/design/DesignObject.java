@@ -19,9 +19,22 @@ import androidx.annotation.NonNull;
 
 import static com.vipapp.appmark2.utils.Const.ATTRIBUTES;
 
+@SuppressWarnings("WeakerAccess")
 public class DesignObject {
 
     private XMLObject object;
+
+    private static String[] availablePackages = new String[]{
+            "android.widget",
+            "android.view"
+    };
+
+    private Class[] availableArgs = new Class[]{
+            float.class,
+            int.class,
+            String.class,
+            CharSequence.class
+    };
 
     public String getName(){
         return getFullName().replaceAll(".+\\.", "");
@@ -37,48 +50,6 @@ public class DesignObject {
         } catch (Exception e){
             throw new RuntimeException(e);
         }
-    }
-
-    public View setupView(XMLObject object, Project project){
-        View view = getView();
-        applyAttributes(view, object, project);
-        return view;
-    }
-
-    private void applyAttributes(View v, XMLObject object, Project project){
-        for(DesignAttribute attribute: ATTRIBUTES){
-            attribute.apply(v, object, project.getResources());
-            object.removeAttribute(attribute.getName());
-        }
-        applyInvokableAttributes(v, object, project.getResources());
-        if(v instanceof ViewGroup)
-            setupChildren((ViewGroup)v, object, project);
-    }
-
-    private Class[] availableArgs = new Class[]{ float.class, int.class, String.class, CharSequence.class };
-
-    private void applyInvokableAttributes(View v, XMLObject object, Res res){
-        for(XMLAttribute attribute: object.getAttributes()){
-            String methodName = reformatToMethodName(attribute.getName());
-            for(Class<?> arg: availableArgs){
-                Method method = new Method(v, methodName, arg);
-                if(method.exists()) {
-                    try {
-                        method.call(AttributesUtils.convert(attribute.getValue(), arg, res));
-                        break;
-                    } catch (Exception ignored){}
-                }
-            }
-        }
-    }
-
-    private String reformatToMethodName(String attrName){
-        attrName = attrName.replaceAll(".*:", "");
-        StringBuilder method_name = new StringBuilder("set");
-        for(String str: attrName.split("_")){
-            method_name.append(str.substring(0, 1).toUpperCase()).append(str.substring(1));
-        }
-        return method_name.toString();
     }
 
     private static void setupLayoutParams(View view, XMLObject object, Res res){
@@ -97,16 +68,51 @@ public class DesignObject {
         }
     }
 
+    private String reformatToMethodName(String attrName){
+        attrName = attrName.replaceAll(".*:", "");
+        StringBuilder method_name = new StringBuilder("set");
+        for(String str: attrName.split("_")){
+            method_name.append(str.substring(0, 1).toUpperCase()).append(str.substring(1));
+        }
+        return method_name.toString();
+    }
+
+    private void applyInvokableAttributes(View v, XMLObject object, Res res){
+        for(XMLAttribute attribute: object.getAttributes()){
+            String methodName = reformatToMethodName(attribute.getName());
+            for(Class<?> arg: availableArgs){
+                Method method = new Method(v, methodName, arg);
+                if(method.exists()) {
+                    try {
+                        method.call(AttributesUtils.convert(attribute.getValue(), arg, res));
+                        break;
+                    } catch (Exception ignored){}
+                }
+            }
+        }
+    }
+
+    private void applyAttributes(View v, XMLObject object, Project project){
+        for(DesignAttribute attribute: ATTRIBUTES){
+            attribute.apply(v, object, project.getResources());
+            object.removeAttribute(attribute.getName());
+        }
+        applyInvokableAttributes(v, object, project.getResources());
+        if(v instanceof ViewGroup)
+            setupChildren((ViewGroup)v, object, project);
+    }
+
+    public View setupView(XMLObject object, Project project) {
+        View view = getView();
+        applyAttributes(view, object, project);
+        return view;
+    }
+
     public static DesignObject createNew(XMLObject object){
         DesignObject designObject = new DesignObject();
         designObject.object = object;
         return designObject;
     }
-
-    private static String[] availablePackages = new String[]{
-            "android.widget",
-            "android.view"
-    };
 
     @NonNull
     private Class<? extends View> getViewClass(){

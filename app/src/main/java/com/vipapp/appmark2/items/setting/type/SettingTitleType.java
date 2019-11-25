@@ -4,11 +4,11 @@ import android.content.SharedPreferences;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.items.SettingType;
+import com.vipapp.appmark2.items.SettingsType;
 import com.vipapp.appmark2.items.SettingsItem;
 import com.vipapp.appmark2.widget.TextView;
 
-public class SettingTitleType extends SettingType {
+public class SettingTitleType extends SettingsType {
     public SettingTitleType() {
         super(R.layout.setting_title);
     }
