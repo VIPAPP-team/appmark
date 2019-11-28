@@ -221,4 +221,53 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       Image -> Bitmap wrapper  
       Method -> method wrapper
       
+    - manager  # directory with managers 
     
+      -res  # DefaultResManagers 
+      
+      DefaultManager<Type>  # default manager (object that loads list of smth in thread)
+        # array list with push callbacks to invoke when items loaded
+        > callbacks: ArrayList<PushCallback<ArrayList<Type>>>
+        # array list with items
+        > objects: ArrayList<Type>
+        # true while 'reload' method is executing
+        > running: boolean
+        
+        # push 'objects' if not running or add 'callback' into 'callbacks'
+        *exec(callback: PushCallback<ArrayList<Type>>)
+        
+        *execCallbacks() -> exec all callbacks from 'callbacks'
+        
+        # reload items, push them into 'callback' if it is and invoke execCallbacks()
+        *reload([callback: PushCallback<ArrayList<Type>>,] args: Object...)
+        
+      DefaultResManager<T>(DefaultManager<XMLObject>)  # manager to load resource values for project
+        > tagName: String  # name of tag to parse (e.g. "string", "color", ...)
+        > xml_root_object: XMLObject  # root object for convertation to string
+        > xml_objects_array: XMLArray  # array with parsed tags
+        > file: File  # file to be parsed
+        
+        # setup values and call super(source) if source exists
+        *DefaultResManager(source: File, tagName: tagName)
+        # return new manager with locale 'locale'
+        *getLocaled(project: Project, locale: String) -> DefaultResManager<T>
+        # return all available locales
+        *getLocales(project: Project) -> ArrayLisrt<FileLocale)
+        # return xml object of resource value
+        *getObject(name: String) -> XMLObject
+        # return object of resource value by converting with toValue()
+        *get(name: String) -> T
+        
+        # overations with resource values
+        *add(...)
+        *rename(...)
+        *changeValue(...)
+        *save(...)
+        
+        
+        - Overridable -
+        *abstract toValue(stringValue: String) -> T
+        *abstract fromValue(value: T) -> String
+        
+      GalleryManager -> manager to load images (have a bug)
+      ProjectManager -> manager to load projects

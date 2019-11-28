@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.AnyThread;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class DefaultManager<Type> {
     private ArrayList<PushCallback<ArrayList<Type>>> callbacks = new ArrayList<>();
     private ArrayList<Type> objects = new ArrayList<>();
@@ -18,9 +19,19 @@ public abstract class DefaultManager<Type> {
         reload(args);
     }
 
-    public final void reload(PushCallback<ArrayList<Type>> onReload, Object... args) {
-        reload(args);
-        exec(onReload);
+    public final void exec(PushCallback<ArrayList<Type>> callback) {
+        if (this.running) {
+            this.callbacks.add(callback);
+        } else {
+            callback.onComplete(this.objects);
+        }
+    }
+
+    private void execCallbacks() {
+        for(PushCallback<ArrayList<Type>> callback: callbacks){
+            exec(callback);
+        }
+        this.callbacks.clear();
     }
 
     public final void reload(Object... args) {
@@ -32,11 +43,9 @@ public abstract class DefaultManager<Type> {
         });
     }
 
-    private void execCallbacks() {
-        for(PushCallback<ArrayList<Type>> callback: callbacks){
-            exec(callback);
-        }
-        this.callbacks.clear();
+    public final void reload(PushCallback<ArrayList<Type>> onReload, Object... args) {
+        reload(args);
+        exec(onReload);
     }
 
     public final ArrayList<Type> getObjects() {
@@ -45,13 +54,5 @@ public abstract class DefaultManager<Type> {
 
     public void setObjects(ArrayList<Type> objects) {
         this.objects = objects;
-    }
-
-    public final void exec(PushCallback<ArrayList<Type>> callback) {
-        if (this.running) {
-            this.callbacks.add(callback);
-        } else {
-            callback.onComplete(this.objects);
-        }
     }
 }

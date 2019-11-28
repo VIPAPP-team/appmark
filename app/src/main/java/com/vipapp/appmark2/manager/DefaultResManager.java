@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import static com.vipapp.appmark2.utils.Const.RES_XML_OBJ_DEFAULT;
 
+@SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
 public abstract class DefaultResManager<T> extends DefaultManager<XMLObject> {
 
     private String tagName;
@@ -79,7 +80,7 @@ public abstract class DefaultResManager<T> extends DefaultManager<XMLObject> {
     }
 
     @NonNull
-    protected abstract T toValue(@NonNull String stringVal);
+    protected abstract T toValue(@NonNull String stringValue);
     @NonNull
     protected abstract String fromValue(@NonNull T value);
 
