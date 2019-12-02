@@ -4,6 +4,7 @@
       <w>appmark</w>
       <w>fullname</w>
       <w>gson</w>
+      <w>huawei</w>
       <w>kokol</w>
       <w>mikhno</w>
       <w>neonhost</w>
@@ -11,11 +12,14 @@
       <w>packag</w>
       <w>paddings</w>
       <w>pickable</w>
+      <w>samsung</w>
+      <w>smartphone</w>
       <w>sokol</w>
       <w>threadable</w>
       <w>throwed</w>
       <w>webhost</w>
       <w>wneonhost</w>
+      <w>xiaomi</w>
     </words>
   </dictionary>
 </component>

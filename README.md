@@ -162,7 +162,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       EmptyHolder(ViewHolder) -> empty view holder (using for create holders in runtime)
       FileHolder(ViewHolder) -> view holder in file manager
       ImageHolder(ViewHolder) -> view holder in gallery
-      InsertSymbolHolder(ViewHolder) -> view holder in "fast symbols" in CodeActivity
+      InsertSymbolHolder(ViewHolder) -> view holder in fast symbols in CodeActivity
       MainMenuHolder(ViewHolder) -> view holder in menu in MainActivity
       ProjectHolder(ViewHolder) -> view holder in projects list in MainActivity
       StringsHolder(ViewHolder) -> view holder in strings list in StringEditorActivity
@@ -271,3 +271,42 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         
       GalleryManager -> manager to load images (have a bug)
       ProjectManager -> manager to load projects
+      
+    -menu  # menus storage
+    
+      DefaultMenu<ListItemType, ViewHolderType(ViewHolder)>:  # support class to build lists
+        > array: ArrayList<ListItemType>  # list to build
+        > adapter: DefaultAdapter  # parent adapter
+        
+        *onAdapterReceived(adapter: DefaultAdapter) -> method to transfer parent adapter
+        
+        # push array to adapter and notify it if 'need_to_notify'
+        *pushArray(arrayList: ArrayList<ListItemType>, need_to_notify = true)
+        # push item to adapter
+        *pushItem(item: Item)
+        
+        *notifyRemoved(...)  |
+        *notifyChanged(...)  | -> notify adapter about changes
+        *notifyInserted(...) |
+        
+        *getRecyclerView() -> return parent recycler if it has been pushed
+        
+        - Overridable -
+        *abstract list(context: Context) -> ArrayList<ListItemType>  # return list with items to build
+        *abstract bind(vh: ViewHolderType, item: ListItemType, i: int)  # setup view from item
+        
+        *onValueReceived(item: Item)  # method to transfer data between recycler and menu
+        *getItemViewType(position: int) -> int; method to get item view type in DefaultAdapter
+        # calls in case when attribute "app:holder" in RecyclerView is empty or getItemViewType
+        *getViewHolder(parent: ViewGroup, itemType: int) -> ViewHolderType
+        *size() -> int; return size of 'array' by default
+        
+      EmptyMenu(DefaultMenu) -> used in RecyclerView when "app:menu" is empty
+      FileMenu(DefaultMenu) -> used in file manager in CodeActivity
+      ImageMenu(DefaultMenu) -> used in gallery menu
+      InsertSymbolMenu(DefaultMenu) -> used in fast symbol in CodeActivity
+      MainScreenMenu(DefaultMenu) -> used in MainActivity in main menu
+      ProjectMenu(DefaultMenu) -> used in project list in main activity
+      SettingsMenu(DefaultMenu) -> used in SettingsActivity to build settings
+      StringsListEditorMenu(DefaultMenu) -> used in StringsListEditorDialog
+      StringsMenu(DefaultMenu) -> used in strings list in StringsEditorActivity 
