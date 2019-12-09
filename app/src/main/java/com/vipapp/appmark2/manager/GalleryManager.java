@@ -3,8 +3,8 @@ package com.vipapp.appmark2.manager;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.vipapp.appmark2.items.Image;
-import com.vipapp.appmark2.utils.wrapper.mContext;
+import com.vipapp.appmark2.item.Image;
+import com.vipapp.appmark2.util.wrapper.mContext;
 
 import java.io.File;
 import java.util.ArrayList;

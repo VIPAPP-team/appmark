@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.AlertDialog;
 import com.vipapp.appmark2.widget.TextView;
 

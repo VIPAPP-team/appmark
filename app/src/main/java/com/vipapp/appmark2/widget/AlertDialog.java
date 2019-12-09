@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.Window;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.utils.ContextUtils;
-import com.vipapp.appmark2.utils.wrapper.mContext;
+import com.vipapp.appmark2.util.ContextUtils;
+import com.vipapp.appmark2.util.wrapper.mContext;
 
 import java.util.Objects;
 

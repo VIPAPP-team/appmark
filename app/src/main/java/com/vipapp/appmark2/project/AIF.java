@@ -2,15 +2,14 @@ package com.vipapp.appmark2.project;
 
 import androidx.annotation.NonNull;
 
-import com.vipapp.appmark2.callbacks.PushCallback;
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.exception.IncorrectAIFName;
 import com.vipapp.appmark2.project.settings.DefaultProjectSettings;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.Json;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.ThreadLoader;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.Json;
+import com.vipapp.appmark2.util.Thread;
+import com.vipapp.appmark2.util.ThreadLoader;
 
 import java.io.File;
 import java.util.ArrayList;

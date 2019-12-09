@@ -2,15 +2,15 @@ package com.vipapp.appmark2.server;
 
 import androidx.annotation.NonNull;
 
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.utils.Json;
-import com.vipapp.appmark2.utils.OkHttp;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.util.Json;
+import com.vipapp.appmark2.util.OkHttp;
 
 import java.util.HashMap;
 
-import static com.vipapp.appmark2.utils.Const.SERVER_CHANGELOG;
-import static com.vipapp.appmark2.utils.Const.SERVER_INFO;
-import static com.vipapp.appmark2.utils.Const.SERVER_STATUS;
+import static com.vipapp.appmark2.util.Const.SERVER_CHANGELOG;
+import static com.vipapp.appmark2.util.Const.SERVER_INFO;
+import static com.vipapp.appmark2.util.Const.SERVER_STATUS;
 
 public class Server {
 

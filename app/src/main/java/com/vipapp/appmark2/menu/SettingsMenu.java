@@ -5,10 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vipapp.appmark2.holder.EmptyHolder;
-import com.vipapp.appmark2.items.SettingsItem;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.wrapper.mLayoutInflater;
-import com.vipapp.appmark2.utils.wrapper.mSharedPreferences;
+import com.vipapp.appmark2.item.SettingsItem;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.wrapper.mLayoutInflater;
+import com.vipapp.appmark2.util.wrapper.mSharedPreferences;
 
 import java.util.ArrayList;
 

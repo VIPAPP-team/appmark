@@ -1,9 +1,9 @@
 package com.vipapp.appmark2.manager;
 
-import com.vipapp.appmark2.items.FileLocale;
+import com.vipapp.appmark2.item.FileLocale;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.utils.ArrayUtils;
-import com.vipapp.appmark2.utils.FileUtils;
+import com.vipapp.appmark2.util.ArrayUtils;
+import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.xml.XMLArray;
 import com.vipapp.appmark2.xml.XMLObject;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static com.vipapp.appmark2.utils.Const.RES_XML_OBJ_DEFAULT;
+import static com.vipapp.appmark2.util.Const.RES_XML_OBJ_DEFAULT;
 
 @SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
 public abstract class DefaultResManager<T> extends DefaultManager<XMLObject> {

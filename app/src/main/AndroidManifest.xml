@@ -15,10 +15,10 @@
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ViewDesignActivity"/>
+        <activity android:name=".activity.ViewDesignActivity"/>
 
         <activity
-            android:name=".activities.IntroActivity"
+            android:name=".activity.IntroActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activity.MainActivity" />
         <activity
-            android:name=".activities.CodeActivity"
+            android:name=".activity.CodeActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activities.StringsEditorActivity" />
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.DebugActivity" />
+        <activity android:name=".activity.StringsEditorActivity" />
+        <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.DebugActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.vipapp.appmark2.provider"

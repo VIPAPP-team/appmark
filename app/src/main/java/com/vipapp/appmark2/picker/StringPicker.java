@@ -4,14 +4,14 @@ import androidx.annotation.StringRes;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.utils.ContextUtils;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.util.ContextUtils;
 import com.vipapp.appmark2.widget.EditText;
 import com.vipapp.appmark2.widget.TextView;
 
 import java.util.Objects;
 
-public class StringPicker extends Picker<String> {
+public class StringPicker extends DefaultPicker<String> {
 
     private TextView title;
     private TextView ok;

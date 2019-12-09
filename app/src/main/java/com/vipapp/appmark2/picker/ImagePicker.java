@@ -5,14 +5,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.Image;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.ContextUtils;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.ImageUtils;
-import com.vipapp.appmark2.utils.wrapper.mActivity;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.Image;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.ContextUtils;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.ImageUtils;
+import com.vipapp.appmark2.util.wrapper.mActivity;
+import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.RecyclerView;
 import com.vipapp.appmark2.widget.TextView;
 
@@ -21,10 +21,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
-import static com.vipapp.appmark2.utils.Const.GALLERY_LOADED;
-import static com.vipapp.appmark2.utils.Const.IMAGE_CLICKED;
+import static com.vipapp.appmark2.util.Const.GALLERY_LOADED;
+import static com.vipapp.appmark2.util.Const.IMAGE_CLICKED;
 
-public class ImagePicker extends Picker<Image> {
+public class ImagePicker extends DefaultPicker<Image> {
     private final static int PICK_BITMAP = 18545;
 
     private RecyclerView images;
@@ -64,11 +64,11 @@ public class ImagePicker extends Picker<Image> {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            ContextUtils.activity.startActivityForResult(Intent.createChooser(intent, str(R.string.select_image)), PICK_BITMAP);
+            mActivity.get().startActivityForResult(Intent.createChooser(intent, str(R.string.select_image)), PICK_BITMAP);
         });
         gallery.setOnClickListener(view -> {
             cancel();
-            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent pickIntent = new Intent(Intent.ACTION_PICK);
             pickIntent.setType("image/*");
 
             Intent chooserIntent = Intent.createChooser(pickIntent, "Select Image");

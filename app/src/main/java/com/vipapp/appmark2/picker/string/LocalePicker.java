@@ -1,11 +1,10 @@
 package com.vipapp.appmark2.picker.string;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.picker.StringPicker;
-import com.vipapp.appmark2.utils.FileUtils;
 
-import static com.vipapp.appmark2.utils.Const.LOCALE_REGEX;
+import static com.vipapp.appmark2.util.Const.LOCALE_REGEX;
 
 public class LocalePicker extends StringPicker {
 

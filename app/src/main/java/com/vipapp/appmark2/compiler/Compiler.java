@@ -2,14 +2,14 @@ package com.vipapp.appmark2.compiler;
 
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.project.ProjectSettings;
-import com.vipapp.appmark2.utils.wrapper.mAssets;
-import com.vipapp.appmark2.utils.wrapper.mContext;
+import com.vipapp.appmark2.util.wrapper.mAssets;
+import com.vipapp.appmark2.util.wrapper.mContext;
 import com.vipapp.fjc.*;
 
 import java.io.File;
 
-import static com.vipapp.appmark2.utils.Const.AAPT_STORAGE;
-import static com.vipapp.appmark2.utils.Const.ANDROID_JAR_STORAGE;
+import static com.vipapp.appmark2.util.Const.AAPT_STORAGE;
+import static com.vipapp.appmark2.util.Const.ANDROID_JAR_STORAGE;
 
 @SuppressWarnings("WeakerAccess")
 public class Compiler {

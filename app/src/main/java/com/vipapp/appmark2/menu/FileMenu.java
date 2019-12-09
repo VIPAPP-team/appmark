@@ -8,19 +8,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.alert.confirm.DeleteFileDialog;
-import com.vipapp.appmark2.callbacks.PushCallback;
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.holder.FileHolder;
-import com.vipapp.appmark2.items.FileItem;
-import com.vipapp.appmark2.items.Item;
+import com.vipapp.appmark2.item.FileItem;
+import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.picker.string.FileNamePicker;
 import com.vipapp.appmark2.picker.ImagePicker;
 import com.vipapp.appmark2.picker.StringChooser;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.ImageUtils;
-import com.vipapp.appmark2.utils.TextUtils;
-import com.vipapp.appmark2.utils.Toast;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.ImageUtils;
+import com.vipapp.appmark2.util.TextUtils;
+import com.vipapp.appmark2.util.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -156,7 +156,7 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
     public ArrayList<File> list(Context context) {
         files = new ArrayList<>(Arrays.asList(current_path.listFiles()));
         Collections.sort(files, file_comparator);
-        // Add null items for menu
+        // Add null item for menu
         files.add(0, null);
         files.add(0, null);
         files.add(0, null);

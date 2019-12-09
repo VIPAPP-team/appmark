@@ -1,10 +1,9 @@
 package com.vipapp.appmark2.alert.confirm;
 
 import com.vipapp.appmark2.alert.ConfirmDialog;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.utils.ContextUtils;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.R;
 
 import java.io.File;

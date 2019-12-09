@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.Item;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.menu.DefaultMenu;
-import com.vipapp.appmark2.utils.ClassUtils;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.wrapper.mActivity;
-import com.vipapp.appmark2.utils.wrapper.mContext;
+import com.vipapp.appmark2.util.ClassUtils;
+import com.vipapp.appmark2.util.Thread;
+import com.vipapp.appmark2.util.wrapper.mActivity;
+import com.vipapp.appmark2.util.wrapper.mContext;
 
 import java.util.ArrayList;
 

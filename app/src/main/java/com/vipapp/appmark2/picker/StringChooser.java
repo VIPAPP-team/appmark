@@ -4,14 +4,14 @@ import androidx.annotation.StringRes;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.Item;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.widget.RecyclerView;
 import com.vipapp.appmark2.widget.TextView;
 
 import java.util.ArrayList;
 
-public class StringChooser extends Picker<Item<String>> {
+public class StringChooser extends DefaultPicker<Item<String>> {
 
     private TextView title;
     private RecyclerView chooser;

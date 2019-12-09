@@ -8,10 +8,10 @@ import android.view.View;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.holder.StringsHolder;
-import com.vipapp.appmark2.items.Item;
+import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.manager.res.StringsManager;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.ContextUtils;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.ContextUtils;
 import com.vipapp.appmark2.xml.XMLAttribute;
 import com.vipapp.appmark2.xml.XMLObject;
 

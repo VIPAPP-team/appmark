@@ -7,14 +7,14 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.activities.StringsEditorActivity;
-import com.vipapp.appmark2.activities.ViewDesignActivity;
-import com.vipapp.appmark2.items.FileActionItem;
+import com.vipapp.appmark2.activity.StringsEditorActivity;
+import com.vipapp.appmark2.activity.ViewDesignActivity;
+import com.vipapp.appmark2.item.FileActionItem;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.wrapper.mActivity;
-import com.vipapp.appmark2.callbacks.PushCallback;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.wrapper.mActivity;
+import com.vipapp.appmark2.callback.PushCallback;
 
 import java.io.File;
 
@@ -93,7 +93,7 @@ public class FileActionButton extends TextView implements View.OnClickListener {
     }
 
     private int getFileType(File file){
-        if(FileUtils.isFileLayout(file, project)) return Const.FILE_LAYOUT;
+        // if(FileUtils.isFileLayout(file, project)) return Const.FILE_LAYOUT;
         if(FileUtils.isFileStrings(file, project)) return Const.FILE_STRINGS;
 
         return -1;

@@ -2,9 +2,9 @@ package com.vipapp.appmark2.project;
 
 import androidx.annotation.Nullable;
 
-import com.vipapp.appmark2.utils.CallableThreadLoader;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.FileUtils;
+import com.vipapp.appmark2.util.CallableThreadLoader;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.xml.XMLObject;
 
 import java.io.File;

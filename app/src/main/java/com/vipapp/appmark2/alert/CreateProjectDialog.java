@@ -1,29 +1,16 @@
 package com.vipapp.appmark2.alert;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.View;
-import android.widget.ImageView;
 
-import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.Predicate;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.picker.ImagePicker;
+import com.vipapp.appmark2.callback.Predicate;
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.picker.ProjectPicker;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.ContextUtils;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.ImageUtils;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.Toast;
-import com.vipapp.appmark2.widget.AlertDialog;
-import com.vipapp.appmark2.widget.EditText;
-import com.vipapp.appmark2.widget.TextView;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.ImageUtils;
+import com.vipapp.appmark2.util.Thread;
 
 import java.io.File;
-import java.net.URLEncoder;
-import java.util.Objects;
 
 public class CreateProjectDialog {
     public static void show(PushCallback<Project> onCreateProject, Predicate<String> checkName){

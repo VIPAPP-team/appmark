@@ -5,10 +5,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.vipapp.appmark2.items.design.DesignObject;
+import com.vipapp.appmark2.item.design.DesignObject;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.utils.ExceptionUtils;
-import com.vipapp.appmark2.utils.Toast;
+import com.vipapp.appmark2.util.ThrowableUtils;
+import com.vipapp.appmark2.util.Toast;
 import com.vipapp.appmark2.xml.XMLObject;
 
 import androidx.annotation.NonNull;
@@ -48,7 +48,7 @@ public class DesignView extends FrameLayout {
             addView(v);
             return true;
         } catch (Throwable th){
-            Toast.show(ExceptionUtils.toString(th));
+            Toast.show(ThrowableUtils.toString(th));
             return false;
         }
     }

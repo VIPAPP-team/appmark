@@ -6,30 +6,26 @@ import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.Predicate;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.ProjectItem;
-import com.vipapp.appmark2.utils.ClassUtils;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.ContextUtils;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.ImageUtils;
-import com.vipapp.appmark2.utils.Permissions;
-import com.vipapp.appmark2.utils.Toast;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.callback.Predicate;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.ProjectItem;
+import com.vipapp.appmark2.util.ClassUtils;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.ContextUtils;
+import com.vipapp.appmark2.util.ImageUtils;
+import com.vipapp.appmark2.util.Toast;
 import com.vipapp.appmark2.widget.EditText;
 import com.vipapp.appmark2.widget.TextView;
 
 import java.util.Objects;
 
-import static com.vipapp.appmark2.utils.Const.DEFAULT_APP_NAME;
-import static com.vipapp.appmark2.utils.Const.DEFAULT_PACKAGE_NAME;
-import static com.vipapp.appmark2.utils.Const.DEFAULT_VERSION_CODE;
-import static com.vipapp.appmark2.utils.Const.DEFAULT_VERSION_NAME;
+import static com.vipapp.appmark2.util.Const.DEFAULT_APP_NAME;
+import static com.vipapp.appmark2.util.Const.DEFAULT_PACKAGE_NAME;
+import static com.vipapp.appmark2.util.Const.DEFAULT_VERSION_CODE;
+import static com.vipapp.appmark2.util.Const.DEFAULT_VERSION_NAME;
 
-public class ProjectPicker extends Picker<ProjectItem> {
+public class ProjectPicker extends DefaultPicker<ProjectItem> {
 
     private Predicate<String> checkName;
 

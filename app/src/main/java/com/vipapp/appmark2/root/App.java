@@ -5,12 +5,12 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Process;
 
-import com.vipapp.appmark2.activities.DebugActivity;
-import com.vipapp.appmark2.callbacks.ActivityLifecycleCallback;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.ContextUtils;
-import com.vipapp.appmark2.utils.ExceptionUtils;
-import com.vipapp.appmark2.utils.FileUtils;
+import com.vipapp.appmark2.activity.DebugActivity;
+import com.vipapp.appmark2.callback.ActivityLifecycleCallback;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.ContextUtils;
+import com.vipapp.appmark2.util.ThrowableUtils;
+import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.server.Server;
 
 import androidx.multidex.MultiDexApplication;
@@ -42,7 +42,7 @@ public class App extends MultiDexApplication {
                 // starting debug activity
                 Intent intent = new Intent(getApplicationContext(), DebugActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("error", ExceptionUtils.toString(throwable));
+                intent.putExtra("error", ThrowableUtils.toString(throwable));
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(
                         getApplicationContext(), 11111, intent, PendingIntent.FLAG_ONE_SHOT);

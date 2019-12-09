@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.utils.FontUtils;
+import com.vipapp.appmark2.util.FontUtils;
 
 public class TextView extends AppCompatTextView {
 

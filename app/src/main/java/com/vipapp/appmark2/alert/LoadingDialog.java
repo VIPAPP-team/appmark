@@ -5,8 +5,8 @@ import androidx.annotation.StringRes;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.util.Thread;
+import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.AlertDialog;
 import com.vipapp.appmark2.widget.TextView;
 

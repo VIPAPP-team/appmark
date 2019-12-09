@@ -1,8 +1,8 @@
 package com.vipapp.appmark2.picker.string;
 
-import com.vipapp.appmark2.callbacks.PushCallback;
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.picker.StringPicker;
-import com.vipapp.appmark2.utils.FileUtils;
+import com.vipapp.appmark2.util.FileUtils;
 
 import com.vipapp.appmark2.R;
 

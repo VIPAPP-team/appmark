@@ -1,8 +1,7 @@
 package com.vipapp.appmark2.project.settings;
 
-import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.project.ProjectSettings;
-import com.vipapp.appmark2.utils.Const;
+import com.vipapp.appmark2.util.Const;
 
 import java.io.File;
 

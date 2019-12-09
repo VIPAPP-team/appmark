@@ -6,9 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.vipapp.appmark2.adapter.DefaultAdapter;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.CallbackObject;
-import com.vipapp.appmark2.items.Item;
+import com.vipapp.appmark2.item.Item;
 
 import java.util.ArrayList;
 

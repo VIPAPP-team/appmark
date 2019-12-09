@@ -10,7 +10,7 @@ support: https://unikalni4elovek.000webhostapp.com/donate
 # struct (IN DEVELOPING):
 SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
 
-    -activities  # activities storage 
+    -activity  # activities storage 
       
       /**
       *    ACTIVITY ARCHITECTURE:
@@ -125,7 +125,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       CreateProjectDialog -> dialog with project creation
       EditProject -> dialog with project edition
       
-    -callbacks  # callbacks storage
+    -callback  # callbacks storage
     
       ActivityLifecycleCallback(ActivityLifecycleCallbacks) -> actiity lifecycle callback with updating context in ContextUtils
       
@@ -168,7 +168,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       StringsHolder(ViewHolder) -> view holder in strings list in StringEditorActivity
       StringListEditorHolder(ViewHolder) -> view holder in StringsListEditorDialog
       
-    -items
+    -item
     
       -design
       
@@ -221,9 +221,9 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       Image -> Bitmap wrapper  
       Method -> method wrapper
       
-    - manager  # directory with managers 
+    -manager  # directory with managers 
     
-      -res  # DefaultResManagers 
+      -res -> DefaultResManagers 
       
       DefaultManager<Type>  # default manager (object that loads list of smth in thread)
         # array list with push callbacks to invoke when items loaded
@@ -301,6 +301,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *getViewHolder(parent: ViewGroup, itemType: int) -> ViewHolderType
         *size() -> int; return size of 'array' by default
         
+      ChooserMenu(DefaultMenu) -> used in StringChooser picker
       EmptyMenu(DefaultMenu) -> used in RecyclerView when "app:menu" is empty
       FileMenu(DefaultMenu) -> used in file manager in CodeActivity
       ImageMenu(DefaultMenu) -> used in gallery menu
@@ -309,4 +310,30 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       ProjectMenu(DefaultMenu) -> used in project list in main activity
       SettingsMenu(DefaultMenu) -> used in SettingsActivity to build settings
       StringsListEditorMenu(DefaultMenu) -> used in StringsListEditorDialog
-      StringsMenu(DefaultMenu) -> used in strings list in StringsEditorActivity 
+      StringsMenu(DefaultMenu) -> used in strings list in StringsEditorActivity
+      
+    -picker  # pickers storage
+    
+      -string  # string pickers with additional check
+        
+        FileNamePicker -> file name picker
+        LocalePicker -> locale name picker
+      
+      DefaultPicker<Type>  # class to pick values of type Type
+        > callbacks: ArrayList<PushCallback<Type>>  # list with callbacks
+        
+        *DefaultPicker(callback: PushCallback<Type>) -> add 'callback' to 'callbacks'3
+        *addCallback(callback: PushCallback<Type>) -> add 'callback' to 'callbacks'        
+        *pushItem(item: Type) -> exec all callbacks with 'item'
+        
+      SimpleIntPicker(DefaultPicker<Integer>) -> int picker with NumberPicker from 'min' to 'max'
+              *SimpleIntPicker(..., min: int, max: int)
+        
+      ImagePicker(DefaultPicker<Image>) -> gallery image picker
+      ProjectPicker(DefaultPicker<ProjectItem>) -> ProjectItem picker
+      ReplacePicker(DefaultPicker<TransformedItem<String, String>>) -> regexp to replace and replace string picker
+      StringChooser(DefaultPicker<Item<String>>) -> string from list picker
+      StringPicker(DefaultPicker<String>) -> string from keyboard picker
+      
+      
+      

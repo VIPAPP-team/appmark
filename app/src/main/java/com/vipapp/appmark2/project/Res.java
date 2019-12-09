@@ -2,28 +2,24 @@ package com.vipapp.appmark2.project;
 
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Nullable;
 
 import com.vipapp.appmark2.manager.res.ColorsManager;
 import com.vipapp.appmark2.manager.res.StringsManager;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.ImageUtils;
-import com.vipapp.appmark2.utils.ResourcesUtils;
-import com.vipapp.appmark2.utils.TextUtils;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.ThreadLoader;
-import com.vipapp.appmark2.utils.Toast;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.ImageUtils;
+import com.vipapp.appmark2.util.ResourcesUtils;
+import com.vipapp.appmark2.util.Thread;
+import com.vipapp.appmark2.util.ThreadLoader;
 
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.vipapp.appmark2.utils.Const.ANDROID_DRAWABLES;
-import static com.vipapp.appmark2.utils.Const.LOAD_TIME;
-import static com.vipapp.appmark2.utils.Const.REFERENCE_REGEX;
+import static com.vipapp.appmark2.util.Const.ANDROID_DRAWABLES;
+import static com.vipapp.appmark2.util.Const.LOAD_TIME;
+import static com.vipapp.appmark2.util.Const.REFERENCE_REGEX;
 
 public class Res extends ThreadLoader{
     private Resources androidRes = Resources.getSystem();

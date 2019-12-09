@@ -4,7 +4,7 @@ import androidx.annotation.StringRes;
 
 import android.widget.ProgressBar;
 
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.TextView;
 
 public class InfoDialog extends LoadableInfoDialog {

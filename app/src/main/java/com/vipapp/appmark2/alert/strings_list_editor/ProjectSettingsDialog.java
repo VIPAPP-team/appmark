@@ -2,10 +2,10 @@ package com.vipapp.appmark2.alert.strings_list_editor;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.alert.StringsListEditor;
-import com.vipapp.appmark2.items.TransformedItem;
+import com.vipapp.appmark2.item.TransformedItem;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.project.ProjectSettings;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.util.wrapper.Str;
 
 import java.util.ArrayList;
 

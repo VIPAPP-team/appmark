@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import com.vipapp.appmark2.utils.Animation;
+import com.vipapp.appmark2.util.Animation;
 
 public class FadeInLayout extends LinearLayout {
 

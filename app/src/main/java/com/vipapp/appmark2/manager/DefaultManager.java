@@ -1,7 +1,7 @@
 package com.vipapp.appmark2.manager;
 
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.utils.Thread;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.util.Thread;
 import java.util.ArrayList;
 
 import androidx.annotation.AnyThread;

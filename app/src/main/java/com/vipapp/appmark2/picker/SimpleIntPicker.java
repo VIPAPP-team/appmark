@@ -4,9 +4,9 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
+import com.vipapp.appmark2.callback.PushCallback;
 
-public class SimpleIntPicker extends Picker<Integer> {
+public class SimpleIntPicker extends DefaultPicker<Integer> {
     private NumberPicker picker;
 
     public SimpleIntPicker(PushCallback<Integer> callback, int minValue, int maxValue) {

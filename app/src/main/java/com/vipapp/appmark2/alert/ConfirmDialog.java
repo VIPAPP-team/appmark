@@ -3,7 +3,7 @@ package com.vipapp.appmark2.alert;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.widget.AlertDialog;
 import com.vipapp.appmark2.widget.TextView;
 

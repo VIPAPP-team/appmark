@@ -3,13 +3,13 @@ package com.vipapp.appmark2.alert;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.TransformedItem;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.TransformedItem;
 import com.vipapp.appmark2.widget.AlertDialog;
 import com.vipapp.appmark2.widget.RecyclerView;
 import com.vipapp.appmark2.widget.TextView;
 import java.util.ArrayList;
-import static com.vipapp.appmark2.utils.Const.STRINGS_LIST_PUSHED;
+import static com.vipapp.appmark2.util.Const.STRINGS_LIST_PUSHED;
 
 public class StringsListEditor {
     public static void show(String title, ArrayList<TransformedItem<String, String>> strings, PushCallback<ArrayList<TransformedItem<String, String>>> results){

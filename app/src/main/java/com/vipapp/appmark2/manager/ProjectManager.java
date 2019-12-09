@@ -1,18 +1,18 @@
 package com.vipapp.appmark2.manager;
 
 
-import com.vipapp.appmark2.items.OnLoadItem;
+import com.vipapp.appmark2.item.OnLoadItem;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.wrapper.mActivity;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.Thread;
+import com.vipapp.appmark2.util.wrapper.mActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.vipapp.appmark2.utils.Const.LOAD_TIME;
+import static com.vipapp.appmark2.util.Const.LOAD_TIME;
 
 public class ProjectManager extends DefaultManager<Project> {
 

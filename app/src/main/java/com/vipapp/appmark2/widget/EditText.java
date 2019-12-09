@@ -7,7 +7,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.utils.FontUtils;
+import com.vipapp.appmark2.util.FontUtils;
 
 import java.util.ArrayList;
 

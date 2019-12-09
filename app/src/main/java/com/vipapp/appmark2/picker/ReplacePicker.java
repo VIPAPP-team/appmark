@@ -3,14 +3,14 @@ package com.vipapp.appmark2.picker;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.TransformedItem;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.TransformedItem;
 import com.vipapp.appmark2.widget.EditText;
 import com.vipapp.appmark2.widget.TextView;
 
 import java.util.Objects;
 
-public class ReplacePicker extends Picker<TransformedItem<String, String>> {
+public class ReplacePicker extends DefaultPicker<TransformedItem<String, String>> {
 
     private EditText replaceable;
     private EditText replacement;

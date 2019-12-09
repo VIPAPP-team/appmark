@@ -2,19 +2,17 @@ package com.vipapp.appmark2.project;
 
 import android.graphics.Bitmap;
 
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.FileLocale;
-import com.vipapp.appmark2.items.ProjectItem;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.FileLocale;
+import com.vipapp.appmark2.item.ProjectItem;
 import com.vipapp.appmark2.project.settings.DefaultProjectSettings;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.FileGenUtils;
-import com.vipapp.appmark2.utils.FileUtils;
-import com.vipapp.appmark2.utils.ImageUtils;
-import com.vipapp.appmark2.utils.TextUtils;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.ThreadLoader;
-import com.vipapp.appmark2.utils.Toast;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.FileGenUtils;
+import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.ImageUtils;
+import com.vipapp.appmark2.util.TextUtils;
+import com.vipapp.appmark2.util.Thread;
+import com.vipapp.appmark2.util.ThreadLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +24,7 @@ import java.util.HashMap;
 
 import androidx.annotation.Nullable;
 
-import static com.vipapp.appmark2.utils.Const.JAVA;
-import static com.vipapp.appmark2.utils.Const.LOAD_TIME;
+import static com.vipapp.appmark2.util.Const.LOAD_TIME;
 
 @SuppressWarnings("WeakerAccess")
 public class Project extends ThreadLoader implements Serializable {

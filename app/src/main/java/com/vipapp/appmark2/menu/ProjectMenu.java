@@ -5,21 +5,21 @@ import android.content.Intent;
 import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.activities.CodeActivity;
+import com.vipapp.appmark2.activity.CodeActivity;
 import com.vipapp.appmark2.alert.EditProject;
 import com.vipapp.appmark2.alert.confirm.DeleteProject;
 import com.vipapp.appmark2.holder.ProjectHolder;
-import com.vipapp.appmark2.items.Item;
+import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.manager.ProjectManager;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.utils.ImageUtils;
-import com.vipapp.appmark2.utils.Toast;
-import com.vipapp.appmark2.utils.wrapper.mActivity;
-import com.vipapp.appmark2.utils.wrapper.Str;
+import com.vipapp.appmark2.util.ImageUtils;
+import com.vipapp.appmark2.util.Toast;
+import com.vipapp.appmark2.util.wrapper.mActivity;
+import com.vipapp.appmark2.util.wrapper.Str;
 
 import java.util.ArrayList;
 
-import static com.vipapp.appmark2.utils.Const.PROJECT_MANAGER;
+import static com.vipapp.appmark2.util.Const.PROJECT_MANAGER;
 
 public class ProjectMenu extends DefaultMenu<Project, ProjectHolder>{
 

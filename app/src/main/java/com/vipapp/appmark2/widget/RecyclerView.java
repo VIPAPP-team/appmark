@@ -5,19 +5,19 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.util.AttributeSet;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.adapter.DefaultAdapter;
-import com.vipapp.appmark2.callbacks.PushCallback;
-import com.vipapp.appmark2.items.Item;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.menu.DefaultMenu;
 import com.vipapp.appmark2.menu.EmptyMenu;
-import com.vipapp.appmark2.utils.ClassUtils;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.ContextUtils;
+import com.vipapp.appmark2.util.ClassUtils;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.ThrowableUtils;
+import com.vipapp.appmark2.util.Toast;
 
 public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {
     DefaultAdapter adapter;
@@ -44,8 +44,8 @@ public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {
 
     public void init(Context context, AttributeSet attrs){
         setHasFixedSize(false);
-        if(context != null) {
-            if(attrs != null) {
+        if (context != null) {
+            if (attrs != null) {
                 TypedArray array = context.getTheme().obtainStyledAttributes(
                         attrs, R.styleable.RecyclerView, 0, 0);
                 setupFromValues(array);
@@ -82,12 +82,6 @@ public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {
     public void addOnPushCallback(PushCallback<Item> callback){
         adapter.addOnPushCallback(callback);
     }
-
-    /* public static LayoutManager getLayoutManager(TypedArray array){
-        int result = array.getInteger(R.styleable.RecyclerView_columns, -1);
-        return result == -1? new LinearLayoutManager(ContextUtils.context):
-                new GridLayoutManager(ContextUtils.context, result);
-    } */
 
     public static String getViewHolder(TypedArray array) {
         String result = array.getString(R.styleable.RecyclerView_holder);

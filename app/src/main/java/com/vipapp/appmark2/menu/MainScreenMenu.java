@@ -2,9 +2,9 @@ package com.vipapp.appmark2.menu;
 
 import android.content.Context;
 import com.vipapp.appmark2.holder.MainMenuHolder;
-import com.vipapp.appmark2.items.Item;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.wrapper.mActivity;
+import com.vipapp.appmark2.item.Item;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.wrapper.mActivity;
 
 import java.util.ArrayList;
 

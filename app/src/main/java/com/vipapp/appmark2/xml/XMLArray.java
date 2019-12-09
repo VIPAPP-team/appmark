@@ -3,7 +3,7 @@ package com.vipapp.appmark2.xml;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.vipapp.appmark2.callbacks.Mapper;
+import com.vipapp.appmark2.callback.Mapper;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

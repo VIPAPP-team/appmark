@@ -8,39 +8,37 @@ import androidx.annotation.Nullable;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.service.autofill.FieldClassification;
 import android.text.InputFilter;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.callbacks.Mapper;
-import com.vipapp.appmark2.utils.Const;
-import com.vipapp.appmark2.utils.DisplayUtils;
-import com.vipapp.appmark2.utils.MathUtils;
-import com.vipapp.appmark2.utils.TextUtils;
-import com.vipapp.appmark2.utils.Thread;
-import com.vipapp.appmark2.utils.Time;
-import com.vipapp.appmark2.utils.Toast;
-import com.vipapp.appmark2.utils.UndoRedoUtils;
+import com.vipapp.appmark2.callback.Mapper;
+import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.DisplayUtils;
+import com.vipapp.appmark2.util.MathUtils;
+import com.vipapp.appmark2.util.TextUtils;
+import com.vipapp.appmark2.util.Thread;
+import com.vipapp.appmark2.util.Time;
+import com.vipapp.appmark2.util.Toast;
+import com.vipapp.appmark2.util.UndoRedoUtils;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
-import static com.vipapp.appmark2.utils.Const.CURRENT_LINE_COLOR;
-import static com.vipapp.appmark2.utils.Const.DISTANCE_TO_ZOOM;
-import static com.vipapp.appmark2.utils.Const.HIGHLIGHT_COUNTDOWN;
-import static com.vipapp.appmark2.utils.Const.HIGHLIGHT_DEBUG;
-import static com.vipapp.appmark2.utils.Const.LINE_NUMBER_COLOR;
-import static com.vipapp.appmark2.utils.Const.MAX_LINES_IN_TEXT_EDITOR;
-import static com.vipapp.appmark2.utils.Const.MAX_MAIN_EDITOR_FONT_SIZE;
-import static com.vipapp.appmark2.utils.Const.MIN_MAIN_EDITOR_FONT_SIZE;
-import static com.vipapp.appmark2.utils.Const.TEXT_SIZE_STEP;
-import static com.vipapp.appmark2.utils.Const.back_symbol;
+import static com.vipapp.appmark2.util.Const.CURRENT_LINE_COLOR;
+import static com.vipapp.appmark2.util.Const.DISTANCE_TO_ZOOM;
+import static com.vipapp.appmark2.util.Const.HIGHLIGHT_COUNTDOWN;
+import static com.vipapp.appmark2.util.Const.HIGHLIGHT_DEBUG;
+import static com.vipapp.appmark2.util.Const.LINE_NUMBER_COLOR;
+import static com.vipapp.appmark2.util.Const.MAX_LINES_IN_TEXT_EDITOR;
+import static com.vipapp.appmark2.util.Const.MAX_MAIN_EDITOR_FONT_SIZE;
+import static com.vipapp.appmark2.util.Const.MIN_MAIN_EDITOR_FONT_SIZE;
+import static com.vipapp.appmark2.util.Const.TEXT_SIZE_STEP;
+import static com.vipapp.appmark2.util.Const.back_symbol;
 
 public class CodeText extends EditText {
 
