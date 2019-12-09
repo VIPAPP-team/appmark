@@ -93,7 +93,7 @@ public class FileActionButton extends TextView implements View.OnClickListener {
     }
 
     private int getFileType(File file){
-        // if(FileUtils.isFileLayout(file, project)) return Const.FILE_LAYOUT;
+        if(FileUtils.isFileLayout(file, project)) return Const.FILE_LAYOUT;
         if(FileUtils.isFileStrings(file, project)) return Const.FILE_STRINGS;
 
         return -1;
