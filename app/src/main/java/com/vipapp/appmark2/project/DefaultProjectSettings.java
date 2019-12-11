@@ -1,10 +1,11 @@
-package com.vipapp.appmark2.project.settings;
+package com.vipapp.appmark2.project;
 
 import com.vipapp.appmark2.project.ProjectSettings;
 import com.vipapp.appmark2.util.Const;
 
 import java.io.File;
 
+@SuppressWarnings("WeakerAccess")
 public class DefaultProjectSettings extends ProjectSettings {
 
     public DefaultProjectSettings(File dir, String project_package) {

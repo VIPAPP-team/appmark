@@ -335,5 +335,35 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
       StringChooser(DefaultPicker<Item<String>>) -> string from list picker
       StringPicker(DefaultPicker<String>) -> string from keyboard picker
       
+    -project 
+    
+      AIF(ThreadLoader):  # AppMark info file (file with service information)
+        > AIF_VERSION = 7  # Newest aif version (used to update it)
+         
+        > PACKAGE            |
+        > APP_VERSION        | -> key consts
+        > APP_VERSION_NUMBER |
+        > VERSION            |
       
-      
+        > aif: File  # source file
+        > info: HashMap<String, String>  # parsed data
+        > project: Project  # parent project
+        
+        *AIF(...)  # call load(...) with args
+        
+        *isAIF(pathname: String) -> boolean  # pathname matches aif regexp
+        *onAttachProject(project: Project) -> method to attach project
+        
+        *readAif() -> HashMap<String, String>  # parse 'source' file
+        *writeAif(thread = true)  # write 'info' to 'source' (in thread if 'thread')
+        
+        *save(thread = true)  # call writeAif('thread')
+        
+        {
+          AIF UPDATES - support methods to update aif
+        }
+        
+        *updateAif(old_version: int)  # update aif from 'old_version' to 'AIF_VERSION'
+        
+        # unknown recursion magic code
+        *load(...)  # create aif if first arg is HashMap or read already existing 

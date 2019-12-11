@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.FileLocale;
 import com.vipapp.appmark2.item.ProjectItem;
-import com.vipapp.appmark2.project.settings.DefaultProjectSettings;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.FileGenUtils;
 import com.vipapp.appmark2.util.FileUtils;
