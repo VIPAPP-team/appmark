@@ -52,7 +52,7 @@ public class ProjectManager extends DefaultManager<Project> {
         }
 
         Collections.sort(projects, (project1, project2) ->
-                -Long.compare(project1.getDir().lastModified(), project2.getDir().lastModified()));
+                -Long.compare(project1.getSource().lastModified(), project2.getSource().lastModified()));
 
         Thread.ui(() -> mActivity.get().onLoad(new OnLoadItem(
                 projects.size() == 0? Const.NO_PROJECTS: Const.PROJECT_LOAD)));

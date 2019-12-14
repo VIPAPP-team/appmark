@@ -173,7 +173,7 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
                 break;
             case Const.PROJECT:
                 this.project = (Project)item.getInstance();
-                this.project_file = project.getDir();
+                this.project_file = project.getSource();
                 break;
             case Const.OPENED_FILE:
                 this.opened = (File)item.getInstance();
@@ -204,11 +204,11 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
                     R.drawable.directory :
                     R.drawable.file);
             vh.name.setText(item.getName());
-            setCallbacks(vh, item, i);
+            setCallbacks(vh, item);
         }
     }
 
-    private void setCallbacks(RecyclerView.ViewHolder vh, File item, int i){
+    private void setCallbacks(RecyclerView.ViewHolder vh, File item){
         vh.itemView.setOnClickListener(view -> {
             if (item.isDirectory()) {
                 current_path = item;
@@ -219,8 +219,8 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
             }
         });
         if(item != null) vh.itemView.setOnLongClickListener(view -> {
-            //noinspection unchecked
             if(files.indexOf(item) != -1) {
+                //noinspection unchecked
                 StringChooser chooser = new StringChooser(action -> menuCallbacks[action.getType()].onComplete(
                         new Item<>(files.indexOf(item), item)));
                 chooser.setTitle(R.string.select_action);

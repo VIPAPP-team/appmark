@@ -9,17 +9,20 @@ import com.vipapp.appmark2.xml.XMLObject;
 
 import java.io.File;
 
+@SuppressWarnings("WeakerAccess")
 public class AndroidManifest extends CallableThreadLoader {
+    private File source;
+
     @Nullable
     private XMLObject parsed_manifest;
     @Nullable
     private XMLObject parsed_application;
-    private File manifest;
+
     private String text;
     private Res res;
 
     private AndroidManifest(File file){
-        this.manifest = file;
+        this.source = file;
     }
 
     public void attachProject(Project project){
@@ -32,10 +35,11 @@ public class AndroidManifest extends CallableThreadLoader {
 
     public void generateNewUI(String project_package, String app_name, String version_name, int version_id, String first_activity, int minSDK){
         String manifest = FileUtils.readAssetsUI("texts/default_manifest.xml");
+        assert manifest != null;
         manifest = String.format(manifest, project_package, app_name, first_activity, version_name,
                                 version_id, minSDK, 25);
         text = manifest;
-        FileUtils.writeFileUI(this.manifest, manifest);
+        FileUtils.writeFileUI(this.source, manifest);
     }
 
     private void parse(){
@@ -47,8 +51,23 @@ public class AndroidManifest extends CallableThreadLoader {
 
     @Override
     public void load(Object... args) {
-        text = FileUtils.readFileUI(manifest);
+        text = FileUtils.readFileUI(source);
         parse();
+    }
+
+    public File getFile(){
+        return source;
+    }
+
+    public boolean isCorrect(){
+        return parsed_manifest != null && parsed_application != null;
+    }
+
+    public void saveUI(){
+        try {
+            assert parsed_manifest != null;
+            FileUtils.writeFileUI(source, parsed_manifest.toString());
+        } catch (Exception ignored) {}
     }
 
     @Nullable
@@ -87,12 +106,6 @@ public class AndroidManifest extends CallableThreadLoader {
             return null;
         }
     }
-    public File getFile(){
-        return manifest;
-    }
-    public boolean isCorrect(){
-        return parsed_manifest != null && parsed_application != null;
-    }
 
     // Setters
     public void setName(String name){
@@ -109,13 +122,6 @@ public class AndroidManifest extends CallableThreadLoader {
         if(parsed_manifest != null) {
             parsed_manifest.setAttribute(Const.VERSION_ID, Integer.toString(versionCode));
         }
-    }
-
-    public void saveUI(){
-        try {
-            assert parsed_manifest != null;
-            FileUtils.writeFileUI(manifest, parsed_manifest.toString());
-        } catch (Exception ignored) {}
     }
 
     @Nullable

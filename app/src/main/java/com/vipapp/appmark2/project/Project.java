@@ -39,7 +39,7 @@ public class Project extends ThreadLoader implements Serializable {
 
     private static AIF getAIF(Project project){
         return new AIF(
-                new File(project.dir, project.dir.list((file1, s) -> AIF.isAIF(s))[0]).toString());
+                new File(project.source, project.source.list((file1, s) -> AIF.isAIF(s))[0]).toString());
     }
 
     public static Project fromFile(File file){
@@ -114,13 +114,6 @@ public class Project extends ThreadLoader implements Serializable {
          }
     }
 
-    private void loadAll(PushCallback<Void> callback){
-        Thread.start(() -> {
-           loadAllUI();
-           Thread.ui(() -> callback.onComplete(null));
-        });
-    }
-
     private void loadAllUI(){
         setupResources();
     }
@@ -132,7 +125,7 @@ public class Project extends ThreadLoader implements Serializable {
 
     private Res resources;
 
-    private File dir;
+    private File source;
     private AIF aif;
     private AndroidManifest manifest;
     private boolean supported = false;
@@ -144,7 +137,7 @@ public class Project extends ThreadLoader implements Serializable {
     }
     public String getPackage(File file){
         if(FileUtils.isChild(file, getJavaDir())){
-            String relative_path = FileUtils.getRelativePath(file,getJavaDir()).replace('/', '.');
+            String relative_path = FileUtils.getRelativePath(file, getJavaDir()).replace('/', '.');
             String package_with_dot = getPackage() + "." + TextUtils.replaceLast(relative_path, file.getName(), "");
             return package_with_dot.substring(0, package_with_dot.length() - 1);
         }
@@ -162,8 +155,8 @@ public class Project extends ThreadLoader implements Serializable {
     public File getIcon() {
         return manifest.getIcon();
     }
-    public File getDir() {
-        return dir;
+    public File getSource() {
+        return source;
     }
     public AIF getAif(){
         return aif;
@@ -284,18 +277,14 @@ public class Project extends ThreadLoader implements Serializable {
 
     @Override
     public void load(Object... args) {
-
-        File source = (File) args[0];
         if(notProject(source))
             throw new RuntimeException("This is not project");
-
-        this.dir = source;
 
         supported = try_to_setup();
     }
 
     public void delete(){
-        FileUtils.deleteFile(dir);
+        FileUtils.deleteFile(source);
     }
 
     public ProjectItem getProjectItem(){
@@ -313,18 +302,18 @@ public class Project extends ThreadLoader implements Serializable {
     private void readObject(ObjectInputStream stream) {
         try {
             String path = (String) stream.readObject();
-            dir = new File(path);
+            source = new File(path);
         } catch (IOException|ClassNotFoundException e){
             // MAGIC CODE CUZ IN RANDOM MOMENTS IS CAN BE THROWED
             readObject(stream);
             return;
         }
-        reload(dir);
+        reload(source);
     }
     private void writeObject(ObjectOutputStream stream) {
         try {
-            if (dir != null) {
-                stream.writeObject(dir.getAbsolutePath());
+            if (source != null) {
+                stream.writeObject(source.getAbsolutePath());
             }
         } catch (IOException e){
             // MAGIC CODE CUZ IN RANDOM MOMENTS IS CAN BE THROWED

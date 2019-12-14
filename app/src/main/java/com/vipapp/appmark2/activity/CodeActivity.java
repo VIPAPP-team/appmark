@@ -295,7 +295,7 @@ public class CodeActivity extends BaseActivity {
     }
     public void setupViews(){
         content.setTextSize(Const.MAIN_EDITOR_FONT_SIZE);
-        file_recycler.pushValue(Const.PATH, project.getDir());
+        file_recycler.pushValue(Const.PATH, project.getSource());
     }
 
     public void lock_screen(){
@@ -322,7 +322,7 @@ public class CodeActivity extends BaseActivity {
         file_recycler.pushValue(Const.PROJECT, project);
     }
     public void setLastProject(){
-        mSharedPreferences.putString("last_project", project.getDir().getAbsolutePath());
+        mSharedPreferences.putString("last_project", project.getSource().getAbsolutePath());
     }
 
     public void openFile(File file){

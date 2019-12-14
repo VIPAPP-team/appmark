@@ -365,5 +365,34 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         
         *updateAif(old_version: int)  # update aif from 'old_version' to 'AIF_VERSION'
         
-        # unknown recursion magic code
-        *load(...)  # create aif if first arg is HashMap or read already existing 
+        # unknown recursion magic code 
+        *load(...)  # create aif if first arg is HashMap or read already existin
+        
+      AndroidManifest(CallableThreadLoader):  # manifest parser
+        > source: File  # source manifest file
+        
+        > parsed_manifest: XMLObject  # parsed xml object of 'source' file
+        > parsed_application: XMLObject  # parsed <application> tag to manage activities
+        
+        > text: String  # text content of 'source' file
+        
+        *private AndroidManifest(File file)  # setup 'source'
+        *fromFile(File file) -> AndroidManifest  # create instance of AndroidManifest from file
+        
+        *attachProject(Project project)  # attach project to manifest
+        
+        # generate new manifest in current thread
+        *generateNewUI(project_package: String, app_name: String, version_name: String, version_id: int, first_activityz: String, minSDK: int)
+        
+        *parse()  # setup 'parsed_manifest' and 'parsed_application' from 'text'
+        
+        *load(args: Object...)  # read text from 'source' and parse()
+        
+        *isCorrect() -> boolean  # return true if parsed successfully
+        
+        *saveUI()  # save manifest in current thread
+        
+        {
+          get... and set... methods with 'parsed_manifest'
+        }
+        

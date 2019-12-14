@@ -96,7 +96,7 @@ public class AIF extends ThreadLoader {
     }
 
     private void add_default_project_settings() {
-        info.putAll(new DefaultProjectSettings(project.getDir(), project.getPackage()).getHashMap());
+        info.putAll(new DefaultProjectSettings(project.getSource(), project.getPackage()).getHashMap());
     }
 
     private void updateAif(int old_version) {
@@ -149,14 +149,14 @@ public class AIF extends ThreadLoader {
     // SETTERS
     public void setLastFile(File file) {
         if (FileUtils.isChild(file, aif.getParentFile())) {
-            info.put(Const.OPENED_FILE_STRING, file.getAbsolutePath().replaceFirst(project.getDir().getAbsolutePath(), ""));
+            info.put(Const.OPENED_FILE_STRING, file.getAbsolutePath().replaceFirst(project.getSource().getAbsolutePath(), ""));
             writeAif(true);
         }
     }
 
     // GETTERS
     public File getLastFile() {
-        return new File(project.getDir(), Objects.requireNonNull(info.get(Const.OPENED_FILE_STRING)));
+        return new File(project.getSource(), Objects.requireNonNull(info.get(Const.OPENED_FILE_STRING)));
     }
 
     public ProjectSettings getProjectSettings() {
