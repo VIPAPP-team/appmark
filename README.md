@@ -440,7 +440,35 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *createNew(...)  # create new project
         *generateAIF(...)  # generate new aif
         
-      
+      Res(ThreadLoader):  # support class to load project resources
+        > androidRes: Resources  # android system resources
+        
+        > strings: StringsManager |
+        > colors: ColorsManager   | -> managers
+        > drawables: Drawables    |
+        
+        > source: File  # source 'res' directory
+        
+        *private Res(file: File)
+        *fromFile(file: File) -> Res  # create instance of Res
+        
+        {
+          setup methods
+        }
+        
+        *load(args: Object...)  # call setup methods
+        
+        {
+          resource getters
+        }
+        
+        # get system resource by 'name' and convert it to type T
+        *<T> getAndroidResource(name: String) -> T  
+        
+        # get resource by 'name' with resource getters and convert it to type T
+        *<T> get(name: String) -> T
+        
+        
       ProjectSettings -> class to store file pathes to build project
       DefaultProjectSettings(ProjectSettings) -> class to create default settings for project
         
