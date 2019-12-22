@@ -31,18 +31,25 @@ public class ProjectMenu extends DefaultMenu<Project, ProjectHolder>{
         return null;
     }
     public void bind(ProjectHolder vh, Project item, int i) {
-        if(item.getName() == null ||
-                item.getPackage() == null ||
-                item.getVersionName() == null)
-            Toast.show(String.format(
-                    Str.get(R.string.xml_error), item.getAndroidManifestFile().getAbsolutePath()));
+        if(item.isSupported()) {
+            if (item.getName() == null ||
+                    item.getPackage() == null ||
+                    item.getVersionName() == null)
+                Toast.show(String.format(
+                        Str.get(R.string.xml_error), item.getAndroidManifestFile().getAbsolutePath()));
 
-        vh.name.setText(item.getName());
-        vh.packag.setText(item.getPackage());
-        vh.version_name.setText(item.getVersionName());
-        vh.edit.setVisibility(item.getManifest().isCorrect()?View.VISIBLE:View.GONE);
-        ImageUtils.loadInto(item.getIcon(), vh.icon);
-        setCallbacks(vh, item, i);
+            vh.name.setText(item.getName());
+            vh.packag.setText(item.getPackage());
+            vh.version_name.setText(item.getVersionName());
+            vh.edit.setVisibility(item.getManifest().isCorrect() ? View.VISIBLE : View.GONE);
+            ImageUtils.loadInto(item.getIcon(), vh.icon);
+            setCallbacks(vh, item, i);
+        } else {
+            vh.name.setText(R.string.project_broken);
+            vh.packag.setText(item.getSource().getAbsolutePath());
+            vh.icon.setImageBitmap(null);
+            vh.version_name.setText(null);
+        }
     }
 
     private void setCallbacks(ProjectHolder vh, Project item, int i){

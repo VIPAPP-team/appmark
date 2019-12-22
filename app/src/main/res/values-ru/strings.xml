@@ -111,4 +111,5 @@
     <string name="add">Добавить</string>
     <string name="enter_locale_name">Введите название языка</string>
     <string name="locale_name_error">Неправильное название языка</string>
+    <string name="project_broken">Ошибка при загрузке проекта</string>
 </resources>

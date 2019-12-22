@@ -19,14 +19,14 @@ public class AndroidManifest extends CallableThreadLoader {
     private XMLObject parsed_application;
 
     private String text;
-    private Res res;
+    private Project project;
 
     private AndroidManifest(File file){
         this.source = file;
     }
 
     public void attachProject(Project project){
-        this.res = project.getResources();
+        this.project = project;
     }
 
     public static AndroidManifest fromFile(File file){
@@ -128,7 +128,7 @@ public class AndroidManifest extends CallableThreadLoader {
     public File getIcon(){
         try{
             assert parsed_application != null;
-            return res.get(parsed_application.getNamedAttribute(Const.APP_ICON).getValue());
+            return project.getResources().get(parsed_application.getNamedAttribute(Const.APP_ICON).getValue());
         } catch (Exception e) {
             return null;
         }

@@ -12,6 +12,8 @@ import com.vipapp.appmark2.util.ImageUtils;
 import com.vipapp.appmark2.util.TextUtils;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.ThreadLoader;
+import com.vipapp.appmark2.util.ThrowableUtils;
+import com.vipapp.appmark2.util.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 
 import androidx.annotation.Nullable;
 
+import static com.vipapp.appmark2.util.Const.ANDROID_MANIFEST_LOCATION;
 import static com.vipapp.appmark2.util.Const.LOAD_TIME;
 
 @SuppressWarnings("WeakerAccess")
@@ -76,10 +79,10 @@ public class Project extends ThreadLoader implements Serializable {
 
     // can throw exception while setup
     private void setup(){
+        manifestSetup();
         aifSetup();
         settingsSetup();
         loadAllUI();
-        manifestSetup();
     }
 
     private boolean try_to_setup() {
@@ -175,7 +178,8 @@ public class Project extends ThreadLoader implements Serializable {
     }
 
     public File getJavaDir(){
-        return new File(settings.get("src"));
+        String javaPath = settings == null? null: settings.get("src");
+        return new File(javaPath == null? Const.getJavaDir(getPackage()): javaPath);
     }
     public File getResDir(){
         return new File(settings.get("res"));
@@ -204,7 +208,10 @@ public class Project extends ThreadLoader implements Serializable {
     }
 
     public File getAndroidManifestFile(){
-        return new File(settings.get("manifest"));
+        String manifestPath = settings == null? null: settings.get("manifest");
+        return manifestPath == null?
+                new File(source, ANDROID_MANIFEST_LOCATION):
+                new File(manifestPath);
     }
 
     // Locales

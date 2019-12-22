@@ -12,10 +12,12 @@ import com.vipapp.appmark2.util.ContextUtils;
 import com.vipapp.appmark2.util.ThrowableUtils;
 import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.server.Server;
+import com.vipapp.appmark2.util.Toast;
 
 import androidx.multidex.MultiDexApplication;
 
 public class App extends MultiDexApplication {
+    public static boolean crashed = false;
 
     @Override
     public void onCreate() {
@@ -39,20 +41,25 @@ public class App extends MultiDexApplication {
     public void initDebugger(){
         if(Const.DEBUGGER_ENABLED){
             Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-                // starting debug activity
-                Intent intent = new Intent(getApplicationContext(), DebugActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("error", ThrowableUtils.toString(throwable));
+                // start debug activity only if it is first crash
+                if(!crashed) {
+                    crashed = true;
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(
-                        getApplicationContext(), 11111, intent, PendingIntent.FLAG_ONE_SHOT);
+                    // starting debug activity
+                    Intent intent = new Intent(getApplicationContext(), DebugActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("error", ThrowableUtils.toString(throwable));
 
-                AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-                assert alarmManager != null;
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000, pendingIntent);
-                // exit
-                Process.killProcess(Process.myPid());
-                System.exit(2);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(
+                            getApplicationContext(), 11111, intent, PendingIntent.FLAG_ONE_SHOT);
+
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    assert alarmManager != null;
+                    alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000, pendingIntent);
+                    // exit
+                    Process.killProcess(Process.myPid());
+                    System.exit(2);
+                }
             });
         }
     }

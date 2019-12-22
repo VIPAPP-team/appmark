@@ -24,7 +24,7 @@ public class ProjectManager extends DefaultManager<Project> {
 
     public boolean existsWithName(String name){
         for(Project project: getObjects()){
-            if(project.getName().equals(name))
+            if(project.isSupported() && project.getName().equals(name))
                 return true;
         }
         return false;

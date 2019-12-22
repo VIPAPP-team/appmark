@@ -352,6 +352,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         *AIF(...)  # call load(...) with args
         
         *isAIF(pathname: String) -> boolean  # pathname matches aif regexp
+        
         *onAttachProject(project: Project) -> method to attach project
         
         *readAif() -> HashMap<String, String>  # parse 'source' file
@@ -363,7 +364,7 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
           AIF UPDATES - support methods to update aif
         }
         
-        *updateAif(old_version: int)  # update aif from 'old_version' to 'AIF_VERSION'
+        *updateAif()  # update aif to 'AIF_VERSION'
         
         # unknown recursion magic code 
         *load(...)  # create aif if first arg is HashMap or read already existin
@@ -468,7 +469,6 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
         # get resource by 'name' with resource getters and convert it to type T
         *<T> get(name: String) -> T
         
-        
-      ProjectSettings -> class to store file pathes to build project
+      ProjectSettings -> class to store file pathes
       DefaultProjectSettings(ProjectSettings) -> class to create default settings for project
         

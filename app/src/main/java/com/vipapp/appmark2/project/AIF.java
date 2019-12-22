@@ -2,6 +2,7 @@ package com.vipapp.appmark2.project;
 
 import androidx.annotation.NonNull;
 
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.exception.IncorrectAIFName;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.FileUtils;
@@ -10,6 +11,7 @@ import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.ThreadLoader;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -24,7 +26,7 @@ public class AIF extends ThreadLoader {
     private static final String VERSION = "aif_version";
 
     private File aif;
-    private HashMap<String, String> info = new HashMap<>();
+    private HashMap<String, String> info = null;
     private Project project;
 
     private String path;
@@ -84,10 +86,6 @@ public class AIF extends ThreadLoader {
         info.remove(PACKAGE);
     }
 
-    private void add_default_file() {
-        info.put(Const.DEFAULT_FILE, Const.getDefaultLastFile(project.getPackage()));
-    }
-
     private void replace_default_with_opened() {
         info.put(Const.OPENED_FILE_STRING, info.get(Const.DEFAULT_FILE));
         info.remove(Const.DEFAULT_FILE);
@@ -99,23 +97,28 @@ public class AIF extends ThreadLoader {
     }
 
     private void add_default_project_settings() {
-        info.putAll(new DefaultProjectSettings(project.getSource(), project.getPackage()).getHashMap());
+        info.putAll(new DefaultProjectSettings(
+                project.getSource(), project.getPackage(project.getSource())).getHashMap());
     }
 
-    private void updateAif(int old_version) {
-        switch (old_version) {
-            case 1:
-                update_with_app_version();
-            case 2:
-                remove_redundant_args();
-            case 3:
-                add_default_file();
-            case 4:
-                replace_default_with_opened();
-            case 5:
-                add_warnings();
-            case 6:
-                add_default_project_settings();
+    public void updateAif() {
+        String versionStr = info.get(VERSION);
+        int version = versionStr == null? 1: Integer.parseInt(versionStr);
+
+        if (version != AIF_VERSION) {
+            switch (version) {
+                case 1:
+                    update_with_app_version();
+                case 2:
+                    remove_redundant_args();
+                case 3:
+                case 4:
+                    replace_default_with_opened();
+                case 5:
+                    add_warnings();
+                case 6:
+                    add_default_project_settings();
+            }
         }
         info.put(VERSION, Integer.toString(AIF_VERSION));
         writeAif();
@@ -127,23 +130,21 @@ public class AIF extends ThreadLoader {
         if (!isAIF(path))
             throw new IncorrectAIFName(path);
 
-        if (info != null) {
+        if (info == null) {
+            aif = new File(path);
+            info = readAif();
+        } else {
             aif = new File(path);
             add_warnings();
             writeAif();
-        } else {
-            aif = new File(path);
-            info = readAif();
         }
 
         if (info == null) {
             // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
             load();
-        } else {
-            int version = Integer.parseInt(Objects.requireNonNull(info.get(VERSION)));
-            if (version != AIF_VERSION)
-                updateAif(version);
         }
+
+        updateAif();
     }
 
     // SETTERS
@@ -156,7 +157,8 @@ public class AIF extends ThreadLoader {
 
     // GETTERS
     public File getLastFile() {
-        return new File(project.getSource(), Objects.requireNonNull(info.get(Const.OPENED_FILE_STRING)));
+        String path = info.get(Const.OPENED_FILE_STRING);
+        return path == null? aif: new File(project.getSource(), path);
     }
 
     public ProjectSettings getProjectSettings() {

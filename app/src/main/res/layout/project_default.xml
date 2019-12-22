@@ -12,7 +12,6 @@
 			android:id="@+id/icon"
 			android:layout_width="60.0dip"
 			android:layout_height="60.0dip"
-			android:src="@android:drawable/ic_delete"
 			android:scaleType="centerCrop" />
 		<LinearLayout
 			android:orientation="vertical"
@@ -20,11 +19,15 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="10.0dip"
 			android:layout_marginTop="5.0dip">
+
 			<com.vipapp.appmark2.widget.TextView
+				android:id="@+id/name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="4.0dip"
+				android:text="@string/project_broken"
 				android:textAppearance="?android:textAppearanceLarge"
-				android:textSize="18.0sp" android:id="@+id/name"
-				android:padding="4.0dip" android:layout_width="match_parent"
-				android:layout_height="wrap_content" />
+				android:textSize="18.0sp" />
 			<com.vipapp.appmark2.widget.TextView
 				android:textAppearance="?android:textAppearanceSmall"
 				android:textColor="#ff757575" android:id="@+id/packag"
