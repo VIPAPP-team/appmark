@@ -396,3 +396,51 @@ SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
           get... and set... methods with 'parsed_manifest'
         }
         
+      Drawables:  # class to search drawables
+        *Drawables(source: File)  # setup source
+        *getDrawable(name: String) -> File  # find drawable file in 'source'
+        
+      Project(ThreadLoader, Serializable)  # support class for project
+        > resources: Res  # resources support class
+        > source: File  # project source file
+        > aif: AIF  # info file class
+        > manifest: AndroidManifest  # android manifest support class
+        > supported: boolean  # result of project setup
+        > settings: ProjectSettings  # parsed settings from aif file
+      
+        *private Project(file: File)  # call super(file)
+        *fromFile(file: File) -> Project  # create new instance of project
+        
+        {
+          setup methods
+        }
+        
+        *setup()  # setup methods executor
+        
+        # try-catch wrapper of setup() method
+        *try_to_setup() -> boolean  # return was exception throwed while executing setup() or not
+        
+        *load(args: Object...)  # call try_to_setup() and store result in 'supported'
+        
+        *saveUI()  # save project in current thread
+        *save([onSave: PushCallback<Void>])  # save project in new thread and exec 'onSave' callback if it exists
+        
+        *saveSettings()  # save project settings
+        
+        *delete()  # delete 'source' file
+        
+        *localizeString(string: String)  # translate 'string' to current locale
+        
+        {
+          getters and setters
+        }
+        
+        *notProject(file: File) -> boolean  # return false if 'file' is not directory or is not contains exactly 1 .aif file
+        
+        *createNew(...)  # create new project
+        *generateAIF(...)  # generate new aif
+        
+      
+      ProjectSettings -> class to store file pathes to build project
+      DefaultProjectSettings(ProjectSettings) -> class to create default settings for project
+        

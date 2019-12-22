@@ -26,7 +26,7 @@ public class CreateProjectDialog {
             File place = new File(Const.PROJECT_STORAGE, app_name_final + Const.APP_ICON_DEFAULT);
             ImageUtils.saveBitmap(icon, place);
             Project.createNew(new File(new File(Const.PROJECT_STORAGE), app_name_final),
-                    app_name, project_package, place, version_name,
+                    app_name, project_package, version_name,
                     version_id, "MainActivity", 21, onCreateProject);
         });
     }

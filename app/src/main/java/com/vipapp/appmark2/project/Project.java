@@ -28,71 +28,20 @@ import static com.vipapp.appmark2.util.Const.LOAD_TIME;
 @SuppressWarnings("WeakerAccess")
 public class Project extends ThreadLoader implements Serializable {
 
+    private Res resources;
+    private File source;
+    private AIF aif;
+    private AndroidManifest manifest;
+    private boolean supported = false;
+    private ProjectSettings settings;
+
     private Project(File source){
         super(source);
     }
-
-    public static boolean notProject(File file){
-        return !file.isDirectory() ||
-                file.list((file1, s) -> AIF.isAIF(s)).length != 1;
-    }
-
-    private static AIF getAIF(Project project){
-        return new AIF(
-                new File(project.source, project.source.list((file1, s) -> AIF.isAIF(s))[0]).toString());
-    }
-
     public static Project fromFile(File file){
         return new Project(file);
     }
 
-    public static void createNew(File source, String name, String packag, File icon, String version_name, int version_id, String first_activity, int minSDK, PushCallback<Project> callback) {
-        Thread.start(() -> {
-            FileUtils.refresh(source, true);
-            HashMap<String, String> meta_info = new HashMap<String, String>(){{}};
-            generateAIF(meta_info, source, packag);
-            FileGenUtils.generateDefaultProject(source, packag, name, version_name, version_id, first_activity, minSDK,
-                    none -> {
-                        Project project = new Project(source);
-                        project.exec(_none_ -> callback.onComplete(project));
-                    });
-        });
-    }
-
-    private static void generateAIF(HashMap<String, String> meta_info, File source, String project_package){
-        source = new File(source, "project.aif");
-        FileUtils.refresh(source, false);
-        meta_info.put(Const.OPENED_FILE_STRING, Const.getDefaultLastFile(project_package));
-        meta_info.put("aif_version", String.valueOf(AIF.AIF_VERSION));
-        meta_info.putAll(new DefaultProjectSettings(source.getParentFile(), project_package).getHashMap());
-        new AIF(meta_info, source.getAbsolutePath());
-    }
-
-    private boolean try_to_setup() {
-        try {
-            setup();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    @SuppressWarnings("RedundantThrows")
-    private void setup() throws Exception{
-        aifSetup();
-        settingsSetup();
-        loadAllUI();
-        manifestSetup();
-    }
-
-    private void manifestSetup(){
-        int[] load = new int[]{0, 1};
-        File manifest_file = getAndroidManifestFile();
-        manifest = AndroidManifest.fromFile(manifest_file);
-        manifest.attachProject(this);
-        manifest.reload(none -> load[0]++);
-        while(load[0] != load[1]){ Thread.sleep(LOAD_TIME); }
-    }
     private void aifSetup(){
         this.aif = getAIF(this);
         aif.onAttachProject(this);
@@ -111,26 +60,80 @@ public class Project extends ThreadLoader implements Serializable {
         resources.exec(none -> loading[0]++);
         while(loading[0] != loading[1]){
             Thread.sleep(LOAD_TIME);
-         }
+        }
     }
-
+    private void manifestSetup(){
+        int[] load = new int[]{0, 1};
+        File manifest_file = getAndroidManifestFile();
+        manifest = AndroidManifest.fromFile(manifest_file);
+        manifest.attachProject(this);
+        manifest.reload(none -> load[0]++);
+        while(load[0] != load[1]){ Thread.sleep(LOAD_TIME); }
+    }
     private void loadAllUI(){
         setupResources();
     }
 
+    // can throw exception while setup
+    private void setup(){
+        aifSetup();
+        settingsSetup();
+        loadAllUI();
+        manifestSetup();
+    }
+
+    private boolean try_to_setup() {
+        try {
+            setup();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void load(Object... args) {
+        if(notProject(source))
+            throw new RuntimeException("This is not project");
+
+        supported = try_to_setup();
+    }
+
+    private void saveUI(){
+        manifest.saveUI();
+    }
+    public void save(PushCallback<Void> onSave){
+        Thread.start(() -> {
+            saveUI();
+            if(onSave != null) onSave.onComplete(null);
+        });
+    }
+    public void save(){
+        save(null);
+    }
+
+    private void saveSettings(){
+        aif.saveProjectSettings(settings);
+        aif.save(true);
+    }
+
+    public void delete(){
+        FileUtils.deleteFile(source);
+    }
+
+    public String localizeString(@Nullable String string){
+        if(string == null)
+            return "";
+        if(!string.startsWith("@"))
+            return string;
+        if(!string.startsWith("@string/"))
+            return null;
+        return resources.get(string);
+    }
 
     public Res getResources() {
         return resources;
     }
-
-    private Res resources;
-
-    private File source;
-    private AIF aif;
-    private AndroidManifest manifest;
-    private boolean supported = false;
-
-    private ProjectSettings settings;
 
     public String getPackage() {
         return manifest.getPackage();
@@ -169,16 +172,6 @@ public class Project extends ThreadLoader implements Serializable {
     }
     public ProjectSettings getSettings() {
         return settings;
-    }
-
-    public String localizeString(@Nullable String string){
-        if(string == null)
-            return "";
-        if(!string.startsWith("@"))
-            return string;
-        if(!string.startsWith("@string/"))
-            return null;
-        return resources.get(string);
     }
 
     public File getJavaDir(){
@@ -238,7 +231,7 @@ public class Project extends ThreadLoader implements Serializable {
     // Setters
     public void setSettings(ProjectSettings settings){
         this.settings = settings;
-        saveSettings(true);
+        saveSettings();
     }
 
     public void setName(String name){
@@ -255,36 +248,6 @@ public class Project extends ThreadLoader implements Serializable {
     }
     public void setIconUI(Bitmap icon){
         ImageUtils.saveBitmap(icon, getIcon());
-    }
-
-    private void saveUI(){
-        manifest.saveUI();
-    }
-    public void save(PushCallback<Void> onSave){
-        Thread.start(() -> {
-            saveUI();
-            if(onSave != null) onSave.onComplete(null);
-        });
-    }
-    public void save(){
-        save(null);
-    }
-
-    private void saveSettings(boolean thread){
-        aif.saveProjectSettings(settings);
-        aif.save(thread);
-    }
-
-    @Override
-    public void load(Object... args) {
-        if(notProject(source))
-            throw new RuntimeException("This is not project");
-
-        supported = try_to_setup();
-    }
-
-    public void delete(){
-        FileUtils.deleteFile(source);
     }
 
     public ProjectItem getProjectItem(){
@@ -319,6 +282,39 @@ public class Project extends ThreadLoader implements Serializable {
             // MAGIC CODE CUZ IN RANDOM MOMENTS IS CAN BE THROWED
             writeObject(stream);
         }
+    }
+
+    // STATIC METHODS
+    public static boolean notProject(File file){
+        return !file.isDirectory() ||
+                file.list((file1, s) -> AIF.isAIF(s)).length != 1;
+    }
+
+    private static AIF getAIF(Project project){
+        return new AIF(
+                new File(project.source, project.source.list((file1, s) -> AIF.isAIF(s))[0]).toString());
+    }
+
+    public static void createNew(File source, String name, String packag, String version_name, int version_id, String first_activity, int minSDK, PushCallback<Project> callback) {
+        Thread.start(() -> {
+            FileUtils.refresh(source, true);
+            HashMap<String, String> meta_info = new HashMap<String, String>(){{}};
+            generateAIF(meta_info, source, packag);
+            FileGenUtils.generateDefaultProject(source, packag, name, version_name, version_id, first_activity, minSDK,
+                    none -> {
+                        Project project = new Project(source);
+                        project.exec(_none_ -> callback.onComplete(project));
+                    });
+        });
+    }
+
+    private static void generateAIF(HashMap<String, String> meta_info, File source, String project_package){
+        source = new File(source, "project.aif");
+        FileUtils.refresh(source, false);
+        meta_info.put(Const.OPENED_FILE_STRING, Const.getDefaultLastFile(project_package));
+        meta_info.put("aif_version", String.valueOf(AIF.AIF_VERSION));
+        meta_info.putAll(new DefaultProjectSettings(source.getParentFile(), project_package).getHashMap());
+        new AIF(meta_info, source.getAbsolutePath());
     }
 
 }
