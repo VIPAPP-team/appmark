@@ -143,8 +143,6 @@ public class AIF extends ThreadLoader {
             // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
             load();
         }
-
-        updateAif();
     }
 
     // SETTERS

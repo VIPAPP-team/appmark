@@ -54,6 +54,9 @@ public class Project extends ThreadLoader implements Serializable {
         // hold thread until loaded
         while(loading[0] != loading[1]){ Thread.sleep(LOAD_TIME); }
     }
+    private void aifUpdate(){
+        aif.updateAif();
+    }
     private void settingsSetup(){
         settings = aif.getProjectSettings();
     }
@@ -79,9 +82,10 @@ public class Project extends ThreadLoader implements Serializable {
 
     // can throw exception while setup
     private void setup(){
-        manifestSetup();
         aifSetup();
         settingsSetup();
+        manifestSetup();
+        aifUpdate();
         loadAllUI();
     }
 
