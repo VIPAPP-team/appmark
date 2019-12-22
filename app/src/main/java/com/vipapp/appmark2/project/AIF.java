@@ -27,12 +27,15 @@ public class AIF extends ThreadLoader {
     private HashMap<String, String> info = new HashMap<>();
     private Project project;
 
-    AIF(@NonNull String pathname) {
-        super(pathname);
+    private String path;
+
+    AIF(@NonNull String path) {
+        this.path = path;
     }
 
-    AIF(HashMap<String, String> metadata, String pathname) {
-        super(metadata, pathname);
+    AIF(HashMap<String, String> metadata, String path) {
+        this.info = metadata;
+        this.path = path;
     }
 
     public static boolean isAIF(String pathname) {
@@ -119,26 +122,23 @@ public class AIF extends ThreadLoader {
     }
 
     @Override
-    public void load(Object... args) {
-        String pathname = (String) (args[0] instanceof String ? args[0] : args[1]);
+    public void load() {
 
-        if (!isAIF(pathname))
-            throw new IncorrectAIFName(pathname);
+        if (!isAIF(path))
+            throw new IncorrectAIFName(path);
 
-        if (args[0] instanceof HashMap) {
-            //noinspection unchecked
-            info = (HashMap<String, String>) args[0];
-            aif = new File(pathname);
+        if (info != null) {
+            aif = new File(path);
             add_warnings();
             writeAif();
         } else {
-            aif = new File(pathname);
+            aif = new File(path);
             info = readAif();
         }
 
         if (info == null) {
             // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
-            load(args);
+            load();
         } else {
             int version = Integer.parseInt(Objects.requireNonNull(info.get(VERSION)));
             if (version != AIF_VERSION)

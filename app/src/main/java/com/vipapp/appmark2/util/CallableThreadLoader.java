@@ -7,26 +7,27 @@ public abstract class CallableThreadLoader {
     private ArrayList<PushCallback<Void>> callbacks = new ArrayList<>();
     private boolean running = false;
 
-    public abstract void load(Object... objArr);
+    public abstract void load();
 
     protected CallableThreadLoader() {
     }
 
-    public final void reload(PushCallback<Void> callback, Object... args) {
-        reload(args);
+    public final void reload(PushCallback<Void> callback) {
+        reload();
         exec(callback);
     }
 
-    public final void reload(Object... args) {
+
+    protected final void reload() {
         this.running = true;
         Thread.start(() -> {
-            load(args);
+            load();
             this.running = false;
             execCallbacks();
         });
     }
 
-    public final void execCallbacks() {
+    private void execCallbacks() {
         for(PushCallback<Void> callback: callbacks){
             exec(callback);
         }

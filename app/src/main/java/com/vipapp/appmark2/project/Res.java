@@ -21,6 +21,7 @@ import static com.vipapp.appmark2.util.Const.ANDROID_DRAWABLES;
 import static com.vipapp.appmark2.util.Const.LOAD_TIME;
 import static com.vipapp.appmark2.util.Const.REFERENCE_REGEX;
 
+@SuppressWarnings("WeakerAccess")
 public class Res extends ThreadLoader{
     private Resources androidRes = Resources.getSystem();
 
@@ -32,20 +33,12 @@ public class Res extends ThreadLoader{
     private Drawables drawables;
 
     private File source;
-    public static Res fromFile(File file){
-        return new Res(file);
-    }
+
     private Res(File file){
         source = file;
     }
-
-    @Override
-    public void load(Object... args) {
-        int[] loaded = new int[]{0, 2};
-        stringsSetup(loaded);
-        colorsSetup(loaded);
-        drawablesSetup();
-        while(loaded[0] != loaded[1]){ Thread.sleep(LOAD_TIME); }
+    public static Res fromFile(File file){
+        return new Res(file);
     }
 
     private void stringsSetup(int[] loaded){
@@ -61,6 +54,56 @@ public class Res extends ThreadLoader{
     private void drawablesSetup(){
         File file = new File(source, "drawable");
         drawables = new Drawables(file);
+    }
+
+    @Override
+    public void load() {
+        int[] loaded = new int[]{0, 2};
+        stringsSetup(loaded);
+        colorsSetup(loaded);
+        drawablesSetup();
+        while(loaded[0] != loaded[1]){ Thread.sleep(LOAD_TIME); }
+    }
+
+    private String getString(String string){
+        return strings == null? null: strings.get(string);
+    }
+    private String getColor(String colorName){
+        return colors == null? null: colors.get(colorName);
+    }
+    private File getDrawable(String name){
+        return drawables == null? null: drawables.getDrawable(name);
+    }
+
+    private File createAndroidDrawable(int id, String name){
+        File file = new File(ANDROID_DRAWABLES, name);
+        if(file.exists())
+            return file;
+        else {
+            FileUtils.refresh(file.getParentFile(), true);
+            ImageUtils.saveBitmap(BitmapFactory.decodeResource(androidRes, id), file);
+        }
+        return file;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nullable
+    private <T> T getAndroidResource(String name){
+        String res_type = getResType(name);
+        if(res_type != null) {
+            int id = ResourcesUtils.getAndroidIdentifier(name, res_type);
+            if(id != 0) {
+                switch (res_type) {
+                    case "string":
+                        return (T) androidRes.getString(id);
+                    case "color":
+                        return (T) colorToString(androidRes.getColor(id));
+                    case "drawable":
+                        return (T) createAndroidDrawable(id, name);
+                }
+            }
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -89,47 +132,6 @@ public class Res extends ThreadLoader{
         } catch (ClassCastException ignored){}
 
         return null;
-    }
-
-    private String getString(String string){
-        return strings == null? null: strings.get(string);
-    }
-    private String getColor(String colorName){
-        return colors == null? null: colors.get(colorName);
-    }
-    private File getDrawable(String name){
-        return drawables == null? null: drawables.getDrawable(name);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Nullable
-    private <T> T getAndroidResource(String name){
-        String res_type = getResType(name);
-        if(res_type != null) {
-            int id = ResourcesUtils.getAndroidIdentifier(name, res_type);
-            if(id != 0) {
-                switch (res_type) {
-                    case "string":
-                        return (T) androidRes.getString(id);
-                    case "color":
-                        return (T) colorToString(androidRes.getColor(id));
-                    case "drawable":
-                        return (T) createAndroidDrawable(id, name);
-                }
-            }
-        }
-        return null;
-    }
-
-    private File createAndroidDrawable(int id, String name){
-        File file = new File(ANDROID_DRAWABLES, name);
-        if(file.exists())
-            return file;
-        else {
-            FileUtils.refresh(file.getParentFile(), true);
-            ImageUtils.saveBitmap(BitmapFactory.decodeResource(androidRes, id), file);
-        }
-        return file;
     }
 
     private String colorToString(long color){

@@ -50,7 +50,7 @@ public class AndroidManifest extends CallableThreadLoader {
     }
 
     @Override
-    public void load(Object... args) {
+    public void load() {
         text = FileUtils.readFileUI(source);
         parse();
     }

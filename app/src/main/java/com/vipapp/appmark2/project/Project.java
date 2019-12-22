@@ -36,7 +36,7 @@ public class Project extends ThreadLoader implements Serializable {
     private ProjectSettings settings;
 
     private Project(File source){
-        super(source);
+        this.source = source;
     }
     public static Project fromFile(File file){
         return new Project(file);
@@ -92,7 +92,7 @@ public class Project extends ThreadLoader implements Serializable {
     }
 
     @Override
-    public void load(Object... args) {
+    public void load() {
         if(notProject(source))
             throw new RuntimeException("This is not project");
 
@@ -271,7 +271,7 @@ public class Project extends ThreadLoader implements Serializable {
             readObject(stream);
             return;
         }
-        reload(source);
+        reload();
     }
     private void writeObject(ObjectOutputStream stream) {
         try {
@@ -286,7 +286,8 @@ public class Project extends ThreadLoader implements Serializable {
 
     // STATIC METHODS
     public static boolean notProject(File file){
-        return !file.isDirectory() ||
+        return file == null ||
+                !file.isDirectory() ||
                 file.list((file1, s) -> AIF.isAIF(s)).length != 1;
     }
 
