@@ -22,3 +22,6 @@
 
 
 -ignorewarnings
+-dontobfuscate
+-dontshrink
+
