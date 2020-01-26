@@ -12,33 +12,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 @SuppressWarnings("WeakerAccess")
-public class ClassUtils extends Utils {
-    public static <T> void castIfInstance(Object object, Class<T> castClass, PushCallback<T> callback){
-        if(castClass.isInstance(object))
-            callback.onComplete(castClass.cast(object));
-    }
-
-    public static <ClassType> ClassType getInstance(Class<ClassType> classType, Object... constructor_args){
+public class ClassUtils {
+    public static <ClassType> ClassType getInstance(Class<ClassType> clazz, Object... constructorArgs){
         try {
-            if(constructor_args.length == 0) return classType.newInstance();
+            if(constructorArgs.length == 0) return clazz.newInstance();
             else {
-                Object[] classes_object = ArrayUtils.filter(constructor_args, Class.class::isInstance);
+                Object[] classes_object = ArrayUtils.filter(constructorArgs, Class.class::isInstance);
                 Class[] classes = new Class[classes_object.length];
                 //noinspection SuspiciousSystemArraycopy
                 System.arraycopy(classes_object, 0, classes, 0, classes_object.length);
-                Object[] args = ArrayUtils.filter(constructor_args, x -> !ArrayUtils.in_array(classes, x));
-                return classType.getConstructor(classes).newInstance(args);
+                Object[] args = ArrayUtils.filter(constructorArgs, x -> !ArrayUtils.in_array(classes, x));
+                return clazz.getConstructor(classes).newInstance(args);
             }
         } catch (Exception e){
             throw new RuntimeException(e.getCause()     );
         }
     }
-    public static Object getInstance(String className, Object... constructor_args){
+    public static Object getInstance(String className, Object... constructorArgs){
         Class<?> clazz = getClass(className);
         if(clazz == null){
             throw new RuntimeException(new ClassNotFoundException());
         }
-        return getInstance(clazz, constructor_args);
+        return getInstance(clazz, constructorArgs);
     }
 
     @Nullable
@@ -51,15 +46,6 @@ public class ClassUtils extends Utils {
         }
     }
 
-    public static boolean classExists(String className){
-        try{
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e){
-            return false;
-        }
-    }
-
     public static Class getClassFromFile(File classFile){
         String className = getClassFullnameFromFile(classFile);
         try {
@@ -68,13 +54,8 @@ public class ClassUtils extends Utils {
         return null;
     }
 
-    public static int resolveClassType(Class clazz){
-        if(clazz != null){
-            if(clazz.isInterface()) return Const.INTERFACE_TYPE; else
-            if(clazz.isLocalClass()) return Const.LOCAL_CLASS_TYPE;
-            return Const.CLASS_TYPE;
-        }
-        return Const.CLASS_NOT_FOUND_TYPE;
+    public static String getClassFullnameFromFile(File classFile){
+        return classFile.getPath().replaceAll("\\.class", "").replaceAll("[/$]", ".");
     }
 
     public static String getClassNameFromFile(File classFile){
@@ -86,8 +67,14 @@ public class ClassUtils extends Utils {
         return className;
     }
 
-    public static String getClassFullnameFromFile(File classFile){
-        return classFile.getPath().replaceAll("\\.class", "").replaceAll("[/$]", ".");
+
+    public static int resolveClassType(Class clazz){
+        if(clazz != null){
+            if(clazz.isInterface()) return Const.INTERFACE_TYPE; else
+            if(clazz.isLocalClass()) return Const.LOCAL_CLASS_TYPE;
+            return Const.CLASS_TYPE;
+        }
+        return Const.CLASS_NOT_FOUND_TYPE;
     }
 
     public static <T> T getOrDefault(T object, T Default, Predicate<T> condition){

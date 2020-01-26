@@ -1,9 +1,9 @@
-package com.vipapp.appmark2.util;
+package com.vipapp.appmark2.util.wrapper;
 
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-public class Animation extends Utils {
+public class Animation {
     public static void animate(View v, String propName, float... values) {
         animate(v, propName, 300, values);
     }

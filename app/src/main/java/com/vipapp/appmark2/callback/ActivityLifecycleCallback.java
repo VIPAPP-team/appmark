@@ -2,17 +2,22 @@ package com.vipapp.appmark2.callback;
 
 import android.app.Activity;
 import android.app.Application.ActivityLifecycleCallbacks;
+import android.os.Build;
 import android.os.Bundle;
 import com.vipapp.appmark2.activity.IntroActivity;
 import com.vipapp.appmark2.util.ActivityStarter;
 import com.vipapp.appmark2.util.ContextUtils;
 import com.vipapp.appmark2.util.Permissions;
 
+import com.vipapp.appmark2.util.wrapper.mContext;
+
 public class ActivityLifecycleCallback implements ActivityLifecycleCallbacks {
     public void onActivityCreated(Activity activity, Bundle bundle) {
+
     }
 
     public void onActivityDestroyed(Activity activity) {
+
     }
 
     public void onActivityPaused(Activity activity) {

@@ -13,7 +13,7 @@ import com.vipapp.appmark2.item.OnProjectEdited;
 import com.vipapp.appmark2.manager.ProjectManager;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.util.ActivityStarter;
-import com.vipapp.appmark2.util.Animation;
+import com.vipapp.appmark2.util.wrapper.Animation;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.Toast;

@@ -3,7 +3,7 @@ package com.vipapp.appmark2.activity;
 import android.widget.ImageView;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.util.Animation;
+import com.vipapp.appmark2.util.wrapper.Animation;
 import com.vipapp.appmark2.util.Permissions;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.thread.IntroductionThread;

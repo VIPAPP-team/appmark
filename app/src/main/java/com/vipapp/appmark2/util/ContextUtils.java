@@ -13,7 +13,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.vipapp.appmark2.util.Const.PREFS_NAME;
 
 @SuppressWarnings({"DeprecatedIsStillUsed", "deprecation"})
-public class ContextUtils extends Utils{
+public class ContextUtils {
 
     // Method mContext.get() exists
     @SuppressLint("StaticFieldLeak")

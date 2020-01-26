@@ -3,6 +3,9 @@ package com.vipapp.appmark2.util;
 import com.vipapp.appmark2.callback.PushCallback;
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
+
+@SuppressWarnings("WeakerAccess")
 public abstract class CallableThreadLoader {
     private ArrayList<PushCallback<Void>> callbacks = new ArrayList<>();
     private boolean running = false;
@@ -12,19 +15,24 @@ public abstract class CallableThreadLoader {
     protected CallableThreadLoader() {
     }
 
-    public final void reload(PushCallback<Void> callback) {
-        reload();
-        exec(callback);
+    public final void reload() {
+        reload(null);
     }
 
 
-    protected final void reload() {
-        this.running = true;
-        Thread.start(() -> {
-            load();
-            this.running = false;
-            execCallbacks();
-        });
+    protected final void reload(@Nullable PushCallback<Void> callback) {
+        if(!running) {
+            this.running = true;
+            Thread.start(() -> {
+                load();
+                this.running = false;
+                execCallbacks();
+                if (callback != null)
+                    exec(callback);
+            });
+        } else {
+            exec(none -> reload(callback));
+        }
     }
 
     private void execCallbacks() {

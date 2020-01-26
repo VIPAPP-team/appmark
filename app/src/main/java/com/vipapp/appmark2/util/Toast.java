@@ -1,10 +1,11 @@
 package com.vipapp.appmark2.util;
 
+import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.util.wrapper.mContext;
 
 import androidx.annotation.StringRes;
 
-public class Toast extends Utils {
+public class Toast {
 
     private static android.widget.Toast previous;
 
@@ -23,7 +24,7 @@ public class Toast extends Utils {
     }
 
     public static void show(@StringRes int res){
-        show(ContextUtils.activity.getString(res));
+        show(Str.get(res));
     }
 
     public static void error(String place, Throwable throwable){

@@ -7,6 +7,7 @@ import android.net.Uri;
 import com.vipapp.appmark2.util.wrapper.mActivity;
 import com.vipapp.appmark2.util.wrapper.mContext;
 
+@SuppressWarnings("WeakerAccess")
 public class ActivityStarter {
 
     public static void go(String activityName){
@@ -16,7 +17,7 @@ public class ActivityStarter {
     public static void go(String activityName, boolean finishOldActivity){
         Intent i = new Intent();
         i.setClassName(mContext.get(), "com.vipapp.appmark2.activity." + activityName);
-        Activity activity = ContextUtils.activity;
+        Activity activity = mActivity.get();
         activity.startActivity(i);
         if(finishOldActivity)
             activity.finish();
