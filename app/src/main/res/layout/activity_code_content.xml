@@ -65,6 +65,7 @@
             android:background="#cecece" />
 
         <com.vipapp.appmark2.widget.CodeText
+            android:enabled="false"
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

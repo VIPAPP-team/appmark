@@ -172,7 +172,7 @@ public class CodeActivity extends BaseActivity {
     @Override
     public void setup() {
         overrideTransition();
-        lock_screen();
+        lockScreen();
         setupDrawer();
         setupProject();
     }
@@ -270,7 +270,7 @@ public class CodeActivity extends BaseActivity {
     public void setupProject(){
         project = (Project) getIntent().getSerializableExtra("project");
         project.exec(none -> {
-            unlock_screen();
+            unlockScreen();
             onProjectLoad();
         });
     }
@@ -298,12 +298,14 @@ public class CodeActivity extends BaseActivity {
         file_recycler.pushValue(Const.PATH, project.getSource());
     }
 
-    public void lock_screen(){
+    public void lockScreen(){
         LoadingDialog.show();
         LoadingDialog.setTitle(R.string.loading_project);
+        content.setEnabled(false);
     }
-    public void unlock_screen(){
+    public void unlockScreen(){
         LoadingDialog.hide();
+        content.setEnabled(true);
     }
 
     public void onProjectLoad(){
