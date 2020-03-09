@@ -27,10 +27,18 @@ public class ClassUtils extends Utils {
                 //noinspection SuspiciousSystemArraycopy
                 System.arraycopy(classes_object, 0, classes, 0, classes_object.length);
                 Object[] args = ArrayUtils.filter(constructor_args, x -> !ArrayUtils.in_array(classes, x));
-                return classType.getConstructor(classes).newInstance(args);
+                return getInstance(classType, classes, args);
             }
         } catch (Exception e){
-            throw new RuntimeException(e.getCause()     );
+            throw new RuntimeException(e);
+        }
+    }
+    public static <ClassType> ClassType getInstance(Class<ClassType> classType, Class[] constructor_classes, Object... constructor_args){
+        try {
+            if(constructor_classes.length == 0) return classType.newInstance();
+            return classType.getConstructor(constructor_classes).newInstance(constructor_args);
+        } catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
     public static Object getInstance(String className, Object... constructor_args){

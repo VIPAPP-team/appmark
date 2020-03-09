@@ -5,6 +5,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.vipapp.appmark2.callback.Mapper;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.BuiltView;
+import com.vipapp.appmark2.item.TransformedItem;
 import com.vipapp.appmark2.item.design.DesignObject;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.util.ThrowableUtils;
@@ -13,6 +17,8 @@ import com.vipapp.appmark2.xml.XMLObject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import static com.vipapp.appmark2.util.Const.SHOW_DESIGN_ERROR;
 
 public class DesignView extends FrameLayout {
 
@@ -41,14 +47,16 @@ public class DesignView extends FrameLayout {
 
     }
 
-    public boolean buildDesign(XMLObject object, Project project){
+    public boolean buildDesign(XMLObject object, Project project, Mapper<BuiltView, View> onNewView){
+        removeAllViews();
         try {
             DesignObject designObject = DesignObject.createNew(object);
-            View v = designObject.setupView(designObject.getXMLObject(), project);
+            View v = designObject.setupView(designObject.getXMLObject(), project, onNewView);
             addView(v);
             return true;
         } catch (Throwable th){
-            Toast.show(ThrowableUtils.toString(th));
+            if(SHOW_DESIGN_ERROR)
+                Toast.show(ThrowableUtils.toString(th));
             return false;
         }
     }

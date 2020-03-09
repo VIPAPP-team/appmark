@@ -58,24 +58,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if(grantResults.length != Permissions.permissions.length) {
-            exit_with_permission_error();
-            return;
-        }
-
-        for(int result: grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                exit_with_permission_error();
-                return;
-            }
-        }
-
-        recreate();
-
-    }
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         for(PushCallback<ActivityResult> callback: callbacks){

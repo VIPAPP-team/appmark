@@ -6,6 +6,7 @@ import android.view.View;
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.util.ContextUtils;
+import com.vipapp.appmark2.util.wrapper.mContext;
 import com.vipapp.appmark2.widget.EditText;
 import com.vipapp.appmark2.widget.TextView;
 
@@ -18,7 +19,11 @@ public class StringPicker extends DefaultPicker<String> {
     private EditText value;
 
     public StringPicker(PushCallback<String> callback)  {
-        super(callback);
+        this(callback, false);
+    }
+
+    public StringPicker(PushCallback<String> callback, boolean closeOnPick){
+        super(callback, closeOnPick);
         setView(R.layout.string_picker_dialog);
         findViews(getView());
         setCallbacks();
@@ -58,7 +63,7 @@ public class StringPicker extends DefaultPicker<String> {
         value.setError(error);
     }
     public void setError(@StringRes int error){
-        value.setError(ContextUtils.context.getString(error));
+        value.setError(mContext.get().getString(error));
     }
 
 }

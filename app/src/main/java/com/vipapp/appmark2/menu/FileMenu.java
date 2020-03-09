@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vipapp.appmark2.R;
+import com.vipapp.appmark2.alert.ImageImportDialog;
 import com.vipapp.appmark2.alert.confirm.DeleteFileDialog;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.holder.FileHolder;
@@ -55,19 +56,7 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
                 picker.show();
             },
             // import image
-            none -> {
-                ImagePicker picker = new ImagePicker(image -> {
-                    FileNamePicker fileNamePicker = new FileNamePicker(string -> {
-                        // Add to string ".png" if filename not contains dot
-                        File file = new File(current_path,
-                                string.indexOf('.') == -1? string + ".png": string);
-                        createNewFile(file.getName(), false);
-                        ImageUtils.saveBitmap(image.getBitmap(), file);
-                    });
-                    fileNamePicker.show();
-                });
-                picker.show();
-            },
+            none -> ImageImportDialog.show(current_path, this::notifyFile),
             // delete file
             file_item -> {
                 //noinspection unchecked
@@ -219,8 +208,8 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
             }
         });
         if(item != null) vh.itemView.setOnLongClickListener(view -> {
-            //noinspection unchecked
             if(files.indexOf(item) != -1) {
+                //noinspection unchecked
                 StringChooser chooser = new StringChooser(action -> menuCallbacks[action.getType()].onComplete(
                         new Item<>(files.indexOf(item), item)));
                 chooser.setTitle(R.string.select_action);
@@ -236,13 +225,16 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
         if(FileUtils.refresh(newFile, directory)) {
             if (!directory)
                 FileUtils.writeFileUI(newFile, FileUtils.getDefaultTextForFile(newFile, project));
-            // refresh files
-            list(null);
-            pushArray(files, false);
-            notifyInserted(files.indexOf(newFile));
+            notifyFile(newFile);
         } else {
             Toast.show(R.string.error_create_file);
         }
+    }
+
+    private void notifyFile(File file){
+        list(null);
+        pushArray(files, false);
+        notifyInserted(files.indexOf(file));
     }
 
 }

@@ -2,6 +2,8 @@ package com.vipapp.appmark2.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
@@ -24,6 +26,7 @@ public class ImageUtils {
                     .into(view);
         } catch (Exception ignored){}
     }
+
     public static void load(@Nullable File file, PushCallback<Bitmap> result){
         Thread.start(() -> {
             Bitmap bitmap = getFromFile(file);

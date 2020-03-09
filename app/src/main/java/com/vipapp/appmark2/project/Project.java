@@ -50,8 +50,8 @@ public class Project extends ThreadLoader implements Serializable {
     public static void createNew(File source, String name, String packag, File icon, String version_name, int version_id, String first_activity, int minSDK, PushCallback<Project> callback) {
         Thread.start(() -> {
             FileUtils.refresh(source, true);
-            HashMap<String, String> meta_info = new HashMap<String, String>(){{}};
-            generateAIF(meta_info, source, packag);
+            HashMap<String, String> meta_info = new HashMap<>();
+            generateAIF(meta_info, source);
             FileGenUtils.generateDefaultProject(source, packag, name, version_name, version_id, first_activity, minSDK,
                     none -> {
                         Project project = new Project(source);
@@ -60,12 +60,10 @@ public class Project extends ThreadLoader implements Serializable {
         });
     }
 
-    private static void generateAIF(HashMap<String, String> meta_info, File source, String project_package){
+    private static void generateAIF(HashMap<String, String> meta_info, File source){
         source = new File(source, "project.aif");
         FileUtils.refresh(source, false);
-        meta_info.put(Const.OPENED_FILE_STRING, Const.getDefaultLastFile(project_package));
-        meta_info.put("aif_version", String.valueOf(AIF.AIF_VERSION));
-        meta_info.putAll(new DefaultProjectSettings(source.getParentFile(), project_package).getHashMap());
+        meta_info.put("aif_version", "1");
         new AIF(meta_info, source.getAbsolutePath());
     }
 
@@ -74,34 +72,37 @@ public class Project extends ThreadLoader implements Serializable {
             setup();
             return true;
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
     @SuppressWarnings("RedundantThrows")
     private void setup() throws Exception{
-        aifSetup();
-        settingsSetup();
+        manifestAndAifSetup();
         loadAllUI();
-        manifestSetup();
+        manifest.attachProject(this);
     }
 
-    private void manifestSetup(){
-        int[] load = new int[]{0, 1};
-        File manifest_file = getAndroidManifestFile();
-        manifest = AndroidManifest.fromFile(manifest_file);
-        manifest.attachProject(this);
-        manifest.reload(none -> load[0]++);
-        while(load[0] != load[1]){ Thread.sleep(LOAD_TIME); }
-    }
-    private void aifSetup(){
+    private void manifestAndAifSetup(){
+
         this.aif = getAIF(this);
         aif.onAttachProject(this);
-        int[] loading = new int[]{0, 1};
-        this.aif.exec(none -> loading[0]++);
+        int[] aif_load = new int[]{0, 1};
+        this.aif.exec(none -> aif_load[0]++);
 
-        // hold thread until loaded
-        while(loading[0] != loading[1]){ Thread.sleep(LOAD_TIME); }
+        while(aif_load[0] != aif_load[1]){ Thread.sleep(LOAD_TIME); }
+
+        settingsSetup();
+
+        int[] manifest_load = new int[]{0, 1};
+        File manifest_file = getAndroidManifestFile();
+        manifest = AndroidManifest.fromFile(manifest_file);
+        manifest.reload(none -> manifest_load[0]++);
+
+        while(manifest_load[0] != manifest_load[1]){ Thread.sleep(LOAD_TIME); }
+
+        aif.update_aif();
+        settingsSetup();
     }
     private void settingsSetup(){
         settings = aif.getProjectSettings();
@@ -112,7 +113,7 @@ public class Project extends ThreadLoader implements Serializable {
         resources.exec(none -> loading[0]++);
         while(loading[0] != loading[1]){
             Thread.sleep(LOAD_TIME);
-         }
+        }
     }
 
     private void loadAll(PushCallback<Void> callback){
@@ -125,7 +126,6 @@ public class Project extends ThreadLoader implements Serializable {
     private void loadAllUI(){
         setupResources();
     }
-
 
     public Res getResources() {
         return resources;
@@ -219,7 +219,10 @@ public class Project extends ThreadLoader implements Serializable {
     }
 
     public File getAndroidManifestFile(){
-        return new File(settings.get("manifest"));
+        String manifest = settings == null? null: settings.get("manifest");
+        return manifest == null?
+                new File(dir, Const.ANDROID_MANIFEST_LOCATION):
+                new File(manifest);
     }
 
     // Locales
@@ -285,14 +288,13 @@ public class Project extends ThreadLoader implements Serializable {
 
     @Override
     public void load(Object... args) {
-
         File source = (File) args[0];
         if(notProject(source))
             throw new RuntimeException("This is not project");
 
         this.dir = source;
 
-        supported = try_to_setup();
+        supported = try_to_setup() && manifest != null;
     }
 
     public void delete(){

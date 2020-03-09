@@ -33,7 +33,7 @@ public class GalleryManager extends DefaultManager<Image> {
                         null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
         int count = (int) args[0];
         if (cursor != null && cursor.moveToFirst()) {
-            while(count > 0) {
+            while(count != 0) {
                 String imageLocation = cursor.getString(1);
                 File imageFile = new File(imageLocation);
                 if (imageFile.exists()) {

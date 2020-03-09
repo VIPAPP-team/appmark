@@ -1,6 +1,9 @@
 package com.vipapp.appmark2.project;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.exception.IncorrectAIFName;
@@ -10,11 +13,18 @@ import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.util.Json;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.ThreadLoader;
+import com.vipapp.appmark2.util.ThrowableUtils;
+import com.vipapp.appmark2.util.Toast;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.vipapp.appmark2.util.Const.LOAD_TIME;
+
+@SuppressWarnings("WeakerAccess")
 public class AIF extends ThreadLoader {
 
     private ArrayList<PushCallback<Void>> onAttach = new ArrayList<>();
@@ -51,14 +61,21 @@ public class AIF extends ThreadLoader {
         for(PushCallback<Void> callback: onAttach) callback.onComplete(null);
     }
 
+    private void addOnAttachCallback(PushCallback<Void> callback){
+        if(project == null) onAttach.add(callback);
+        else callback.onComplete(null);
+    }
+
     private HashMap<String, String> read_aif(){
         String text = FileUtils.readFileUI(aif);
-        if(text.equals("")){
+        try {
+            if(text.equals("")) throw new RuntimeException();
+            return Json.stringHashMap(text);
+        } catch (Exception e){
             HashMap<String, String> result = new HashMap<>();
-            result.put(VERSION, "0");
+            result.put(VERSION, "1");
             return result;
         }
-        return Json.stringHashMap(text);
     }
     private void write_aif(){
         FileUtils.writeFileUI(aif, Json.toPrettyJson(info));
@@ -76,22 +93,8 @@ public class AIF extends ThreadLoader {
     }
 
     //AIF UPDATES
-    private void update_with_app_version(){
-        info.put(AIF.APP_VERSION, "1.0");
-        info.put(AIF.APP_VERSION_NUMBER, "1");
-    }
-    private void remove_redundant_args(){
-        info.remove(APP_VERSION);
-        info.remove(APP_VERSION_NUMBER);
-        info.remove(PACKAGE);
-    }
-    private void add_default_file(){
-        info.put(Const.DEFAULT_FILE, Const.getDefaultLastFile(project.getPackage()));
-    }
-    private void replace_default_with_opened(){
-        info.put(Const.OPENED_FILE_STRING, info.get(Const.DEFAULT_FILE));
-        info.remove(Const.DEFAULT_FILE);
-        write_aif();
+    private void add_opened_file(){
+        info.put(Const.OPENED_FILE_STRING, Const.getDefaultLastFile(project.getPackage()));
     }
     private void add_warnings(){
         info.put(Const.DANGEROUS_WARN_KEY, Const.DANGEROUS_WARN_VALUE);
@@ -100,17 +103,22 @@ public class AIF extends ThreadLoader {
         info.putAll(new DefaultProjectSettings(project.getDir(), project.getPackage()).getHashMap());
     }
 
-    private void update_aif(int old_version){
-        switch(old_version){
-            case 1: update_with_app_version();
-            case 2: remove_redundant_args();
-            case 3: add_default_file();
-            case 4: replace_default_with_opened();
-            case 5: add_warnings();
-            case 6: add_default_project_settings();
+    public void update_aif(){
+        String versionStr = info.get(VERSION);
+        int version = versionStr == null? 0: Integer.parseInt(versionStr);
+        if (version != AIF_VERSION) {
+            if (version < 7)
+                version = 1;
+
+            switch (version) {
+                case 1:
+                    add_opened_file();
+                    add_warnings();
+                    add_default_project_settings();
+            }
+            info.put(VERSION, Integer.toString(AIF_VERSION));
+            write_aif();
         }
-        info.put(VERSION, Integer.toString(AIF_VERSION));
-        write_aif();
     }
 
     // SETTERS
@@ -124,12 +132,18 @@ public class AIF extends ThreadLoader {
     public File getLastFile(){
         return new File(project.getDir(), info.get(Const.OPENED_FILE_STRING));
     }
+
+    @Nullable
     public ProjectSettings getProjectSettings(){
-        ProjectSettings settings = new ProjectSettings();
-        for(String str: ProjectSettings.getAvailableKeys()){
-            settings.put(str, info.get(str));
+        try {
+            ProjectSettings settings = new ProjectSettings();
+            for (String str : ProjectSettings.getAvailableKeys()) {
+                settings.put(str, info.get(str));
+            }
+            return settings;
+        } catch (Exception e){
+            return null;
         }
-        return settings;
     }
     public void saveProjectSettings(ProjectSettings settings){
         for(String str: ProjectSettings.getAvailableKeys()){
@@ -158,10 +172,6 @@ public class AIF extends ThreadLoader {
         if(info == null) {
             // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
             load(args);
-        } else {
-            int version = Integer.parseInt(info.get(VERSION));
-            if (version != AIF_VERSION)
-                update_aif(version);
         }
     }
 

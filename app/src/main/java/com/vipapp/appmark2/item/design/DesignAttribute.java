@@ -5,7 +5,6 @@ import android.view.View;
 import com.vipapp.appmark2.project.Res;
 import com.vipapp.appmark2.xml.XMLObject;
 
-@SuppressWarnings("WeakerAccess")
 public abstract class DesignAttribute {
 
     private String name;
