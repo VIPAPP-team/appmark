@@ -12,6 +12,7 @@ import static com.vipapp.appmark2.util.Const.SERVER_CHANGELOG;
 import static com.vipapp.appmark2.util.Const.SERVER_INFO;
 import static com.vipapp.appmark2.util.Const.SERVER_STATUS;
 
+@SuppressWarnings("WeakerAccess")
 public class Server {
 
     private static Boolean server_online;
@@ -26,7 +27,7 @@ public class Server {
                 if(result != null) {
                     server_online = result.equals("OK");
                 }
-                callback.onComplete(false);
+                callback.onComplete(server_online);
             });
         }
     }
@@ -61,7 +62,7 @@ public class Server {
         getServerOnline(result -> {
             if(result) OkHttp.get(url, callback); else {
                 callback.onComplete(null);
-            };
+            }
         });
     }
 

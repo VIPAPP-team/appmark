@@ -142,8 +142,9 @@ public class Const {
 
     private static final String SERVER_WEBHOST = "https://apphosting.000webhostapp.com/appmark/";
     private static final String SERVER_NEON = "https://neonteam.net/appmark/";
+    private static final String SERVER_VIPAPP = "https://vipapp.site/api/appmark/";
 
-    private static final String SERVER_URL = SERVER_WEBHOST;
+    private static final String SERVER_URL = SERVER_VIPAPP;
     public static final String SERVER_STATUS = SERVER_URL + "status";
     public static final String SERVER_INFO = SERVER_URL + "info.json";
     public static String SERVER_CHANGELOG = SERVER_URL + "changelog/";
