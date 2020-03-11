@@ -57,11 +57,6 @@ public class AIF extends ThreadLoader {
         this.project = project;
     }
 
-    private void addOnAttachCallback(PushCallback<Void> callback){
-        if(project == null) onAttach.add(callback);
-        else callback.onComplete(null);
-    }
-
     private HashMap<String, String> read_aif(){
         String text = FileUtils.readFileUI(aif);
         try {
@@ -118,7 +113,7 @@ public class AIF extends ThreadLoader {
                     add_default_project_settings();
             }
             info.put(VERSION, Integer.toString(AIF_VERSION));
-            write_aif();
+            writeAif();
         }
     }
 
@@ -159,22 +154,20 @@ public class AIF extends ThreadLoader {
     public void load() {
 
         if (!isAIF(path))
-            throw new IncorrectAIFName(pathname);
+            throw new IncorrectAIFName(path);
 
         if(info == null) {
             aif = new File(path);
             info = read_aif();
         } else {
-            //noinspection unchecked
-            info = (HashMap<String, String>) args[0];
             aif = new File(path);
             add_warnings();
-            write_aif();
+            writeAif();
         }
 
         if(info == null) {
             // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
-            load(args);
+            load();
         }
     }
 

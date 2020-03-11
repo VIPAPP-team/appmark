@@ -102,9 +102,7 @@ public class Project extends ThreadLoader implements Serializable {
         aif.update_aif();
         settingsSetup();
     }
-    private void aifUpdate(){
-        aif.updateAif();
-    }
+
     private void settingsSetup(){
         settings = aif.getProjectSettings();
     }
@@ -115,14 +113,6 @@ public class Project extends ThreadLoader implements Serializable {
         while(loading[0] != loading[1]){
             Thread.sleep(LOAD_TIME);
         }
-    }
-    private void manifestSetup(){
-        int[] load = new int[]{0, 1};
-        File manifest_file = getAndroidManifestFile();
-        manifest = AndroidManifest.fromFile(manifest_file);
-        manifest.attachProject(this);
-        manifest.reload(none -> load[0]++);
-        while(load[0] != load[1]){ Thread.sleep(LOAD_TIME); }
     }
     private void loadAllUI(){
         setupResources();
@@ -172,6 +162,16 @@ public class Project extends ThreadLoader implements Serializable {
         return settings;
     }
 
+    public String localizeString(@Nullable String string){
+        if(string == null)
+            return "";
+        if(!string.startsWith("@"))
+            return string;
+        if(!string.startsWith("@string/"))
+            return null;
+        return resources.get(string);
+    }
+
     public File getJavaDir(){
         String javaPath = settings == null? null: settings.get("src");
         return new File(javaPath == null? Const.getJavaDir(getPackage()): javaPath);
@@ -205,7 +205,7 @@ public class Project extends ThreadLoader implements Serializable {
     public File getAndroidManifestFile(){
         String manifest = settings == null? null: settings.get("manifest");
         return manifest == null?
-                new File(dir, Const.ANDROID_MANIFEST_LOCATION):
+                new File(source, Const.ANDROID_MANIFEST_LOCATION):
                 new File(manifest);
     }
 
@@ -233,7 +233,7 @@ public class Project extends ThreadLoader implements Serializable {
     // Setters
     public void setSettings(ProjectSettings settings){
         this.settings = settings;
-        saveSettings();
+        saveSettings(true);
     }
 
     public void setName(String name){
@@ -279,7 +279,7 @@ public class Project extends ThreadLoader implements Serializable {
     }
 
     public void delete(){
-        FileUtils.deleteFile(dir);
+        FileUtils.deleteFile(source);
     }
 
     public ProjectItem getProjectItem(){

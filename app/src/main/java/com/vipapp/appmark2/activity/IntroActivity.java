@@ -6,13 +6,13 @@ import android.widget.ImageView;
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.item.widget.View;
 import com.vipapp.appmark2.util.ActivityStarter;
-import com.vipapp.appmark2.util.Animation;
 import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.util.Permissions;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.Toast;
 import com.vipapp.appmark2.util.thread.IntroductionThread;
 import com.vipapp.appmark2.compiler.Compiler;
+import com.vipapp.appmark2.util.wrapper.Animation;
 import com.vipapp.appmark2.util.wrapper.mSharedPreferences;
 
 import androidx.annotation.NonNull;

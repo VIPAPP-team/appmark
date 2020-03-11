@@ -20,7 +20,7 @@ public abstract class CallableThreadLoader {
     }
 
 
-    protected final void reload(@Nullable PushCallback<Void> callback) {
+    public final void reload(@Nullable PushCallback<Void> callback) {
         if(!running) {
             this.running = true;
             Thread.start(() -> {

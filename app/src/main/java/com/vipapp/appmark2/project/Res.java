@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import static com.vipapp.appmark2.util.Const.ANDROID_DRAWABLES;
 import static com.vipapp.appmark2.util.Const.LOAD_TIME;
 import static com.vipapp.appmark2.util.Const.REFERENCE_REGEX;
+import static com.vipapp.appmark2.util.ResourcesUtils.getResType;
 
 @SuppressWarnings("WeakerAccess")
 public class Res extends ThreadLoader{
@@ -66,7 +67,7 @@ public class Res extends ThreadLoader{
             if (name.startsWith("@android:"))
                 return getAndroidResource(name);
 
-            String res_type = ResourcesUtils.getResType(name);
+            String res_type = getResType(name);
 
             if (res_type != null) {
                 switch (res_type) {
@@ -118,7 +119,7 @@ public class Res extends ThreadLoader{
     @SuppressWarnings("unchecked")
     @Nullable
     private <T> T getAndroidResource(String name){
-        String res_type = ResourcesUtils.getResType(name);
+        String res_type = getResType(name);
         if(res_type != null) {
             int id = ResourcesUtils.getAndroidIdentifier(name);
             if(id != 0) {
@@ -132,34 +133,6 @@ public class Res extends ThreadLoader{
                 }
             }
         }
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Nullable
-    public <T> T get(String name){
-        try {
-
-            String withoutReference = removeReference(name);
-
-            if (name.startsWith("@android:"))
-                return getAndroidResource(name);
-
-            String res_type = getResType(name);
-
-            if(res_type != null) {
-                switch (res_type){
-                    case "string":
-                        return (T) getString(withoutReference);
-                    case "color":
-                        return (T) getColor(withoutReference);
-                    case "drawable":
-                        return (T) getDrawable(withoutReference);
-                }
-            }
-
-        } catch (ClassCastException ignored){}
-
         return null;
     }
 

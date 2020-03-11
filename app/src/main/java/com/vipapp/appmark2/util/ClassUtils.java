@@ -21,8 +21,8 @@ public class ClassUtils {
                 Class[] classes = new Class[classes_object.length];
                 //noinspection SuspiciousSystemArraycopy
                 System.arraycopy(classes_object, 0, classes, 0, classes_object.length);
-                Object[] args = ArrayUtils.filter(constructor_args, x -> !ArrayUtils.in_array(classes, x));
-                return getInstance(classType, classes, args);
+                Object[] args = ArrayUtils.filter(constructorArgs, x -> !ArrayUtils.in_array(classes, x));
+                return getInstance(clazz, classes, args);
             }
         } catch (Exception e){
             throw new RuntimeException(e);
