@@ -65,7 +65,7 @@
     <string name="system_settings">System settings</string>
     <string name="open_last_project_title">Open last launched project</string>
     <string name="opened_project_subtitle">Open project that was launched before closing app</string>
-    <string name="debugger_enabled_title" translatable="false">Debugger</string>
+    <string name="debugger_enabled_title">Debugger</string>
     <string name="debugger_enabled_subtitle">Show crash reason</string>
     <string name="main_editor_font_size_title">Font size</string>
     <string name="main_editor_font_size_subtitle">Change text size in code editor</string>
@@ -76,7 +76,7 @@
     <string name="version_number">Version number:</string>
     <string name="app_version_name">Version name:</string>
     <string name="server_status">Server status:</string>
-    <string name="offline" translatable="false">Offline</string>
+    <string name="offline">Offline</string>
     <string name="actual_version_name">%1$s (newest)</string>
     <string name="newest_version_available">%1$s (newest is %2$s)</string>
     <string name="main_developer_description">Alex Sokol - main app developer and idea maker</string>
@@ -87,12 +87,12 @@
     <string name="replaceable">Replaceable (RexExp)</string>
     <string name="replacement">Replacement</string>
     <string name="locale">en</string>
-    <string name="changelog" translatable="false">Changelog</string>
+    <string name="changelog">Changelog</string>
     <string name="error_create_file">Cannot create this file or directory</string>
     <string name="in_developing">Function in developing</string>
     <string name="java">Compiling java…</string>
     <string name="apk_signing">Signing apk…</string>
-    <string name="pkg" translatable="false">Packaging...</string>
+    <string name="pkg">Packaging...</string>
     <string name="aapt_error">Aapt error</string>
     <string name="java_error">Java error</string>
     <string name="dx_error">Dex error</string>
@@ -116,4 +116,61 @@
     <string name="enter_locale_name">Enter locale name</string>
     <string name="locale_name_error">Invalid locale name</string>
     <string name="project_broken">Error while loading project</string>
+    <string name="select_widget">Select widget</string>
+    <string name="delete_view_warn">Do you really want to delete view ?</string>
+    <string name="enter_string">Enter string</string>
+    <string name="text">Text</string>
+    <string name="id">Id</string>
+    <string name="layout_height">Layout height</string>
+    <string name="layout_width">Layout width</string>
+    <string name="background">Background</string>
+    <string name="other">Other</string>
+    <string name="select_size">Select size</string>
+    <string name="incorrect_number">Incorrect number</string>
+    <string name="enter_number">Enter number</string>
+    <string name="select_drawable">Select drawable</string>
+    <string name="drawable">Drawable</string>
+    <string name="color">Color</string>
+    <string name="visibility">Visibility</string>
+    <string name="enabled">Enabled</string>
+    <string name="debugger_disabled_msg">Debugger disabled. You can turn it on in settings</string>
+    <string name="all">all</string>
+    <string name="left">left</string>
+    <string name="right">right</string>
+    <string name="top">top</string>
+    <string name="bottom">bottom</string>
+    <string name="padding">Padding</string>
+    <string name="margin">Margin</string>
+    <string name="show_design_errors_title">Show design errors</string>
+    <string name="show_design_errors_description">Toast error when design build is unsuccessful</string>
+    <string name="orientation">Orientation</string>
+    <string name="weight_sum">Weight sum</string>
+    <string name="gravity">Gravity</string>
+    <string name="layout_gravity">Layout gravity</string>
+    <string name="weight">Weight</string>
+    <string name="rotation">Rotation</string>
+    <string name="alpha">Alpha</string>
+    <string name="translation_x">Translation X</string>
+    <string name="translation_y">Translation Y</string>
+    <string name="scale_x">Scale X</string>
+    <string name="scale_y">Scale Y</string>
+    <string name="select_gravity">Select gravity</string>
+    <string name="text_size">Text size</string>
+    <string name="text_style">Text style</string>
+    <string name="text_color">Text color</string>
+    <string name="single_line">Single line</string>
+    <string name="lines">Lines</string>
+    <string name="add_inside">Add inside</string>
+    <string name="add_before">Add before</string>
+    <string name="hint">Hint</string>
+    <string name="hint_color">Hint color</string>
+    <string name="input_type">Input type</string>
+    <string name="ime_option">Ime option</string>
+    <string name="src">Src</string>
+    <string name="scale_type">Scale type</string>
+    <string name="checked">Checked</string>
+    <string name="max">Max</string>
+    <string name="progress">Progress</string>
+    <string name="indeterminate">Indeterminate</string>
+    <string name="progress_bar_style">Progress bar style</string>
 </resources>

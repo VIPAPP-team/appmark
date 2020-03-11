@@ -45,14 +45,62 @@ public class Project extends ThreadLoader implements Serializable {
         return new Project(file);
     }
 
-    private void aifSetup(){
+    public static void createNew(File source, String name, String packag, File icon, String version_name, int version_id, String first_activity, int minSDK, PushCallback<Project> callback) {
+        Thread.start(() -> {
+            FileUtils.refresh(source, true);
+            HashMap<String, String> meta_info = new HashMap<>();
+            generateAIF(meta_info, source);
+            FileGenUtils.generateDefaultProject(source, packag, name, version_name, version_id, first_activity, minSDK,
+                    none -> {
+                        Project project = new Project(source);
+                        project.exec(_none_ -> callback.onComplete(project));
+                    });
+        });
+    }
+
+    private static void generateAIF(HashMap<String, String> meta_info, File source){
+        source = new File(source, "project.aif");
+        FileUtils.refresh(source, false);
+        meta_info.put("aif_version", "1");
+        new AIF(meta_info, source.getAbsolutePath());
+    }
+
+    private boolean try_to_setup() {
+        try {
+            setup();
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("RedundantThrows")
+    private void setup() throws Exception{
+        manifestAndAifSetup();
+        loadAllUI();
+        manifest.attachProject(this);
+    }
+
+    private void manifestAndAifSetup(){
+
         this.aif = getAIF(this);
         aif.onAttachProject(this);
-        int[] loading = new int[]{0, 1};
-        this.aif.exec(none -> loading[0]++);
+        int[] aif_load = new int[]{0, 1};
+        this.aif.exec(none -> aif_load[0]++);
 
-        // hold thread until loaded
-        while(loading[0] != loading[1]){ Thread.sleep(LOAD_TIME); }
+        while(aif_load[0] != aif_load[1]){ Thread.sleep(LOAD_TIME); }
+
+        settingsSetup();
+
+        int[] manifest_load = new int[]{0, 1};
+        File manifest_file = getAndroidManifestFile();
+        manifest = AndroidManifest.fromFile(manifest_file);
+        manifest.reload(none -> manifest_load[0]++);
+
+        while(manifest_load[0] != manifest_load[1]){ Thread.sleep(LOAD_TIME); }
+
+        aif.update_aif();
+        settingsSetup();
     }
     private void aifUpdate(){
         aif.updateAif();
@@ -80,63 +128,6 @@ public class Project extends ThreadLoader implements Serializable {
         setupResources();
     }
 
-    // can throw exception while setup
-    private void setup(){
-        aifSetup();
-        settingsSetup();
-        manifestSetup();
-        aifUpdate();
-        loadAllUI();
-    }
-
-    private boolean try_to_setup() {
-        try {
-            setup();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    @Override
-    public void load() {
-        if(notProject(source))
-            throw new RuntimeException("This is not project");
-
-        supported = try_to_setup();
-    }
-
-    private void saveUI(){
-        manifest.saveUI();
-    }
-    public void save(PushCallback<Void> onSave){
-        Thread.start(() -> {
-            saveUI();
-            if(onSave != null) onSave.onComplete(null);
-        });
-    }
-    public void save(){
-        save(null);
-    }
-
-    private void saveSettings(){
-        aif.saveProjectSettings(settings);
-        aif.save(true);
-    }
-
-    public void delete(){
-        FileUtils.deleteFile(source);
-    }
-
-    public String localizeString(@Nullable String string){
-        if(string == null)
-            return "";
-        if(!string.startsWith("@"))
-            return string;
-        if(!string.startsWith("@string/"))
-            return null;
-        return resources.get(string);
-    }
 
     public Res getResources() {
         return resources;
@@ -212,10 +203,10 @@ public class Project extends ThreadLoader implements Serializable {
     }
 
     public File getAndroidManifestFile(){
-        String manifestPath = settings == null? null: settings.get("manifest");
-        return manifestPath == null?
-                new File(source, ANDROID_MANIFEST_LOCATION):
-                new File(manifestPath);
+        String manifest = settings == null? null: settings.get("manifest");
+        return manifest == null?
+                new File(dir, Const.ANDROID_MANIFEST_LOCATION):
+                new File(manifest);
     }
 
     // Locales
@@ -259,6 +250,36 @@ public class Project extends ThreadLoader implements Serializable {
     }
     public void setIconUI(Bitmap icon){
         ImageUtils.saveBitmap(icon, getIcon());
+    }
+
+    private void saveUI(){
+        manifest.saveUI();
+    }
+    public void save(PushCallback<Void> onSave){
+        Thread.start(() -> {
+            saveUI();
+            if(onSave != null) onSave.onComplete(null);
+        });
+    }
+    public void save(){
+        save(null);
+    }
+
+    private void saveSettings(boolean thread){
+        aif.saveProjectSettings(settings);
+        aif.save(thread);
+    }
+
+    @Override
+    public void load() {
+        if(notProject(source))
+            throw new RuntimeException("This is not project");
+
+        supported = try_to_setup();
+    }
+
+    public void delete(){
+        FileUtils.deleteFile(dir);
     }
 
     public ProjectItem getProjectItem(){

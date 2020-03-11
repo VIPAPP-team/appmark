@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+@SuppressWarnings("WeakerAccess")
 public class XMLArray implements Iterable<XMLObject>{
 
     private Document source;
@@ -39,6 +40,7 @@ public class XMLArray implements Iterable<XMLObject>{
         }
         return null;
     }
+
     public void add(XMLObject object){
         parent.appendChild(source.importNode(object.toNode(), true));
         list = ((Element)parent).getElementsByTagName("string");

@@ -12,4 +12,15 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="RedAccent" parent="AppTheme">
+        <item name="colorAccent">#ff0000</item>
+    </style>
+    <style name="GreenAccent" parent="AppTheme">
+        <item name="colorAccent">#00ff00</item>
+    </style>
+    <style name="BlueAccent" parent="AppTheme">
+        <item name="colorAccent">#0000ff</item>
+    </style>
+
+
 </resources>

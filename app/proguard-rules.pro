@@ -21,6 +21,8 @@
 #-renamesourcefileattribute SourceFile
 
 
+-dontshrink
+-dontobfuscate
 -ignorewarnings
 -dontobfuscate
 -dontshrink

@@ -9,9 +9,9 @@ import com.vipapp.appmark2.util.ViewUtils;
 
 import static com.vipapp.appmark2.util.Const.MARGIN;
 
-public class Margin extends DesignAttribute {
+public class MarginAttribute extends DesignAttribute {
 
-    public Margin() {
+    public MarginAttribute() {
         super(MARGIN);
     }
 

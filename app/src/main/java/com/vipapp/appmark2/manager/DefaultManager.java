@@ -20,11 +20,13 @@ public abstract class DefaultManager<Type> {
     }
 
     public final void exec(PushCallback<ArrayList<Type>> callback) {
-        if (this.running) {
-            this.callbacks.add(callback);
-        } else {
-            callback.onComplete(this.objects);
-        }
+        Thread.ui(() -> {
+            if (this.running) {
+                this.callbacks.add(callback);
+            } else {
+                callback.onComplete(this.objects);
+            }
+        });
     }
 
     private void execCallbacks() {

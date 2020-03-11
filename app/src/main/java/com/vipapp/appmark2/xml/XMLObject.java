@@ -26,6 +26,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+@SuppressWarnings("WeakerAccess")
 public class XMLObject {
 
     private Document source;
@@ -35,6 +36,7 @@ public class XMLObject {
         parsed = node;
         this.source = source;
     }
+
     public XMLObject(String xml){
         try {
             // Создается построитель документа
@@ -138,6 +140,9 @@ public class XMLObject {
     public void addInside(XMLObject object){
         parsed.appendChild(source.importNode(object.toNode(), true));
     }
+    public void addBefore(XMLObject object){
+        parsed.getParentNode().insertBefore(source.importNode(object.toNode(), true), parsed);
+    }
 
     public void removeAttribute(String name){
         Node toRemove = getAttributeNode(name);
@@ -159,7 +164,7 @@ public class XMLObject {
     @Override
     public String toString() {
         try {
-            return nodeToString(parsed);//.replaceAll(Const.PRETTY_XML_NEWLINE, "\n");
+            return nodeToString(parsed).replaceAll("\n\\s+(?=\n)", "");
         } catch (Exception e) {
             return "";
         }
@@ -168,18 +173,56 @@ public class XMLObject {
         return parsed;
     }
 
-    public XMLObject copy(){
-        return new XMLObject(parsed, source);
-    }
-
     private static String nodeToString(Node node) throws Exception{
         StringWriter sw = new StringWriter();
 
         Transformer t = TransformerFactory.newInstance().newTransformer();
-        t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         t.setOutputProperty(OutputKeys.INDENT, "yes");
         t.transform(new DOMSource(node), new StreamResult(sw));
 
-        return sw.toString();
+        return formatCode(sw.toString());
     }
+
+    private static String formatCode(String code){
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+
+        StringBuilder builder = new StringBuilder();
+
+        int level = 0;
+
+        for(String line: code.split("\n")){
+            if(line.trim().equals(""))
+                continue;
+
+            line = line.trim();
+            int wordNumber = 0;
+
+            if(line.matches("</\\w+>"))
+                level--;
+
+            int spaces = level * 4;
+
+            for(String word: line.split(" ")){
+                int current_spaces = spaces;
+                if(wordNumber > 0)
+                    current_spaces += 6;
+
+                for(int i = 0; i < current_spaces; i++)
+                    builder.append(" ");
+
+                builder.append(word);
+                builder.append("\n");
+
+                wordNumber++;
+            }
+
+            if(line.matches("<[^/].+[^/]>"))
+                level++;
+
+            builder.append("\n");
+        }
+        return header + "\n" + builder.toString();
+    }
+
 }

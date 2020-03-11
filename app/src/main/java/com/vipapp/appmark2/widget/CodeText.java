@@ -300,7 +300,7 @@ public class CodeText extends EditText {
             // Auto adding char
             if (lengthAfter - lengthBefore == 1) {
                 char inserted = text.charAt(start);
-                if (back_symbol.containsKey(inserted)) {
+                if (start != 0 && back_symbol.containsKey(inserted)) {
                     pasting_second = true;
                     Objects.requireNonNull(getText()).insert(start + 1, String.valueOf(back_symbol.get(inserted)));
                     setSelection(start + 1);

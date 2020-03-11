@@ -56,6 +56,35 @@ public class Res extends ThreadLoader{
         drawables = new Drawables(file);
     }
 
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public <T> T get(String name) {
+        try {
+
+            String withoutReference = removeReference(name);
+
+            if (name.startsWith("@android:"))
+                return getAndroidResource(name);
+
+            String res_type = ResourcesUtils.getResType(name);
+
+            if (res_type != null) {
+                switch (res_type) {
+                    case "string":
+                        return (T) getString(withoutReference);
+                    case "color":
+                        return (T) getColor(withoutReference);
+                    case "drawable":
+                        return (T) getDrawable(withoutReference);
+                }
+            }
+
+        } catch (ClassCastException ignored) {
+        }
+
+        return null;
+    }
+
     @Override
     public void load() {
         int[] loaded = new int[]{0, 2};
@@ -89,9 +118,9 @@ public class Res extends ThreadLoader{
     @SuppressWarnings("unchecked")
     @Nullable
     private <T> T getAndroidResource(String name){
-        String res_type = getResType(name);
+        String res_type = ResourcesUtils.getResType(name);
         if(res_type != null) {
-            int id = ResourcesUtils.getAndroidIdentifier(name, res_type);
+            int id = ResourcesUtils.getAndroidIdentifier(name);
             if(id != 0) {
                 switch (res_type) {
                     case "string":
@@ -138,19 +167,24 @@ public class Res extends ThreadLoader{
         return String.format("#%06X", (0xFFFFFF & color));
     }
 
-    @Nullable
-    private String getResType(String name){
-        Matcher matcher = Pattern.compile(REFERENCE_REGEX).matcher(name);
-        if(matcher.find()) {
-            String res_type = matcher.group();
-            return res_type.replaceAll("@(android:)?", "").replaceAll("/", "");
-        }
-        return null;
-    }
-
     private String removeReference(String string){
         if(!string.startsWith("@")) return string;
         return string.replaceFirst(REFERENCE_REGEX, "");
+    }
+
+    @Nullable
+    public StringsManager getStrings(){
+        return strings;
+    }
+
+    @Nullable
+    public ColorsManager getColors(){
+        return colors;
+    }
+
+    @Nullable
+    public Drawables getDrawables(){
+        return drawables;
     }
 
 }

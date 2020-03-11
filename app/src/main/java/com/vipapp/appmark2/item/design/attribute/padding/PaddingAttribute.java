@@ -9,8 +9,8 @@ import com.vipapp.appmark2.util.ViewUtils;
 
 import static com.vipapp.appmark2.util.Const.PADDING;
 
-public class Padding extends DesignAttribute {
-    public Padding() {
+public class PaddingAttribute extends DesignAttribute {
+    public PaddingAttribute() {
         super(PADDING);
     }
 

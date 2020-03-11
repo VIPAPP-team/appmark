@@ -6,6 +6,7 @@ import android.view.View;
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.Item;
+import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.RecyclerView;
 import com.vipapp.appmark2.widget.TextView;
 
@@ -18,7 +19,7 @@ public class StringChooser extends DefaultPicker<Item<String>> {
 
     public StringChooser(PushCallback<Item<String>> callback) {
         super(callback);
-        setView(R.layout.chooser_dialog);
+        setView(R.layout.string_chooser_dialog);
         findViews(getView());
         setCallbacks();
     }
@@ -39,10 +40,11 @@ public class StringChooser extends DefaultPicker<Item<String>> {
         chooser.pushValue(array);
     }
     public void setTitle(String text){
+        title.setVisibility(text == null || text.equals("")? View.GONE: View.VISIBLE);
         title.setText(text);
     }
     public void setTitle(@StringRes int res){
-        title.setText(res);
+        setTitle(Str.get(res));
     }
 
 }

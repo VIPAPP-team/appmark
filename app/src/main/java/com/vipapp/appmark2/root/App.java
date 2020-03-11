@@ -25,7 +25,6 @@ public class App extends MultiDexApplication {
         preInit();
         initDebugger();
         initServer();
-        initFiles();
     }
 
     /* REGISTER ACTIVITY LIFECYCLE CALLBACKS AND START INITIALIZATION */
@@ -65,9 +64,6 @@ public class App extends MultiDexApplication {
     }
     public void initServer(){
         Server.getServerOnline(result -> {});
-    }
-    public void initFiles(){
-        FileUtils.setupFiles();
     }
 
 }

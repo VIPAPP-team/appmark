@@ -2,6 +2,7 @@ package com.vipapp.appmark2.util;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.util.wrapper.Res;
@@ -106,6 +107,20 @@ public class ViewUtils {
     public static void setPaddingVertical(View view, int paddingVertical){
         setPaddingTop(view, paddingVertical);
         setPaddingBottom(view, paddingVertical);
+    }
+
+    public static void setLinearLayoutParams(View v, float weight, int layout_gravity){
+        try{
+            ViewGroup.MarginLayoutParams params = getLayoutParams(v);
+            LinearLayout.LayoutParams newParams = new LinearLayout.LayoutParams(
+                    params.width,
+                    params.height,
+                    weight);
+            if(layout_gravity != 0)
+                newParams.gravity = layout_gravity;
+            newParams.setMargins(params.leftMargin, params.topMargin, params.rightMargin, params.bottomMargin);
+            v.setLayoutParams(newParams);
+        } catch (Exception ignored){}
     }
 
 }

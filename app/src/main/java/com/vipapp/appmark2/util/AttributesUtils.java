@@ -2,23 +2,40 @@ package com.vipapp.appmark2.util;
 
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.project.Res;
 
+import static android.graphics.Typeface.BOLD;
+import static android.graphics.Typeface.BOLD_ITALIC;
+import static android.graphics.Typeface.DEFAULT_BOLD;
+import static android.graphics.Typeface.ITALIC;
+import static android.graphics.Typeface.NORMAL;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.widget.ImageView.ScaleType.CENTER;
+import static android.widget.ImageView.ScaleType.CENTER_CROP;
+import static android.widget.ImageView.ScaleType.CENTER_INSIDE;
+import static android.widget.ImageView.ScaleType.FIT_CENTER;
+import static android.widget.ImageView.ScaleType.FIT_END;
+import static android.widget.ImageView.ScaleType.FIT_START;
+import static android.widget.ImageView.ScaleType.FIT_XY;
+import static android.widget.ImageView.ScaleType.MATRIX;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
+import static com.vipapp.appmark2.util.Const.SIZE_POSTFIX_REGEX;
 import static com.vipapp.appmark2.util.Const.gravity_string_to_int;
 
+@SuppressWarnings("WeakerAccess")
 public class AttributesUtils {
 
     @SuppressWarnings("unchecked")
@@ -29,10 +46,17 @@ public class AttributesUtils {
         if(clazz.equals(int.class))
             return (T) (Integer) valueToInt(value);
 
+        if(clazz.equals(boolean.class))
+            return (T) valueToBoolean(value, resources);
+
         if(clazz.equals(String.class) || clazz.equals(CharSequence.class))
             return (T) valueToString(value, resources);
 
         return (T) value;
+    }
+
+    public static Boolean valueToBoolean(String value, Res resources){
+        return Boolean.parseBoolean(value);
     }
 
     public static String valueToString(String value, Res resources){
@@ -42,10 +66,11 @@ public class AttributesUtils {
 
     public static int valueToGravity(String value){
         int result = 0;
-        for(String gravity: value.split("\\|")){
-            int current_gravity = getGravityForString(gravity);
-            result = result == 0? current_gravity: result|current_gravity;
-        }
+        if(value != null)
+            for(String gravity: value.split("\\|")){
+                int current_gravity = getGravityForString(gravity);
+                result = result == 0? current_gravity: result|current_gravity;
+            }
         return result;
     }
 
@@ -74,8 +99,25 @@ public class AttributesUtils {
         return VISIBLE;
     }
 
-    private static float valueToFloat(String value){
+    public static ImageView.ScaleType valueToScaleType(String value){
+        switch (value){
+            case "centerInside": return CENTER_INSIDE;
+            case "fitStart": return FIT_START;
+            case "fitEnd": return FIT_END;
+            case "center": return CENTER;
+            case "matrix": return MATRIX;
+            case "fitXY": return FIT_XY;
+            case "fitCenter": return FIT_CENTER;
+            case "centerCrop": return CENTER_CROP;
+        }
+        return null;
+    }
+
+    public static float valueToFloat(String value){
         float size;
+
+        if(value == null)
+            return 0;
 
         switch (value) {
             case "match_parent":
@@ -87,13 +129,10 @@ public class AttributesUtils {
                 return FILL_PARENT;
             default:
                 value = value.replaceFirst("f", "");
+                size = Float.parseFloat(value.replaceAll(SIZE_POSTFIX_REGEX, ""));
                 if(value.contains("dp") || value.contains("dip"))
-                    size = Float.parseFloat(value.replaceAll("(dp|dip)", "")) *
-                            DisplayUtils.getScaledDensity();
-                else
-                    size = Float.parseFloat(value);
+                     size *= DisplayUtils.getScaledDensity();
         }
-
         return size;
     }
 
@@ -133,6 +172,18 @@ public class AttributesUtils {
 
     public static int getAttrId(String name){
         return ResourcesUtils.getAndroidIdentifier(name, "attr");
+    }
+
+    public static int valueToTypeface(String value){
+        switch (value){
+            case "bold":
+                return BOLD;
+            case "italic":
+                return ITALIC;
+            case "bold|italic":
+                return BOLD_ITALIC;
+        }
+        return NORMAL;
     }
 
 }

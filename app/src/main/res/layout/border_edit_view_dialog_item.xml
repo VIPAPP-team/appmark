@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="10.0dip"
+    android:paddingTop="10.0dip">
+
+    <com.vipapp.appmark2.widget.TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.0dip"
+        android:paddingLeft="10.0dip"
+        android:paddingRight="10.0dip"
+        android:textColor="#ff000000"
+        android:textSize="18.0sp" />
+
+    <com.vipapp.appmark2.widget.EditText
+        android:id="@+id/valueAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
+        android:background="@drawable/round_gray"
+        android:hint="@string/all"
+        android:padding="10.0dip"
+        android:singleLine="true"
+        android:textSize="18.0sp" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="3dp"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.vipapp.appmark2.widget.EditText
+                android:id="@+id/valueLeft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20.0dip"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/round_gray"
+                android:hint="@string/left"
+                android:padding="10.0dip"
+                android:singleLine="true"
+                android:textSize="18.0sp" />
+
+            <com.vipapp.appmark2.widget.EditText
+                android:id="@+id/valueRight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20.0dip"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/round_gray"
+                android:hint="@string/right"
+                android:padding="10.0dip"
+                android:singleLine="true"
+                android:textSize="18.0sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.vipapp.appmark2.widget.EditText
+                android:id="@+id/valueTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20.0dip"
+                android:background="@drawable/round_gray"
+                android:hint="@string/top"
+                android:padding="10.0dip"
+                android:singleLine="true"
+                android:textSize="18.0sp" />
+
+            <com.vipapp.appmark2.widget.EditText
+                android:id="@+id/valueBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="20.0dip"
+                android:background="@drawable/round_gray"
+                android:hint="@string/bottom"
+                android:padding="10.0dip"
+                android:singleLine="true"
+                android:textSize="18.0sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="3dp"
+        android:background="?android:attr/listDivider" />
+
+    <com.vipapp.appmark2.widget.TextView
+        android:id="@+id/ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.0dip"
+        android:background="@drawable/less_round_blue"
+        android:paddingBottom="7.0dip"
+        android:paddingLeft="20.0dip"
+        android:paddingRight="20.0dip"
+        android:paddingTop="7.0dip"
+        android:text="@android:string/ok"
+        android:textColor="#ffffffff"
+        android:textSize="14.0sp" />
+</LinearLayout>

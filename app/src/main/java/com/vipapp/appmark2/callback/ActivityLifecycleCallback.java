@@ -17,7 +17,7 @@ public class ActivityLifecycleCallback implements ActivityLifecycleCallbacks {
     }
 
     public void onActivityDestroyed(Activity activity) {
-
+        activity.finish();
     }
 
     public void onActivityPaused(Activity activity) {

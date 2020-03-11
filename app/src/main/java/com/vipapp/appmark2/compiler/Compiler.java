@@ -2,6 +2,7 @@ package com.vipapp.appmark2.compiler;
 
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.project.ProjectSettings;
+import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.util.wrapper.mAssets;
 import com.vipapp.appmark2.util.wrapper.mContext;
 import com.vipapp.fjc.*;
@@ -28,8 +29,10 @@ public class Compiler {
 
     public static void compileRelease(Project project, ApkBuilderCert cert, ApkBuilderCallBack callback){
         ProjectSettings settings = project.getSettings();
+        File assets = new File(settings.get("assets"));
+        FileUtils.refresh(assets, true);
         ApkBuilderConfig config = new ApkBuilderConfig(AAPT_STORAGE, ANDROID_JAR_STORAGE,
-                settings.get("src"), settings.get("res"), settings.get("assets"),
+                settings.get("src"), settings.get("res"), assets.getAbsolutePath(),
                 settings.get("manifest"), null, null, settings.get("build"), cert);
         new ApkBuilder(config, callback).build();
     }

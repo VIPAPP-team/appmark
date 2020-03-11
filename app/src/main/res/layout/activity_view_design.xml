@@ -22,37 +22,27 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_width="50dp"
+                android:layout_height="wrap_content" />
 
             <com.vipapp.appmark2.widget.TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="-50dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#444444"
                 android:textSize="18sp" />
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
             <ImageView
-                android:id="@+id/create"
+                android:id="@+id/select_widget"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackground"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:focusable="true"
-                android:clickable="true"
-                app:srcCompat="@drawable/create" />
+                android:padding="10dp"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/select_widget_icon" />
 
         </LinearLayout>
 

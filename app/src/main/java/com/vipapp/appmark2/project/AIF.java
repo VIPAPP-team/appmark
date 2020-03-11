@@ -1,6 +1,9 @@
 package com.vipapp.appmark2.project;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.exception.IncorrectAIFName;
@@ -9,11 +12,17 @@ import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.util.Json;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.ThreadLoader;
+import com.vipapp.appmark2.util.ThrowableUtils;
+import com.vipapp.appmark2.util.Toast;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import static com.vipapp.appmark2.util.Const.LOAD_TIME;
 
 @SuppressWarnings("WeakerAccess")
 public class AIF extends ThreadLoader {
@@ -48,14 +57,21 @@ public class AIF extends ThreadLoader {
         this.project = project;
     }
 
-    private HashMap<String, String> readAif() {
+    private void addOnAttachCallback(PushCallback<Void> callback){
+        if(project == null) onAttach.add(callback);
+        else callback.onComplete(null);
+    }
+
+    private HashMap<String, String> read_aif(){
         String text = FileUtils.readFileUI(aif);
-        if (text.equals("")) {
+        try {
+            if(text.equals("")) throw new RuntimeException();
+            return Json.stringHashMap(text);
+        } catch (Exception e){
             HashMap<String, String> result = new HashMap<>();
-            result.put(VERSION, "0");
+            result.put(VERSION, "1");
             return result;
         }
-        return Json.stringHashMap(text);
     }
 
     private void writeAif() {
@@ -75,21 +91,8 @@ public class AIF extends ThreadLoader {
     }
 
     //AIF UPDATES
-    private void update_with_app_version() {
-        info.put(AIF.APP_VERSION, "1.0");
-        info.put(AIF.APP_VERSION_NUMBER, "1");
-    }
-
-    private void remove_redundant_args() {
-        info.remove(APP_VERSION);
-        info.remove(APP_VERSION_NUMBER);
-        info.remove(PACKAGE);
-    }
-
-    private void replace_default_with_opened() {
-        info.put(Const.OPENED_FILE_STRING, info.get(Const.DEFAULT_FILE));
-        info.remove(Const.DEFAULT_FILE);
-        writeAif();
+    private void add_opened_file(){
+        info.put(Const.OPENED_FILE_STRING, Const.getDefaultLastFile(project.getPackage()));
     }
 
     private void add_warnings() {
@@ -101,47 +104,21 @@ public class AIF extends ThreadLoader {
                 project.getSource(), project.getPackage(project.getSource())).getHashMap());
     }
 
-    public void updateAif() {
+    public void update_aif(){
         String versionStr = info.get(VERSION);
-        int version = versionStr == null? 1: Integer.parseInt(versionStr);
-
+        int version = versionStr == null? 0: Integer.parseInt(versionStr);
         if (version != AIF_VERSION) {
+            if (version < 7)
+                version = 1;
+
             switch (version) {
                 case 1:
-                    update_with_app_version();
-                case 2:
-                    remove_redundant_args();
-                case 3:
-                case 4:
-                    replace_default_with_opened();
-                case 5:
+                    add_opened_file();
                     add_warnings();
-                case 6:
                     add_default_project_settings();
             }
-        }
-        info.put(VERSION, Integer.toString(AIF_VERSION));
-        writeAif();
-    }
-
-    @Override
-    public void load() {
-
-        if (!isAIF(path))
-            throw new IncorrectAIFName(path);
-
-        if (info == null) {
-            aif = new File(path);
-            info = readAif();
-        } else {
-            aif = new File(path);
-            add_warnings();
-            writeAif();
-        }
-
-        if (info == null) {
-            // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
-            load();
+            info.put(VERSION, Integer.toString(AIF_VERSION));
+            write_aif();
         }
     }
 
@@ -159,17 +136,45 @@ public class AIF extends ThreadLoader {
         return path == null? aif: new File(project.getSource(), path);
     }
 
-    public ProjectSettings getProjectSettings() {
-        ProjectSettings settings = new ProjectSettings();
-        for (String str : ProjectSettings.getAvailableKeys()) {
-            settings.put(str, info.get(str));
+    @Nullable
+    public ProjectSettings getProjectSettings(){
+        try {
+            ProjectSettings settings = new ProjectSettings();
+            for (String str : ProjectSettings.getAvailableKeys()) {
+                settings.put(str, info.get(str));
+            }
+            return settings;
+        } catch (Exception e){
+            return null;
         }
-        return settings;
     }
 
     public void saveProjectSettings(ProjectSettings settings) {
         for (String str : ProjectSettings.getAvailableKeys()) {
             info.put(str, settings.get(str));
+        }
+    }
+
+    @Override
+    public void load() {
+
+        if (!isAIF(path))
+            throw new IncorrectAIFName(pathname);
+
+        if(info == null) {
+            aif = new File(path);
+            info = read_aif();
+        } else {
+            //noinspection unchecked
+            info = (HashMap<String, String>) args[0];
+            aif = new File(path);
+            add_warnings();
+            write_aif();
+        }
+
+        if(info == null) {
+            // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
+            load(args);
         }
     }
 

@@ -5,19 +5,25 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.vipapp.appmark2.R;
+import com.vipapp.appmark2.item.EditViewDialogItem;
+import com.vipapp.appmark2.item.ImageItem;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.item.SettingsItem;
 import com.vipapp.appmark2.item.design.DesignAttribute;
 import com.vipapp.appmark2.item.design.attribute.BackgroundAttribute;
 import com.vipapp.appmark2.item.design.attribute.GravityAttribute;
 import com.vipapp.appmark2.item.design.attribute.HeightAttribute;
+import com.vipapp.appmark2.item.design.attribute.HintColorAttribute;
 import com.vipapp.appmark2.item.design.attribute.IdAttribute;
 import com.vipapp.appmark2.item.design.attribute.OrientationAttribute;
+import com.vipapp.appmark2.item.design.attribute.ScaleTypeAttribute;
 import com.vipapp.appmark2.item.design.attribute.SrcAttribute;
 import com.vipapp.appmark2.item.design.attribute.TextColorAttribute;
+import com.vipapp.appmark2.item.design.attribute.TextSizeAttribute;
+import com.vipapp.appmark2.item.design.attribute.TextStyleAttribute;
 import com.vipapp.appmark2.item.design.attribute.VisibilityAttribute;
 import com.vipapp.appmark2.item.design.attribute.WidthAttribute;
-import com.vipapp.appmark2.item.design.attribute.margin.Margin;
+import com.vipapp.appmark2.item.design.attribute.margin.MarginAttribute;
 import com.vipapp.appmark2.item.design.attribute.margin.MarginBottom;
 import com.vipapp.appmark2.item.design.attribute.margin.MarginEnd;
 import com.vipapp.appmark2.item.design.attribute.margin.MarginHorizontal;
@@ -26,7 +32,7 @@ import com.vipapp.appmark2.item.design.attribute.margin.MarginRight;
 import com.vipapp.appmark2.item.design.attribute.margin.MarginStart;
 import com.vipapp.appmark2.item.design.attribute.margin.MarginTop;
 import com.vipapp.appmark2.item.design.attribute.margin.MarginVertical;
-import com.vipapp.appmark2.item.design.attribute.padding.Padding;
+import com.vipapp.appmark2.item.design.attribute.padding.PaddingAttribute;
 import com.vipapp.appmark2.item.design.attribute.padding.PaddingBottom;
 import com.vipapp.appmark2.item.design.attribute.padding.PaddingEnd;
 import com.vipapp.appmark2.item.design.attribute.padding.PaddingHorizontal;
@@ -35,6 +41,42 @@ import com.vipapp.appmark2.item.design.attribute.padding.PaddingRight;
 import com.vipapp.appmark2.item.design.attribute.padding.PaddingStart;
 import com.vipapp.appmark2.item.design.attribute.padding.PaddingTop;
 import com.vipapp.appmark2.item.design.attribute.padding.PaddingVertical;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.ProgressBarStyle;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.ScaleType;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.bool.Checked;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.bool.Indeterminate;
+import com.vipapp.appmark2.item.editviewdialogitem.color.HintColor;
+import com.vipapp.appmark2.item.editviewdialogitem.color.TextColor;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.TextStyle;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.bool.SingleLine;
+import com.vipapp.appmark2.item.editviewdialogitem.drawable.Src;
+import com.vipapp.appmark2.item.editviewdialogitem.multiplechoose.Gravity;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.bool.Enabled;
+import com.vipapp.appmark2.item.editviewdialogitem.multiplechoose.ImeOption;
+import com.vipapp.appmark2.item.editviewdialogitem.multiplechoose.InputType;
+import com.vipapp.appmark2.item.editviewdialogitem.multiplechoose.LayoutGravity;
+import com.vipapp.appmark2.item.editviewdialogitem.string.Hint;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.Alpha;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.Lines;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.Max;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.Progress;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.Rotation;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.ScaleX;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.ScaleY;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.sp.TextSize;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.dp.TranslationX;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.dp.TranslationY;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.Weight;
+import com.vipapp.appmark2.item.editviewdialogitem.border.Margin;
+import com.vipapp.appmark2.item.editviewdialogitem.border.Padding;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.Orientation;
+import com.vipapp.appmark2.item.editviewdialogitem.choose.Visibility;
+import com.vipapp.appmark2.item.editviewdialogitem.drawableOrColor.Background;
+import com.vipapp.appmark2.item.editviewdialogitem.unit.no.WeightSum;
+import com.vipapp.appmark2.item.editviewdialogitem.string.Id;
+import com.vipapp.appmark2.item.editviewdialogitem.size.LayoutHeight;
+import com.vipapp.appmark2.item.editviewdialogitem.size.LayoutWidth;
+import com.vipapp.appmark2.item.editviewdialogitem.string.Text;
 import com.vipapp.appmark2.item.setting.item.AppVersionName;
 import com.vipapp.appmark2.item.setting.item.DebuggerEnabled;
 import com.vipapp.appmark2.item.setting.item.LabelItem;
@@ -43,8 +85,23 @@ import com.vipapp.appmark2.item.setting.item.MaxLinesInEditor;
 import com.vipapp.appmark2.item.setting.item.OpenLastProject;
 import com.vipapp.appmark2.item.setting.item.ServerStatus;
 import com.vipapp.appmark2.item.setting.item.SettingTitleItem;
+import com.vipapp.appmark2.item.setting.item.ShowDesignError;
 import com.vipapp.appmark2.item.setting.item.ShowHighlightUpdate;
 import com.vipapp.appmark2.item.setting.item.UndoOnBackPressed;
+import com.vipapp.appmark2.item.widget.Button;
+import com.vipapp.appmark2.item.widget.CalendarView;
+import com.vipapp.appmark2.item.widget.CheckBox;
+import com.vipapp.appmark2.item.widget.EditText;
+import com.vipapp.appmark2.item.widget.ImageView;
+import com.vipapp.appmark2.item.widget.LinearLayout;
+import com.vipapp.appmark2.item.widget.ListView;
+import com.vipapp.appmark2.item.widget.ProgressBar;
+import com.vipapp.appmark2.item.widget.ScrollView;
+import com.vipapp.appmark2.item.widget.SeekBar;
+import com.vipapp.appmark2.item.widget.Switch;
+import com.vipapp.appmark2.item.widget.TextView;
+import com.vipapp.appmark2.item.widget.View;
+import com.vipapp.appmark2.item.widget.WebView;
 import com.vipapp.appmark2.util.wrapper.mAppInfo;
 import com.vipapp.appmark2.util.wrapper.mSharedPreferences;
 import com.vipapp.appmark2.util.wrapper.Str;
@@ -68,6 +125,7 @@ import static android.view.Gravity.RIGHT;
 import static android.view.Gravity.START;
 import static android.view.Gravity.TOP;
 
+@SuppressWarnings("WeakerAccess")
 public class Const {
 
     public static final String PREFS_NAME = "data";
@@ -97,6 +155,7 @@ public class Const {
     public static final String MAIN_EDITOR_FONT_SIZE_PREF = "mainEditorTextSize0";
     public static final String MAX_LINES_IN_TEXT_EDITOR_PREF = "maxLinesInEditor0";
     public static final String HIGHLIGHT_DEBUG_PREF = "highlightDebug0";
+    public static final String SHOW_DESIGN_ERROR_PREF = "showDesignError";
 
     public static final String DEFAULT_APP_NAME = "MyApp";
     public static final String DEFAULT_PACKAGE_NAME = "com.mycompany.myapp";
@@ -108,6 +167,7 @@ public class Const {
     public static final boolean DEFAULT_ON_BACK_PRESSED = false;
     public static final boolean DEFAULT_DEBUGGER_ENABLED = true;
     public static final boolean DEFAULT_OPEN_LAST_PROJECT = true;
+    public static final boolean DEFAULT_SHOW_DESIGN_ERROR = false;
     public static final int DEFAULT_MAIN_EDITOR_FONT_SIZE = 15;
     public static final int DEFAULT_MAX_LINES_IN_TEXT_EDITOR = 15;
 
@@ -120,6 +180,7 @@ public class Const {
     public static boolean DEBUGGER_ENABLED;
     public static boolean HIGHLIGHT_DEBUG;
     public static boolean OPEN_LAST_PROJECT;
+    public static boolean SHOW_DESIGN_ERROR;
     public static int MAIN_EDITOR_FONT_SIZE;
     public static int MAX_LINES_IN_TEXT_EDITOR;
 
@@ -251,6 +312,7 @@ public class Const {
     public static final String WIDTH_ATTR = "android:layout_width";
     public static final String HEIGHT_ATTR = "android:layout_height";
     public static final String GRAVITY_ATTR = "android:gravity";
+    public static final String LAYOUT_GRAVITY_ATTR = "android:layout_gravity";
     public static final String BACKGROUND_ATTR = "android:background";
     public static final String MARGIN = "android:layout_margin";
     public static final String MARGIN_LEFT = "android:layout_marginLeft";
@@ -274,10 +336,71 @@ public class Const {
     public static final String TEXT_COLOR_ATTR = "android:textColor";
     public static final String VISIBILITY_ATTR = "android:visibility";
     public static final String SRC_ATTR = "android:src";
+    public static final String TEXT_SIZE_ATTR = "android:textSize";
+    public static final String TEXT_STYLE_ATTR = "android:textStyle";
+    public static final String HINT_COLOR_ATTR = "android:textColorHint";
+    public static final String SCALE_TYPE_ATTR = "android:scaleType";
+    public static final String STYLE_ATTR = "android:style";
+
+    public static final ArrayList<ImageItem> WIDGETS = new ArrayList<ImageItem>(){{
+        add(new View());
+        add(new LinearLayout());
+        add(new ScrollView());
+        add(new TextView());
+        add(new EditText());
+        add(new Button());
+        add(new ImageView());
+        add(new CheckBox());
+        add(new ListView());
+        add(new WebView());
+        add(new Switch());
+        add(new SeekBar());
+        add(new ProgressBar());
+        add(new CalendarView());
+    }};
+
+    public static final ArrayList<EditViewDialogItem> EDIT_DIALOG_ATTRIBUTES = new ArrayList<EditViewDialogItem>(){{
+        add(new Id());
+        add(new LayoutWidth());
+        add(new LayoutHeight());
+        add(new Padding());
+        add(new Margin());
+        add(new Background());
+        add(new Orientation());
+        add(new Gravity());
+        add(new LayoutGravity());
+        add(new Src());
+        add(new ScaleType());
+        add(new Checked());
+        add(new Max());
+        add(new Progress());
+        add(new Indeterminate());
+        add(new ProgressBarStyle());
+        add(new Text());
+        add(new TextSize());
+        add(new TextColor());
+        add(new TextStyle());
+        add(new SingleLine());
+        add(new Lines());
+        add(new Hint());
+        add(new HintColor());
+        add(new InputType());
+        add(new ImeOption());
+        add(new Visibility());
+        add(new Enabled());
+        add(new WeightSum());
+        add(new Weight());
+        add(new Alpha());
+        add(new Rotation());
+        add(new TranslationX());
+        add(new TranslationY());
+        add(new ScaleX());
+        add(new ScaleY());
+    }};
 
     public static final ArrayList<DesignAttribute> ATTRIBUTES = new ArrayList<DesignAttribute>(){{
         add(new BackgroundAttribute());
-        add(new Margin());
+        add(new MarginAttribute());
         add(new MarginLeft());
         add(new MarginRight());
         add(new MarginBottom());
@@ -286,7 +409,7 @@ public class Const {
         add(new MarginEnd());
         add(new MarginHorizontal());
         add(new MarginVertical());
-        add(new Padding());
+        add(new PaddingAttribute());
         add(new PaddingLeft());
         add(new PaddingRight());
         add(new PaddingBottom());
@@ -303,6 +426,134 @@ public class Const {
         add(new OrientationAttribute());
         add(new VisibilityAttribute());
         add(new SrcAttribute());
+        add(new TextSizeAttribute());
+        add(new TextStyleAttribute());
+        add(new HintColorAttribute());
+        add(new ScaleTypeAttribute());
+    }};
+
+    public static final ArrayList<String> ime_option_choose = new ArrayList<String>(){{
+        add("actionDone");
+        add("actionSend");
+        add("actionNext");
+        add("actionPrevious");
+        add("actionGo");
+        add("actionSearch");
+        add("actionName");
+        add("actionUnspecified");
+        add("flagNoPersonalizedLearning");
+        add("flagNoExtractUi");
+        add("flagNavigatePrevious");
+        add("flagNavigateNext");
+        add("flagNoEnterAction");
+        add("flagNoAccessoryAction");
+        add("flagNoFullscreen");
+        add("flagForceAscii");
+    }};
+
+    public static final ArrayList<String> input_type_choose = new ArrayList<String>(){{
+        add("date");
+        add("textUri");
+        add("textShortMessage");
+        add("textLongMessage");
+        add("textAutoCorrect");
+        add("numberSigned");
+        add("textVisiblePassword");
+        add("textWebEditText");
+        add("textMultiLine");
+        add("textNoSuggestions");
+        add("textFilter");
+        add("number");
+        add("datetime");
+        add("textWebEmailAddress");
+        add("textPersonName");
+        add("text");
+        add("textPhonetic");
+        add("textCapSentences");
+        add("textPassword");
+        add("textAutoComplete");
+        add("textImeMultiLine");
+        add("textPostalAddress");
+        add("numberDecimal");
+        add("textEmailAddress");
+        add("numberPassword");
+        add("textCapWords");
+        add("phone");
+        add("textEmailSubject");
+        add("textCapCharacters");
+        add("time");
+        add("textWebPassword");
+    }};
+
+    public static final ArrayList<String> gravity_chooser = new ArrayList<String>(){{
+        add("center");
+        add("center_horizontal");
+        add("center_vertical");
+        add("top");
+        add("bottom");
+        add("left");
+        add("right");
+        add("start");
+        add("end");
+        add("fill");
+        add("fill_horizontal");
+        add("fill_vertical");
+        add("clip_horizontal");
+        add("clip_vertical");
+    }};
+
+    public static final ArrayList<Item<String>> progress_bar_style_choose = new ArrayList<Item<String>>(){{
+        add(new Item<>("?android:progressBarStyle"));
+        add(new Item<>("?android:progressBarStyleHorizontal"));
+    }};
+    public static final ArrayList<Item<String>> scale_type_choose = new ArrayList<Item<String>>(){{
+        add(new Item<>("centerInside"));
+        add(new Item<>("fitStart"));
+        add(new Item<>("fitEnd"));
+        add(new Item<>("center"));
+        add(new Item<>("matrix"));
+        add(new Item<>("fitXY"));
+        add(new Item<>("fitCenter"));
+        add(new Item<>("centerCrop"));
+    }};
+
+    public static final ArrayList<Item<String>> add_choose = new ArrayList<Item<String>>(){{
+        add(new Item<>(0, Str.get(R.string.add_before)));
+        add(new Item<>(1, Str.get(R.string.add_inside)));
+    }};
+
+    public static final ArrayList<Item<String>> text_style_chooser = new ArrayList<Item<String>>(){{
+        add(new Item<>("bold"));
+        add(new Item<>("italic"));
+        add(new Item<>("bold|italic"));
+    }};
+
+    public static final ArrayList<Item<String>> orientation_chooser = new ArrayList<Item<String>>(){{
+        add(new Item<>("horizontal"));
+        add(new Item<>("vertical"));
+    }};
+
+    public static final ArrayList<Item<String>> boolean_chooser = new ArrayList<Item<String>>(){{
+        add(new Item<>("true"));
+        add(new Item<>("false"));
+    }};
+
+    public static final ArrayList<Item<String>> visibility_chooser = new ArrayList<Item<String>>(){{
+        add(new Item<>("visible"));
+        add(new Item<>("invisible"));
+        add(new Item<>("gone"));
+    }};
+
+    public static final ArrayList<Item<String>> drawables_chooser = new ArrayList<Item<String>>(){{
+        add(new Item<>(0, Str.get(R.string.drawable)));
+        add(new Item<>(1, Str.get(R.string.color)));
+        add(new Item<>(2, Str.get(R.string.other)));
+    }};
+
+    public static final ArrayList<Item<String>> size_chooser = new ArrayList<Item<String>>(){{
+        add(new Item<>(0, "match_parent"));
+        add(new Item<>(1, "wrap_content"));
+        add(new Item<>(2, Str.get(R.string.other)));
     }};
 
     // MANIFEST CONST
@@ -352,7 +603,7 @@ public class Const {
     private static final String DEFAULT_FILE_DEFAULT_VALUE = JAVA + "/MainActivity.java";
 
     // REGEX CONST
-    public static final String REFERENCE_REGEX = "@.+/";
+    public static final String REFERENCE_REGEX = "(\\?|@).+/";
     public static final String LOCALE_REGEX = "[a-z\\-]*";
     public static final String WORD_SPLITTER = "([^.\\w]|\\W(?=\\W))";
     public static final String IMPORTS_REGEX = "(?:package(.|\\n)*?(?=import)|.+\\{(?:.|\\s)*|import.*\\.|;)";
@@ -361,8 +612,11 @@ public class Const {
     public static final String IMAGE_REGEX = ".+\\.(png|jpg)";
     public static final String TEXT_FILE_REGEX = ".+\\.(xml|aif|java|json)";
     public static final String FILENAME_REGEX = "([a-zA-Z0-9\\s_\\\\.\\-\\(\\):])+";
-    public static final String DRAWABLE_REGEX = "%1$s\\.(png|jpg|xml)";
-    public static final String PRETTY_XML_NEWLINE = " +(?=[^\\s]+=)";
+    public static final String NAMED_DRAWABLE_REGEX = "%1$s\\.(png|jpg|xml)";
+    public static final String DRAWABLE_REGEX = ".+\\.(png|jpg|xml)";
+    public static final String NUMBER_REGEX = "-?[0-9.]+";
+    public static final String SIZE_POSTFIX_REGEX = "(dp|sp|dip)";
+    public static final String SIZE_REGEX = NUMBER_REGEX + SIZE_POSTFIX_REGEX + "?";
 
     // CALLBACK CONST
     public static final int IMAGE_CLICKED = 0;
@@ -419,6 +673,7 @@ public class Const {
             add(new SettingTitleItem(R.string.settings_debug));
             add(new DebuggerEnabled());
             add(new ShowHighlightUpdate());
+            add(new ShowDesignError());
             add(new SettingTitleItem(R.string.app_info));
             add(new LabelItem(R.string.version_number, Long.toString(mAppInfo.get().versionCode)));
             add(new AppVersionName());
@@ -444,6 +699,7 @@ public class Const {
         MAIN_EDITOR_FONT_SIZE = mSharedPreferences.getInteger(MAIN_EDITOR_FONT_SIZE_PREF, DEFAULT_MAIN_EDITOR_FONT_SIZE);
         MAX_LINES_IN_TEXT_EDITOR = mSharedPreferences.getInteger(MAX_LINES_IN_TEXT_EDITOR_PREF, DEFAULT_MAX_LINES_IN_TEXT_EDITOR);
         HIGHLIGHT_DEBUG = mSharedPreferences.getBoolean(HIGHLIGHT_DEBUG_PREF, DEFAULT_HIGHLIGHT_DEBUG);
+        SHOW_DESIGN_ERROR = mSharedPreferences.getBoolean(SHOW_DESIGN_ERROR_PREF, DEFAULT_SHOW_DESIGN_ERROR);
     }
 
     public static String getDefaultLastFile(String project_package){
