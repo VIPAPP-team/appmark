@@ -187,6 +187,10 @@ public class ViewDesignActivity extends BaseActivity{
             addable.setScaleX(1);
 
             linearLayout.addView(addable);
+
+            linearLayout.setLayoutParams(addable.getLayoutParams());
+            addable.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
             widgets.add(new BuiltView(linearLayout, viewObject.getObject()));
 
             return linearLayout;
