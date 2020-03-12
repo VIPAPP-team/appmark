@@ -26,6 +26,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import static com.vipapp.appmark2.util.Const.SPACE_XML_NEWLINE;
+
 @SuppressWarnings("WeakerAccess")
 public class XMLObject {
 
@@ -203,7 +205,7 @@ public class XMLObject {
 
             int spaces = level * 4;
 
-            for(String word: line.split(" ")){
+            for(String word: line.split(SPACE_XML_NEWLINE)){
                 int current_spaces = spaces;
                 if(wordNumber > 0)
                     current_spaces += 6;

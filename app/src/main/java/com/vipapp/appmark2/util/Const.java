@@ -618,6 +618,7 @@ public class Const {
     public static final String NUMBER_REGEX = "-?[0-9.]+";
     public static final String SIZE_POSTFIX_REGEX = "(dp|sp|dip)";
     public static final String SIZE_REGEX = NUMBER_REGEX + SIZE_POSTFIX_REGEX + "?";
+    public static final String SPACE_XML_NEWLINE = " (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
 
     // CALLBACK CONST
     public static final int IMAGE_CLICKED = 0;
