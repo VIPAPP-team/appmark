@@ -83,6 +83,8 @@ public abstract class BorderEditViewDialogItem extends EditViewDialogItem {
 
             if(valid_data)
                 callback.onComplete(Joiner.on(';').join(values));
+
+            dialog.cancel();
         });
 
         dialog.show();
