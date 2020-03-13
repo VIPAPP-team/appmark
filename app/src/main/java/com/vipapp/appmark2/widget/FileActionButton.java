@@ -69,13 +69,17 @@ public class FileActionButton extends TextView implements View.OnClickListener {
     public void setProject(Project project){
         this.project = project;
     }
-    public void setFile(File file){
+    public boolean setFile(File file){
         fileType = getFileType(file);
+        boolean fileTypeFound = fileType != -1;
         this.file = file;
-        if(fileType == -1) setVisibility(GONE); else {
+        if (fileTypeFound) {
             setVisibility(VISIBLE);
             setText(items[fileType].getPlaceholder(getContext()));
+        } else {
+            setVisibility(GONE);
         }
+        return fileTypeFound;
     }
 
     @Override

@@ -16,6 +16,8 @@ import android.view.MotionEvent;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.Mapper;
+import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.item.ScrollChange;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.DisplayUtils;
 import com.vipapp.appmark2.util.MathUtils;
@@ -41,6 +43,8 @@ import static com.vipapp.appmark2.util.Const.TEXT_SIZE_STEP;
 import static com.vipapp.appmark2.util.Const.back_symbol;
 
 public class CodeText extends EditText {
+
+    PushCallback<ScrollChange> scroll;
 
     UndoRedoUtils undoRedo;
 
@@ -363,6 +367,13 @@ public class CodeText extends EditText {
         }
     }
 
+    @Override
+    protected void onScrollChanged(int horiz, int vert, int oldHoriz, int oldVert) {
+        if(scroll != null)
+            scroll.onComplete(new ScrollChange(vert, horiz, oldVert, oldHoriz));
+        super.onScrollChanged(horiz, vert, oldHoriz, oldVert);
+    }
+
     private void mDraw(Canvas canvas){
         // highlighting current line
         highlightLine(getLayout().getLineForOffset(getSelectionStart()), Color.parseColor(CURRENT_LINE_COLOR), canvas);
@@ -385,6 +396,10 @@ public class CodeText extends EditText {
         getLineBounds(line, lineBounds);
         lineBounds.left = 0;
         canvas.drawRect(lineBounds, highlightPaint);
+    }
+
+    public void setOnScrollChangeListener(PushCallback<ScrollChange> listener){
+        this.scroll = listener;
     }
 
     private void upTextSize(float k){

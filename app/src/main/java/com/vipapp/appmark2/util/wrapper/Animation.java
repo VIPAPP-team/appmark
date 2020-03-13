@@ -3,6 +3,7 @@ package com.vipapp.appmark2.util.wrapper;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
+@SuppressWarnings("WeakerAccess")
 public class Animation {
     public static void animate(View v, String propName, float... values) {
         animate(v, propName, 300, values);
@@ -33,7 +34,7 @@ public class Animation {
     }
 
     public static void fadeOut(View v, int time) {
-        animate(v, "alpha", (long) time, 1.0f, 0.0f);
+        animate(v, "alpha", time, 1.0f, 0.0f);
     }
 
     public static void scaleX(View v, float... values) {
@@ -59,5 +60,21 @@ public class Animation {
     public static void scaleAll(View v, long time, float... values) {
         scaleX(v, time, values);
         scaleY(v, time, values);
+    }
+
+    public static void moveX(View x, float... values){
+        moveX(x, 300, values);
+    }
+
+    public static void moveX(View v, long time, float... values){
+        animate(v, "translationX", time, values);
+    }
+
+    public static void moveY(View x, float... values){
+        moveY(x, 300, values);
+    }
+
+    public static void moveY(View v, long time, float... values){
+        animate(v, "translationY", time, values);
     }
 }

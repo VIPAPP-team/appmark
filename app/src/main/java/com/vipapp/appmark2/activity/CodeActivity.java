@@ -1,5 +1,6 @@
 package com.vipapp.appmark2.activity;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,9 @@ import com.vipapp.appmark2.util.Language;
 import com.vipapp.appmark2.util.TextUtils;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.Toast;
+import com.vipapp.appmark2.util.wrapper.Animation;
 import com.vipapp.appmark2.util.wrapper.Classes;
+import com.vipapp.appmark2.util.wrapper.Res;
 import com.vipapp.appmark2.util.wrapper.mSharedPreferences;
 import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.CodeText;
@@ -49,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static android.content.res.Configuration.KEYBOARDHIDDEN_NO;
 import static com.vipapp.appmark2.util.Const.DEFAULT_ON_BACK_PRESSED;
 import static com.vipapp.appmark2.util.Const.JAVA_LANGUAGE;
 import static com.vipapp.appmark2.util.Const.MAX_LINES_IN_TEXT_EDITOR;
@@ -64,6 +68,10 @@ public class CodeActivity extends BaseActivity {
 
     boolean saving = false;
     boolean compiling = false;
+    // Is opened file type supports action bar
+    boolean actionButtonVisible = false;
+    // Is action button hidden while scrolling
+    boolean actionButtonHidden = false;
 
     DrawerLayout drawerLayout;
     FrameLayout main;
@@ -175,6 +183,7 @@ public class CodeActivity extends BaseActivity {
         lockScreen();
         setupDrawer();
         setupProject();
+        setupActionButtonMoves();
     }
 
     @Override
@@ -267,6 +276,30 @@ public class CodeActivity extends BaseActivity {
         mSharedPreferences.remove("last_project");
     }
 
+    private void setupActionButtonMoves(){
+        content.setOnScrollChangeListener(scrollChange -> {
+            boolean scrolledUp = scrollChange.getOldVert() > scrollChange.getVert();
+            if(actionButtonVisible && Math.abs(scrollChange.getVert() - scrollChange.getOldVert()) > 10)
+                if(scrolledUp == actionButtonHidden)
+                if(scrolledUp)
+                    showActionButton();
+                else
+                    hideActionButton();
+        });
+    }
+
+    private void hideActionButton(){
+        actionButtonHidden = true;
+        Animation.moveY(actionButton, 300 * Res.get().getDisplayMetrics().density);
+        Animation.fadeOut(actionButton);
+    }
+
+    private void showActionButton(){
+        actionButtonHidden = false;
+        Animation.moveY(actionButton, 0f);
+        Animation.fadeIn(actionButton);
+    }
+
     public void setupProject(){
         project = (Project) getIntent().getSerializableExtra("project");
         project.exec(none -> {
@@ -282,15 +315,9 @@ public class CodeActivity extends BaseActivity {
                 float slideX = view.getWidth() * v;
                 main.setTranslationX(slideX);
             }
-            public void onDrawerOpened(@NonNull View view) {
-
-            }
-            public void onDrawerClosed(@NonNull View view) {
-
-            }
-            public void onDrawerStateChanged(int i) {
-
-            }
+            public void onDrawerOpened(@NonNull View view) {}
+            public void onDrawerClosed(@NonNull View view) {}
+            public void onDrawerStateChanged(int i) {}
         });
     }
     public void setupViews(){
@@ -362,7 +389,7 @@ public class CodeActivity extends BaseActivity {
         history = history.size() > 10? new ArrayList<>(history.subList(0, 10)): history;
     }
     private void setupActionButton(){
-        actionButton.setFile(opened);
+        actionButtonVisible = actionButton.setFile(opened);
     }
 
     private void setCodeWatcher(){
