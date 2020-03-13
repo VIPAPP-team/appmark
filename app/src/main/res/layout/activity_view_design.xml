@@ -38,9 +38,12 @@
 
             <ImageView
                 android:id="@+id/select_widget"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:padding="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:padding="0dp"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/select_widget_icon" />
 
