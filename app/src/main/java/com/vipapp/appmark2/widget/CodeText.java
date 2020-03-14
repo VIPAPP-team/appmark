@@ -175,34 +175,26 @@ public class CodeText extends EditText {
     // TODO: Discover how it works and improve code style
     public CharSequence autoIndent(CharSequence source, Spanned dest, int d_start, int d_end){
         String indent = "";
-        int istart = d_start - 1;
-        int iend;
+        int sequenceStart = d_start - 1;
+        int sequenceEnd;
 
         // find start of this line
-        boolean dataBefore = false;
+        boolean stringFound = false;
         int pt = 0;
 
-        for (; istart > -1; --istart) {
-            char c = dest.charAt(istart);
+        for (; sequenceStart > -1; --sequenceStart) {
+            char c = dest.charAt(sequenceStart);
 
             if (c == '\n')
                 break;
 
-            if (c != ' ' &&
-                    c != '\t') {
-                if (!dataBefore) {
+            if (c != ' ' && c != '\t') {
+                if (!stringFound) {
                     // indent always after those characters
-                    if (c == '{' ||
-                            c == '+' ||
-                            c == '-' ||
-                            c == '*' ||
-                            c == '/' ||
-                            c == '%' ||
-                            c == '^' ||
-                            c == '=')
+                    if (c == '{' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^' || c == '=')
                         --pt;
 
-                    dataBefore = true;
+                    stringFound = true;
                 }
 
                 // parenthesis counter
@@ -214,34 +206,33 @@ public class CodeText extends EditText {
         }
 
         // copy indent of this line into the next
-        if (istart > -1) {
-            char charAtCursor = dest.charAt(d_start);
+        char charAtCursor = ' ';
+        if (sequenceStart > -1) {
+            charAtCursor = dest.charAt(d_start);
 
-            for (iend = ++istart;
-                 iend < d_end;
-                 ++iend) {
-                char c = dest.charAt(iend);
+            for (sequenceEnd = ++sequenceStart; sequenceEnd < d_end; ++sequenceEnd) {
+                char lastChar = dest.charAt(sequenceEnd);
 
                 // auto expand comments
-                if (charAtCursor != '\n' &&
-                        c == '/' &&
-                        iend + 1 < d_end &&
-                        dest.charAt(iend) == c) {
-                    iend += 2;
+                if (charAtCursor != '\n' && lastChar == '/' && sequenceEnd + 1 < d_end && dest.charAt(sequenceEnd) == lastChar) {
+                    sequenceEnd += 2;
                     break;
                 }
 
-                if (c != ' ' &&
-                        c != '\t')
+                if (lastChar != ' ' && lastChar != '\t')
                     break;
             }
 
-            indent += dest.subSequence(istart, iend);
+            indent += dest.subSequence(sequenceStart, sequenceEnd);
         }
 
         // add new indent
-        if (pt < 0)
+        if (pt < 0) {
+            String old_indent = indent;
             indent += "    "; // (4 spaces)
+            if(charAtCursor == '}' || charAtCursor == ')' || charAtCursor == ']')
+                indent += "\n" + old_indent;
+        }
 
         // append white space of previous line and new indent
         return source + indent;
