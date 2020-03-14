@@ -153,8 +153,20 @@ public class CodeActivity extends BaseActivity {
         });
         insert_symbol.addOnPushCallback(item -> {
             if(item.getType() == SYMBOL_INSERTED){
+                CharSequence contentText = content.getText();
+                assert contentText != null;
+                CharSequence insert = (CharSequence) item.getInstance();
+                int insertPos = content.getSelectionStart();
+                if(insertPos < contentText.length()){
+                    char nextChar = contentText.charAt(insertPos);
+                    if(ArrayUtils.in_array(new Character[]{'(', ')', '[', ']', '"', ';', ',', '.'}, nextChar)
+                            && ArrayUtils.in_array(new CharSequence[]{"    ", ")", "]", "\"", "'", ";", "."}, insert)){
+                        content.setSelection(content.getSelectionStart() + 1);
+                        return;
+                    }
+                }
                 Objects.requireNonNull(content.getText())
-                        .insert(content.getSelectionStart(), (CharSequence) item.getInstance());
+                        .insert(content.getSelectionStart(), insert);
             }
         });
         path.setOnClickListener(view -> {

@@ -109,9 +109,8 @@ public class CodeText extends EditText {
                 (string, start, end, destination, d_start, d_end) -> {
                     if(end - start == 1 && start < string.length() && d_start < destination.length()){
                         char inserted = string.charAt(start);
-                        if (inserted == '\n') {
+                        if (inserted == '\n')
                             return autoIndent(string, destination, d_start, d_end);
-                        }
                     }
                     return string;
                 }
@@ -172,37 +171,28 @@ public class CodeText extends EditText {
         });
     }
 
-    // TODO: Discover how it works and improve code style
     public CharSequence autoIndent(CharSequence source, Spanned dest, int d_start, int d_end){
         String indent = "";
-        int istart = d_start - 1;
-        int iend;
+        int sequenceStart = d_start - 1;
+        int sequenceEnd;
 
         // find start of this line
-        boolean dataBefore = false;
+        boolean stringFound = false;
         int pt = 0;
 
-        for (; istart > -1; --istart) {
-            char c = dest.charAt(istart);
+        for (; sequenceStart > -1; --sequenceStart) {
+            char c = dest.charAt(sequenceStart);
 
             if (c == '\n')
                 break;
 
-            if (c != ' ' &&
-                    c != '\t') {
-                if (!dataBefore) {
+            if (c != ' ' && c != '\t') {
+                if (!stringFound) {
                     // indent always after those characters
-                    if (c == '{' ||
-                            c == '+' ||
-                            c == '-' ||
-                            c == '*' ||
-                            c == '/' ||
-                            c == '%' ||
-                            c == '^' ||
-                            c == '=')
+                    if (c == '{' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^' || c == '=')
                         --pt;
 
-                    dataBefore = true;
+                    stringFound = true;
                 }
 
                 // parenthesis counter
@@ -214,34 +204,33 @@ public class CodeText extends EditText {
         }
 
         // copy indent of this line into the next
-        if (istart > -1) {
-            char charAtCursor = dest.charAt(d_start);
+        char charAtCursor = ' ';
+        if (sequenceStart > -1) {
+            charAtCursor = dest.charAt(d_start);
 
-            for (iend = ++istart;
-                 iend < d_end;
-                 ++iend) {
-                char c = dest.charAt(iend);
+            for (sequenceEnd = ++sequenceStart; sequenceEnd < d_end; ++sequenceEnd) {
+                char lastChar = dest.charAt(sequenceEnd);
 
                 // auto expand comments
-                if (charAtCursor != '\n' &&
-                        c == '/' &&
-                        iend + 1 < d_end &&
-                        dest.charAt(iend) == c) {
-                    iend += 2;
+                if (charAtCursor != '\n' && lastChar == '/' && sequenceEnd + 1 < d_end && dest.charAt(sequenceEnd) == lastChar) {
+                    sequenceEnd += 2;
                     break;
                 }
 
-                if (c != ' ' &&
-                        c != '\t')
+                if (lastChar != ' ' && lastChar != '\t')
                     break;
             }
 
-            indent += dest.subSequence(istart, iend);
+            indent += dest.subSequence(sequenceStart, sequenceEnd);
         }
 
         // add new indent
-        if (pt < 0)
+        if (pt < 0) {
+            String old_indent = indent;
             indent += "    "; // (4 spaces)
+            if(charAtCursor == '}' || charAtCursor == ')' || charAtCursor == ']')
+                indent += "\n" + old_indent;
+        }
 
         // append white space of previous line and new indent
         return source + indent;
@@ -293,27 +282,14 @@ public class CodeText extends EditText {
             requestFocus();
 
         if(!pasting_second) {
-            int max_lines = MAX_LINES_IN_TEXT_EDITOR * 10000;
-            if(text.length() > max_lines){
-                pasting_second = true;
-                setText(text.subSequence(0, max_lines + 1));
-                setSelection(max_lines + 1);
-                return;
-            }
-            time_edited = Time.getCurrentTime();
-            // Auto adding char
-            if (lengthAfter - lengthBefore == 1) {
-                char inserted = text.charAt(start);
-                if (start != 0 && back_symbol.containsKey(inserted)) {
-                    pasting_second = true;
-                    Objects.requireNonNull(getText()).insert(start + 1, String.valueOf(back_symbol.get(inserted)));
-                    setSelection(start + 1);
-                }
-            }
+            insertSecondChar(text, start, lengthBefore, lengthAfter);
+            cutBigString(text);
         } else {
             pasting_second = false;
         }
     }
+
+
 
     @Override
     public int getCompoundPaddingLeft() {
@@ -396,6 +372,48 @@ public class CodeText extends EditText {
         getLineBounds(line, lineBounds);
         lineBounds.left = 0;
         canvas.drawRect(lineBounds, highlightPaint);
+    }
+
+    private void insertSecondChar(CharSequence text, int start, int lengthBefore, int lengthAfter){
+        time_edited = Time.getCurrentTime();
+        // Auto adding char
+        if (lengthAfter - lengthBefore == 1) {
+            char inserted = text.charAt(start);
+            if (start != 0 && symbolOpened(inserted, text)) {
+                pasting_second = true;
+                Objects.requireNonNull(getText()).insert(start + 1, String.valueOf(back_symbol.get(inserted)));
+                setSelection(start + 1);
+            }
+        }
+    }
+
+    private boolean symbolOpened(Character symbol, CharSequence text){
+        if(!back_symbol.containsKey(symbol)) {
+            return false;
+        }
+        Character back = back_symbol.get(symbol);
+
+        int symbol_count = 0;
+        int back_count = 0;
+        for(int i = 0; i < text.length(); i++){
+            Character c = text.charAt(i);
+            if(c.equals(symbol))
+                symbol_count ++;
+            if(c.equals(back))
+                back_count ++;
+        }
+
+        return (!symbol.equals(back) && symbol_count == back_count + 1) ||
+                (symbol.equals(back) && symbol_count % 2 == 1);
+    }
+
+    private void cutBigString(CharSequence text){
+        int max_lines = MAX_LINES_IN_TEXT_EDITOR * 10000;
+        if(text.length() > max_lines){
+            pasting_second = true;
+            setText(text.subSequence(0, max_lines + 1));
+            setSelection(max_lines + 1);
+        }
     }
 
     public void setOnScrollChangeListener(PushCallback<ScrollChange> listener){
