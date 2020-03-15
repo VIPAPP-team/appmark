@@ -252,7 +252,7 @@ public class Const {
     public static final Pattern XML_START_TAG = Pattern.compile("(?<=\\s)[^:\\s=]*?(?=:)");
     public static final Pattern XML_END_TAG = Pattern.compile("\\b.\\w*?(?:=)");
     // Others
-    public static final Pattern JAVA_ERROR_PATTERN = Pattern.compile("\\d+\\. (ERROR|WARNING) in (\\S+) \\(at line (\\d+)\\)\\n([^\\n]+)\\n[^\\n]+\\n([^\\n]+)");
+    public static final Pattern JAVA_ERROR_PATTERN = Pattern.compile("\\d+\\. (ERROR|WARNING) in (\\S+) \\(at line (\\d+)\\)\\n[^\\n]+\\n[^\\n]+\\n([^\\n]+)");
     public static final Pattern AAPT_ERROR_PATTERN = Pattern.compile("(.*?):(\\d+): error: (.+)");
 
     // Extension to language table

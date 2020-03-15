@@ -2,6 +2,7 @@ package com.vipapp.appmark2.activity;
 
 import android.graphics.Color;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.vipapp.appmark2.R;
+import com.vipapp.appmark2.alert.CodeErrorsDialog;
 import com.vipapp.appmark2.alert.ConfirmDialog;
 import com.vipapp.appmark2.alert.InfoDialog;
 import com.vipapp.appmark2.alert.LoadingDialog;
@@ -77,16 +79,15 @@ public class CodeActivity extends BaseActivity {
     boolean textChangedAfterCompile = true;
     boolean saving = false;
     boolean needShowApk = false;
-    // Is opened file type supports action bar
-    boolean actionButtonVisible = false;
     // Is action button hidden while scrolling
-    boolean actionButtonHidden = false;
+    boolean floatingPanelHidden = false;
 
+    public CodeText content;
     DrawerLayout drawerLayout;
     FrameLayout main;
+    FrameLayout floatingPanel;
     TextView title;
     TextView path;
-    CodeText content;
     ImageView files;
     ImageView menu;
     RecyclerView file_recycler;
@@ -146,6 +147,10 @@ public class CodeActivity extends BaseActivity {
         content = f(R.id.content);
         main = f(R.id.main);
         actionButton = f(R.id.actionButton);
+        stateLayout = f(R.id.stateLayout);
+        stateImage = f(R.id.stateImage);
+        stateProgress = f(R.id.stateProgress);
+        floatingPanel = f(R.id.floatingPanel);
     }
 
     @Override
@@ -200,6 +205,7 @@ public class CodeActivity extends BaseActivity {
             chooser.setArray(Const.code_menu_chooser);
             chooser.show();
         });
+        stateLayout.setOnClickListener(this::onStateLayoutClicked);
         setCodeWatcher();
     }
 
@@ -305,25 +311,73 @@ public class CodeActivity extends BaseActivity {
     private void setupActionButtonMoves(){
         content.setOnScrollChangeListener(scrollChange -> {
             boolean scrolledUp = scrollChange.getOldVert() > scrollChange.getVert();
-            if(actionButtonVisible && Math.abs(scrollChange.getVert() - scrollChange.getOldVert()) > 10)
-                if(scrolledUp == actionButtonHidden)
+            if(Math.abs(scrollChange.getVert() - scrollChange.getOldVert()) > 10)
+                if(scrolledUp == floatingPanelHidden)
                 if(scrolledUp)
-                    showActionButton();
+                    showFloatingPanel();
                 else
-                    hideActionButton();
+                    hideFloatingPanel();
         });
     }
 
-    private void hideActionButton(){
-        actionButtonHidden = true;
-        Animation.moveY(actionButton, 300 * Res.get().getDisplayMetrics().density);
-        Animation.fadeOut(actionButton);
+    private void hideFloatingPanel(){
+        floatingPanelHidden = true;
+        hideView(floatingPanel);
     }
 
-    private void showActionButton(){
-        actionButtonHidden = false;
-        Animation.moveY(actionButton, 0f);
-        Animation.fadeIn(actionButton);
+    private void hideView(View v){
+        Animation.moveY(v, 300 * Res.get().getDisplayMetrics().density);
+        Animation.fadeOut(v);
+    }
+
+    private void showFloatingPanel(){
+        floatingPanelHidden = false;
+        showView(floatingPanel);
+    }
+
+    public void showView(View v){
+        Animation.moveY(v, 0f);
+        Animation.fadeIn(v);
+    }
+
+    private void onStateLayoutClicked(View v){
+        if(!compiling && errors.size() > 0){
+            CodeErrorsDialog.show(errors, this);
+        }
+    }
+
+    private void hideStateLayout(){
+        stateLayout.setVisibility(View.GONE);
+    }
+
+    private void showStateLayout(){
+        stateLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void setStateLayoutLoading(){
+        showStateLayout();
+        stateProgress.setVisibility(View.VISIBLE);
+        stateImage.setVisibility(View.GONE);
+    }
+
+    private void setStateLayoutWarning(){
+        showStateImage();
+        setStateImage(R.drawable.warning_icon);
+    }
+
+    private void setStateLayoutError(){
+        showStateImage();
+        setStateImage(R.drawable.error_icon);
+    }
+
+    private void showStateImage(){
+        showStateLayout();
+        stateProgress.setVisibility(View.GONE);
+        stateImage.setVisibility(View.VISIBLE);
+    }
+
+    private void setStateImage(@DrawableRes int res) {
+        stateImage.setImageResource(res);
     }
 
     public void setupProject(){
@@ -382,9 +436,12 @@ public class CodeActivity extends BaseActivity {
     }
 
     public void openFile(File file){
+        openFile(file, null);
+    }
+    public void openFile(File file, PushCallback<Void> onOpen){
         if(file.exists()) {
             if (FileUtils.resolveMimeType(file).contains("text"))
-                openTextFile(file);
+                openTextFile(file, onOpen);
             else if(!FileUtils.openFileInExternal(file)){
                 Toast.show(R.string.open_file_error);
             }
@@ -392,6 +449,9 @@ public class CodeActivity extends BaseActivity {
     }
 
     public void openTextFile(File file){
+        openTextFile(file, null);
+    }
+    public void openTextFile(File file, PushCallback<Void> onOpen){
         if(!file.equals(opened)) {
             // Saving previous opened file
             save(none -> {
@@ -406,9 +466,14 @@ public class CodeActivity extends BaseActivity {
                         // Other
                         addToHistory(file);
                         project.getAif().setLastFile(file);
+                        if(onOpen != null)
+                            onOpen.onComplete(null);
                     }
                 });
             });
+        } else {
+            if(onOpen != null)
+                onOpen.onComplete(null);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
     }
@@ -425,7 +490,7 @@ public class CodeActivity extends BaseActivity {
                     else content.setWarning(start, end);
                 }
             }
-        } catch (Exception e){}
+        } catch (Exception ignored){}
     }
     private void addToHistory(File file){
         history.remove(file);
@@ -433,7 +498,7 @@ public class CodeActivity extends BaseActivity {
         history = history.size() > 10 ? new ArrayList<>(history.subList(0, 10)) : history;
     }
     private void setupActionButton(){
-        actionButtonVisible = actionButton.setFile(opened);
+        actionButton.setFile(opened);
     }
 
     private void setCodeWatcher(){
@@ -442,9 +507,11 @@ public class CodeActivity extends BaseActivity {
 
             }
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                textChangedAfterCompile = true;
-                if(!compiling)
-                    compileProject();
+                Thread.delay(0, 500, () -> {
+                    textChangedAfterCompile = true;
+                    if(!compiling)
+                        compileProject();
+                });
                 // Make auto imports only when language is JAVA
                 if(content.getLanguage() == JAVA_LANGUAGE) {
                     // Get current char if it was inserted
@@ -500,6 +567,7 @@ public class CodeActivity extends BaseActivity {
     }
 
     private void compileProject(){
+        Thread.ui(this::setStateLayoutLoading);
         save();
         Compiler.compileDebug(project, new ApkBuilderCallBack() {
             public void aapt() {
@@ -515,7 +583,7 @@ public class CodeActivity extends BaseActivity {
                 LoadingDialog.setTitle(R.string.java);
             }
             public void javaOK(@NotNull String output_out, @NotNull String output_err) {
-                parseErrors(TYPE_JAVA, output_err);
+                parseErrors(TYPE_JAVA, output_err, true);
             }
             public void javaERR(@NotNull String output_out, @NotNull String output_err) {
                 showErrors(R.string.java_error, TYPE_JAVA, output_err);
@@ -552,31 +620,48 @@ public class CodeActivity extends BaseActivity {
         });
     }
 
-    private void parseErrors(int error_type, String message){
-        ArrayList<ErrorsParser.Error> newErrors = new ErrorsParser(error_type, message).getErrors();
-        if(textChangedAfterCompile) {
-            errors = newErrors;
+    private void parseErrors(int error_type, String message, boolean warnsOnly){
+        Thread.ui(() -> {
+            errors = new ErrorsParser(error_type, message).getErrors();
             underLineErrors();
-        }
+            if(warnsOnly)
+                setStateLayoutWarning();
+            else
+                setStateLayoutError();
+            if(needShowApk) {
+                needShowApk = false;
+                LoadingDialog.hide();
+                if(!warnsOnly)
+                    CodeErrorsDialog.show(errors, this);
+            }
+        });
     }
 
     private void showErrors(@StringRes int title, int error_type, String message){
         lastCompiledSuccessful = false;
         Thread.ui(() -> {
+            hideStateLayout();
             if(error_type >= 0){
-                parseErrors(error_type, message);
-            }
-            if(needShowApk) {
-                needShowApk = false;
-                LoadingDialog.hide();
-                InfoDialog dialog = new InfoDialog(title, message);
-                dialog.show();
+                parseErrors(error_type, message, false);
+            } else {
+                if (needShowApk) {
+                    needShowApk = false;
+                    LoadingDialog.hide();
+                    InfoDialog dialog = new InfoDialog(title, message);
+                    dialog.show();
+                }
             }
             onCompile();
         });
     }
 
     private void onCompile(){
+        Thread.ui(() -> {
+            if(errors.size() == 0) {
+                content.clearErrors();
+                hideStateLayout();
+            }
+        });
         if(textChangedAfterCompile)
             compileProject();
         textChangedAfterCompile = false;

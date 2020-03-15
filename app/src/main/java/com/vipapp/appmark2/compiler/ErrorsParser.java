@@ -26,9 +26,8 @@ public class ErrorsParser {
                     int type = matcher.group(1).equals("ERROR")? Error.TYPE_ERROR: Error.TYPE_WARNING;
                     File file = new File(matcher.group(2));
                     int line_number = Integer.parseInt(matcher.group(3));
-                    String line_string = matcher.group(4);
-                    String message = matcher.group(5);
-                    return new Error(type,  line_number, file, message, line_string);
+                    String message = matcher.group(4);
+                    return new Error(type,  line_number, file, message);
                 }
             },
             // Aapt error parser
@@ -38,9 +37,8 @@ public class ErrorsParser {
                     int type = Error.TYPE_ERROR;
                     File file = new File(matcher.group(1));
                     int line_number = Integer.parseInt(matcher.group(2));
-                    String line_string = "";
                     String message = matcher.group(3);
-                    return new Error(type, line_number, file, message, line_string);
+                    return new Error(type, line_number, file, message);
                 }
             }
     };
@@ -73,6 +71,7 @@ public class ErrorsParser {
         abstract Error parse(Matcher matcher);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class Error{
         public static final int TYPE_ERROR = 0;
         public static final int TYPE_WARNING = 1;
@@ -81,14 +80,12 @@ public class ErrorsParser {
         private int line_number;
         private File file;
         private String message;
-        private String line_string;
 
-        Error(int type, int line_number, File file, String message, String line_string) {
+        Error(int type, int line_number, File file, String message) {
             this.type = type;
             this.line_number = line_number;
             this.file = file;
             this.message = message;
-            this.line_string = line_string;
         }
 
         public int getType() {
@@ -123,19 +120,11 @@ public class ErrorsParser {
             this.message = message;
         }
 
-        public String getLineString() {
-            return line_string;
-        }
-
-        public void setLineString(String line_string) {
-            this.line_string = line_string;
-        }
-
         @NonNull
         @Override
         public String toString() {
-            return String.format(Locale.getDefault(), "type: %1$d\nline: %2$d\nfile: %3$s\nmessage: %4$s\nline string: %5$s",
-                    type, line_number, file.getAbsolutePath(), message, line_string);
+            return String.format(Locale.getDefault(), "type: %1$d\nline: %2$d\nfile: %3$s\nmessage: %4$s",
+                    type, line_number, file.getAbsolutePath(), message);
         }
     }
 }

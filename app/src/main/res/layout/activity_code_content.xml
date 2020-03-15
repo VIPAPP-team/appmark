@@ -86,21 +86,54 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <com.vipapp.appmark2.widget.FileActionButton
-            android:id="@+id/actionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/round_blue"
-            android:gravity="center"
-            android:minWidth="100dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="#ffffff"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:textAllCaps="true" />
+        <FrameLayout
+            android:id="@+id/floatingPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/stateLayout"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom|right"
+                android:background="@drawable/round_white"
+                android:elevation="5dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginVertical="10dp"
+                android:layout_marginRight="15dp"
+                android:padding="8dp">
+
+                <ProgressBar
+                    android:id="@+id/stateProgress"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/stateImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/error_icon" />
+            </LinearLayout>
+
+            <com.vipapp.appmark2.widget.FileActionButton
+                android:id="@+id/actionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/round_blue"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:minWidth="100dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_marginVertical="10dp"
+                app:textAllCaps="true" />
+        </FrameLayout>
 
         <com.vipapp.appmark2.widget.RecyclerView
             android:id="@+id/insert_symbol"
@@ -115,30 +148,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/stateLayout"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/round_white"
-        android:elevation="5dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="8dp">
 
-        <ProgressBar
-            android:id="@+id/stateProgress"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/stateImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/error_icon" />
-    </LinearLayout>
 
 </FrameLayout>

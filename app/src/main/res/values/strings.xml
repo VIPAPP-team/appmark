@@ -92,7 +92,7 @@
     <string name="in_developing">Function in developing</string>
     <string name="java">Compiling java…</string>
     <string name="apk_signing">Signing apk…</string>
-    <string name="pkg">Packaging...</string>
+    <string name="pkg">Packaging…</string>
     <string name="aapt_error">Aapt error</string>
     <string name="java_error">Java error</string>
     <string name="dx_error">Dex error</string>
@@ -174,4 +174,5 @@
     <string name="indeterminate">Indeterminate</string>
     <string name="progress_bar_style">Progress bar style</string>
     <string name="runtime_error">Runtime error</string>
+    <string name="errors_and_warnings">Errors and warnings</string>
 </resources>

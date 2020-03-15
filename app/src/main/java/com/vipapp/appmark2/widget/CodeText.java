@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.DynamicDrawableSpan;
@@ -374,20 +375,23 @@ public class CodeText extends EditText {
     }
 
     private void mDraw(Canvas canvas){
-        // highlighting current line
-        highlightLine(getLayout().getLineForOffset(getSelectionStart()), Color.parseColor(CURRENT_LINE_COLOR), canvas);
-        // drawing line numbers
-        int count = getLineCount();
+        Layout layout = getLayout();
+        if(layout != null) {
+            // highlighting current line
+            highlightLine(layout.getLineForOffset(getSelectionStart()), Color.parseColor(CURRENT_LINE_COLOR), canvas);
+            // drawing line numbers
+            int count = getLineCount();
 
-        for(int i = 0; i < count; i++){
-            int baseline = getLineBounds(i, null);
-            String num = Integer.toString(i + 1);
-            canvas.drawText(num, 10 + getScrollX(), baseline, mPaint);
+            for (int i = 0; i < count; i++) {
+                int baseline = getLineBounds(i, null);
+                String num = Integer.toString(i + 1);
+                canvas.drawText(num, 10 + getScrollX(), baseline, mPaint);
+            }
+            // drawing vertical divider
+            int x = getScrollX() + getCompoundPaddingLeft() - 10;
+            int y = Math.max(getLineHeight() * getLineCount(), getHeight());
+            canvas.drawLine(x, 0, x, y, mPaint);
         }
-        // drawing vertical divider
-        int x = getScrollX() + getCompoundPaddingLeft() - 10;
-        int y = Math.max(getLineHeight() * getLineCount(), getHeight());
-        canvas.drawLine(x, 0, x, y, mPaint);
     }
 
     private void highlightLine(int line, int color, Canvas canvas){
@@ -493,7 +497,7 @@ public class CodeText extends EditText {
         private int waveSize;
         private int color;
 
-        public WaveSpan(int color){
+        WaveSpan(int color){
             this(color, 1, 3);
         }
 

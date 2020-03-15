@@ -24,9 +24,7 @@ public class Server {
             callback.onComplete(server_online);
         } else {
             OkHttp.get(SERVER_STATUS, result -> {
-                if(result != null) {
-                    server_online = result.equals("OK");
-                }
+                server_online = result != null && result.equals("OK");
                 callback.onComplete(server_online);
             });
         }

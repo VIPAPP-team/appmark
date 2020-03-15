@@ -2,6 +2,7 @@ package com.vipapp.appmark2.util;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
@@ -9,8 +10,10 @@ import androidx.annotation.Nullable;
 
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
+import android.view.inputmethod.InputMethodManager;
 
 import com.vipapp.appmark2.item.SpanItem;
+import com.vipapp.appmark2.util.wrapper.Service;
 import com.vipapp.appmark2.widget.EditText;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.vipapp.appmark2.util.Const.IMPORTS_REGEX;
 import static com.vipapp.appmark2.util.Const.WORD_SPLITTER;
 
+@SuppressWarnings("WeakerAccess")
 public class TextUtils {
 
     public static String replaceLast(String text, String regex, String replacement){
@@ -125,6 +129,11 @@ public class TextUtils {
     public static void copyToClipboard(String text){
         ((ClipboardManager)ContextUtils.getSystemService(CLIPBOARD_SERVICE))
                 .setPrimaryClip(ClipData.newPlainText("clipboard", text));
+    }
+
+    public static void forceShowKeyboard(EditText editText){
+        InputMethodManager imm = (InputMethodManager) Service.get(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
 }

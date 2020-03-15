@@ -174,4 +174,5 @@
     <string name="progress_bar_style">Стиль виджета</string>
     <string name="project_broken">Ошибка при загрузке проекта</string>
     <string name="runtime_error">Ошибка при компиляции</string>
+    <string name="errors_and_warnings">Ошибки и предупреждения</string>
 </resources>
