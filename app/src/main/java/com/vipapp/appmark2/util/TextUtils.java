@@ -45,7 +45,7 @@ public class TextUtils {
             final ForegroundColorSpan span = getForegroundSpan(color);
             SpanItem item = new SpanItem(matcher.start(), matcher.end());
             if(!hasSpan(text, item)) {
-                clearSpans(text, matcher.start(), matcher.end());
+                clearForegroundSpans(text, matcher.start(), matcher.end());
                 text.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -95,12 +95,14 @@ public class TextUtils {
         }
     }
 
-    public static void clearSpans(Spannable spannable, int start_pos, int end_pos){
-        try {
-            for (ForegroundColorSpan span: spannable.getSpans(start_pos, end_pos, ForegroundColorSpan.class)) {
-                spannable.removeSpan(span);
-            }
-        } catch (Exception ignored){}
+    public static void clearForegroundSpans(Spannable spannable, int start_pos, int end_pos){
+        clearSpans(spannable, ForegroundColorSpan.class, start_pos, end_pos);
+    }
+
+    public static void clearSpans(Spannable spannable, Class<?> spanClass, int start_pos, int end_pos){
+        for (Object span: spannable.getSpans(start_pos, end_pos, spanClass)) {
+            spannable.removeSpan(span);
+        }
     }
 
     public static void clearAllSpansExclude(@NonNull Spannable spannable, int start_pos, int end_pos){

@@ -40,7 +40,7 @@ public class LoadableInfoDialog extends AlertDialog {
     }
     private void setCallbacks(PushCallback<PushCallback<String>> callback){
         callback.onComplete(string -> {
-            this.content.setText(Html.fromHtml(string));
+            this.content.setText(Html.fromHtml(string.replaceAll("\n", "<br>")));
             progressBar.setVisibility(View.GONE);
             content.setVisibility(View.VISIBLE);
         });

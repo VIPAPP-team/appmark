@@ -3,14 +3,20 @@ package com.vipapp.appmark2.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.style.DynamicDrawableSpan;
+import android.text.style.LineBackgroundSpan;
+import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -26,13 +32,17 @@ import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.Time;
 import com.vipapp.appmark2.util.Toast;
 import com.vipapp.appmark2.util.UndoRedoUtils;
+import com.vipapp.appmark2.util.wrapper.Res;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 import static com.vipapp.appmark2.util.Const.CURRENT_LINE_COLOR;
 import static com.vipapp.appmark2.util.Const.DISTANCE_TO_ZOOM;
+import static com.vipapp.appmark2.util.Const.ERROR_COLOR;
 import static com.vipapp.appmark2.util.Const.HIGHLIGHT_COUNTDOWN;
 import static com.vipapp.appmark2.util.Const.HIGHLIGHT_DEBUG;
 import static com.vipapp.appmark2.util.Const.LINE_NUMBER_COLOR;
@@ -40,6 +50,7 @@ import static com.vipapp.appmark2.util.Const.MAX_LINES_IN_TEXT_EDITOR;
 import static com.vipapp.appmark2.util.Const.MAX_MAIN_EDITOR_FONT_SIZE;
 import static com.vipapp.appmark2.util.Const.MIN_MAIN_EDITOR_FONT_SIZE;
 import static com.vipapp.appmark2.util.Const.TEXT_SIZE_STEP;
+import static com.vipapp.appmark2.util.Const.WARNING_COLOR;
 import static com.vipapp.appmark2.util.Const.back_symbol;
 
 public class CodeText extends EditText {
@@ -253,6 +264,18 @@ public class CodeText extends EditText {
         });
     }
 
+    public void setError(int start, int end){
+        getText().setSpan(new WaveSpan(Color.parseColor(ERROR_COLOR)), start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+    }
+
+    public void setWarning(int start, int end){
+        getText().setSpan(new WaveSpan(Color.parseColor(WARNING_COLOR)), start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+    }
+
+    public void clearErrors(){
+        TextUtils.clearSpans(getText(), WaveSpan.class, 0, getText().length());
+    }
+
     public void setLanguage(int language){
         this.language = language;
     }
@@ -435,4 +458,65 @@ public class CodeText extends EditText {
             setTextSize(MIN_MAIN_EDITOR_FONT_SIZE);
     }
 
+    public int getLineStartIndex(int line){
+        Pattern pattern = Pattern.compile(".*?\n");
+        Matcher matcher = pattern.matcher(getText());
+        int i = 0;
+        while(matcher.find()){
+            if(line == i)
+                return matcher.start();
+            i++;
+        }
+        return -1;
+    }
+    public int getLineEndIndex(int line){
+        Pattern pattern = Pattern.compile(".*?\n");
+        Matcher matcher = pattern.matcher(getText());
+        int i = 0;
+        while(matcher.find()){
+            if(line == i)
+                return matcher.end();
+            i++;
+        }
+        return -1;
+    }
+
+    @NonNull
+    @Override
+    public Editable getText() {
+        return Objects.requireNonNull(super.getText());
+    }
+
+    private static class WaveSpan implements LineBackgroundSpan {
+
+        private int lineWidth;
+        private int waveSize;
+        private int color;
+
+        public WaveSpan(int color){
+            this(color, 1, 3);
+        }
+
+        WaveSpan(int color, int lineWidth, int waveSize){
+            float scale = Res.get().getDisplayMetrics().density;
+            this.lineWidth = (int)(lineWidth * scale + 0.5f);
+            this.waveSize = (int)(waveSize * scale + 0.5f);
+            this.color = color;
+        }
+
+        @Override
+        public void drawBackground(Canvas canvas, Paint paint, int left, int right, int top, int baseline, int bottom, CharSequence text, int start, int end, int lnum) {
+            Paint p = new Paint(paint);
+            p.setColor(color);
+            p.setStrokeWidth(lineWidth);
+
+            int width = (int) paint.measureText(text, start, end);
+
+            int doubleWaveSize = waveSize * 2;
+            for(int i = left; i < width; i += doubleWaveSize){
+                canvas.drawLine(i, bottom, i + waveSize, bottom - waveSize, p);
+                canvas.drawLine(i + waveSize, bottom - waveSize, i + doubleWaveSize, bottom, p);
+            }
+        }
+    }
 }

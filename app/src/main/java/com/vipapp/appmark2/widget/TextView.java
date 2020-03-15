@@ -13,6 +13,11 @@ import com.vipapp.appmark2.util.FontUtils;
 
 public class TextView extends AppCompatTextView {
 
+    @Override
+    public boolean isInEditMode() {
+        return false;
+    }
+
     public TextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setup(context, attrs);

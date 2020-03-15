@@ -251,6 +251,9 @@ public class Const {
     public static final Pattern XMLNS = Pattern.compile("\\sxmlns:");
     public static final Pattern XML_START_TAG = Pattern.compile("(?<=\\s)[^:\\s=]*?(?=:)");
     public static final Pattern XML_END_TAG = Pattern.compile("\\b.\\w*?(?:=)");
+    // Others
+    public static final Pattern JAVA_ERROR_PATTERN = Pattern.compile("\\d+\\. (ERROR|WARNING) in (\\S+) \\(at line (\\d+)\\)\\n([^\\n]+)\\n[^\\n]+\\n([^\\n]+)");
+    public static final Pattern AAPT_ERROR_PATTERN = Pattern.compile("(.*?):(\\d+): error: (.+)");
 
     // Extension to language table
     public static final HashMap<String, Integer> extToLan = new HashMap<String, Integer>(){{
@@ -276,6 +279,8 @@ public class Const {
     public static final String ANNOTATIONS_COLOR = "#808000";
     public static final String XML_TAG_COLOR = "#0000FF";
     public static final String XML_TAG_SECOND_COLOR = "#660E7A";
+    public static final String ERROR_COLOR = "#ff0000";
+    public static final String WARNING_COLOR = "#E69317";
 
     public static String[] CODE_EDITOR_SYMBOLS = new String[]{
             "    ", ";", "\"", "{", "}", "(", ")", ",", ".", "=", "[", "]", ":", "#", "<", ">"};
