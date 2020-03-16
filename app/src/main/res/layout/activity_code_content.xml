@@ -34,25 +34,49 @@
                     android:padding="12dp"
                     app:srcCompat="@drawable/menu" />
 
-                <com.vipapp.appmark2.widget.TextView
-                    android:id="@+id/title"
+                <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="#444444"
-                    android:textSize="18sp" />
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id="@+id/run"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="7dp"
+                    app:srcCompat="@drawable/run" />
+
+                <ImageView
+                    android:id="@+id/undo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/undo" />
+
+                <ImageView
+                    android:id="@+id/redo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/redo" />
 
                 <ImageView
                     android:id="@+id/menu"
                     android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_height="50dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
-                    android:padding="12dp"
+                    android:padding="10dp"
                     app:srcCompat="@drawable/vertical_menu" />
 
             </LinearLayout>

@@ -19,8 +19,28 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="bottom|center_horizontal"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
+
+            <com.vipapp.appmark2.widget.TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#444444"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cecece" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
             <com.vipapp.appmark2.widget.TextView
                 android:id="@+id/textView3"
@@ -36,10 +56,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/round_gray"
-                android:paddingBottom="4dp"
                 android:paddingLeft="20dp"
+                android:paddingTop="4dp"
                 android:paddingRight="20dp"
-                android:paddingTop="4dp" />
+                android:paddingBottom="4dp" />
         </LinearLayout>
 
         <View

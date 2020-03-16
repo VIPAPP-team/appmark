@@ -90,6 +90,9 @@ public class CodeActivity extends BaseActivity {
     TextView path;
     ImageView files;
     ImageView menu;
+    ImageView run;
+    ImageView undo;
+    ImageView redo;
     RecyclerView file_recycler;
     RecyclerView insert_symbol;
     FileActionButton actionButton;
@@ -151,6 +154,9 @@ public class CodeActivity extends BaseActivity {
         stateImage = f(R.id.stateImage);
         stateProgress = f(R.id.stateProgress);
         floatingPanel = f(R.id.floatingPanel);
+        run = f(R.id.run);
+        undo = f(R.id.undo);
+        redo = f(R.id.redo);
     }
 
     @Override
@@ -206,6 +212,12 @@ public class CodeActivity extends BaseActivity {
             chooser.show();
         });
         stateLayout.setOnClickListener(this::onStateLayoutClicked);
+        //noinspection unchecked
+        run.setOnClickListener(view -> callbacks[0].onComplete(null));
+        //noinspection unchecked
+        undo.setOnClickListener(view -> callbacks[3].onComplete(null));
+        //noinspection unchecked
+        redo.setOnClickListener(view -> callbacks[4].onComplete(null));
         setCodeWatcher();
     }
 
