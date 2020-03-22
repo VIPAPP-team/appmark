@@ -1,6 +1,8 @@
 package com.vipapp.appmark2.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import androidx.annotation.NonNull;
@@ -9,17 +11,21 @@ import androidx.annotation.Nullable;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.text.style.DynamicDrawableSpan;
+import android.text.method.ScrollingMovementMethod;
 import android.text.style.LineBackgroundSpan;
-import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.OverScroller;
+import android.widget.PopupWindow;
+import android.widget.Scroller;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.Mapper;
@@ -34,6 +40,7 @@ import com.vipapp.appmark2.util.Time;
 import com.vipapp.appmark2.util.Toast;
 import com.vipapp.appmark2.util.UndoRedoUtils;
 import com.vipapp.appmark2.util.wrapper.Res;
+import com.vipapp.appmark2.util.wrapper.mLayoutInflater;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -53,8 +60,13 @@ import static com.vipapp.appmark2.util.Const.MIN_MAIN_EDITOR_FONT_SIZE;
 import static com.vipapp.appmark2.util.Const.TEXT_SIZE_STEP;
 import static com.vipapp.appmark2.util.Const.WARNING_COLOR;
 import static com.vipapp.appmark2.util.Const.back_symbol;
+import static java.lang.Math.abs;
 
 public class CodeText extends EditText {
+
+    View popupView;
+    PopupWindow hintsPopup;
+    int popupY = -1;
 
     PushCallback<ScrollChange> scroll;
 
@@ -65,6 +77,8 @@ public class CodeText extends EditText {
     private int language = Const.JAVA_LANGUAGE;
 
     boolean pasting_second = false;
+
+    Canvas canvas;
 
     ArrayList<Mapper<Spannable, CharSequence>> highlights = new ArrayList<Mapper<Spannable, CharSequence>>(){{
         // TEXT HIGHLIGHT
@@ -105,12 +119,13 @@ public class CodeText extends EditText {
     }
 
     public void setup(){
-        setHorizontallyScrolling(true);
         text_before = "";
+        setHorizontallyScrolling(true);
         highlight();
         setFilters();
         setupUndoRedo();
         setupTouchZoom();
+        setupHintsPopup();
         initDraw();
     }
     public void initDraw(){
@@ -131,6 +146,16 @@ public class CodeText extends EditText {
     public void setupUndoRedo(){
         undoRedo = new UndoRedoUtils(this);
     }
+    @SuppressLint("InflateParams")
+    private void setupHintsPopup(){
+        popupView = mLayoutInflater.get().inflate(R.layout.hints_popup, null);
+    }
+    public void hidePopup(){
+        if(hintsPopup != null) {
+            hintsPopup.dismiss();
+            hintsPopup = null;
+        }
+    }
 
     int first_pointer_id = 0;
     int second_pointer_id = 1;
@@ -140,10 +165,12 @@ public class CodeText extends EditText {
 
     private void setupTouchZoom(){
         setOnTouchListener((view, motionEvent) -> {
+            extendedPaddingBottom = 0;
             try {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
+                        scrollingVertical = null;
                         startDistance = -1;
                         canTouch = true;
                         break;
@@ -162,16 +189,15 @@ public class CodeText extends EditText {
 
                             double difference = distance - startDistance;
 
-                            if (Math.abs(difference) >= DISTANCE_TO_ZOOM) {
+                            if (abs(difference) >= DISTANCE_TO_ZOOM) {
                                 float k = (float)difference / DISTANCE_TO_ZOOM;
                                 if (difference > 0)
                                     upTextSize(k);
                                 else
                                     downTextSize(k);
                                 startDistance = distance;
-                                canTouch = false;
                             }
-
+                            canTouch = false;
                         }
                         break;
                 }
@@ -301,6 +327,19 @@ public class CodeText extends EditText {
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
+        Layout layout = getLayout();
+
+        if(layout != null) {
+            int current_line = layout.getLineForOffset(getSelectionStart());
+            Rect currentLineBounds = new Rect();
+            getLineBounds(current_line, currentLineBounds);
+            int current_baseline = layout.getLineBaseline(current_line);
+            int current_ascent = layout.getLineAscent(current_line);
+            float cursor_y = current_baseline + current_ascent + currentLineBounds.bottom - currentLineBounds.top;
+            if(TextUtils.getCurrentWord(this).trim().equals(""))
+                hidePopup();
+            else setHintsPopupPosition((int)cursor_y);
+        }
 
         if(!hasFocus())
             requestFocus();
@@ -312,8 +351,6 @@ public class CodeText extends EditText {
             pasting_second = false;
         }
     }
-
-
 
     @Override
     public int getCompoundPaddingLeft() {
@@ -352,13 +389,13 @@ public class CodeText extends EditText {
         return super.performClick();
     }
 
-    Rect lineBounds = new Rect();
     Paint highlightPaint = new Paint();
     Paint mPaint = new Paint();
 
     // trying to draw view if error trying again after half second to fix bug with spans
     @Override
     protected void onDraw(Canvas canvas) {
+        this.canvas = canvas;
         mDraw(canvas);
         try{
             super.onDraw(canvas);
@@ -367,8 +404,41 @@ public class CodeText extends EditText {
         }
     }
 
+    int extendedPaddingBottom = 0;
+    boolean scrollingToHints = false;
+
+    public void scrollToHints(int y) {
+        int maxScroll = computeVerticalScrollRange();
+        int availableHeight = getHeight() - super.getCompoundPaddingBottom() - super.getCompoundPaddingTop();
+        if (maxScroll - y < availableHeight) {
+            extendedPaddingBottom = availableHeight - maxScroll + y - getLineHeight() * 2;
+            y = maxScroll;
+        }
+        scrollingToHints = true;
+        setScrollY(y);
+        scrollingToHints = false;
+    }
+
+    Boolean scrollingVertical;
+    @Override
+    public void scrollTo(int x, int y) {
+        if(scrollingVertical == null){
+            scrollingVertical = abs(getScrollY() - y) > abs(getScrollX() - x);
+        }
+        if(scrollingVertical)
+            super.scrollTo(getScrollX(), y);
+        else
+            super.scrollTo(x, getScrollY());
+    }
+
+    @Override
+    public int getExtendedPaddingBottom() {
+        return super.getExtendedPaddingBottom() + extendedPaddingBottom;
+    }
+
     @Override
     protected void onScrollChanged(int horiz, int vert, int oldHoriz, int oldVert) {
+
         if(scroll != null)
             scroll.onComplete(new ScrollChange(vert, horiz, oldVert, oldHoriz));
         super.onScrollChanged(horiz, vert, oldHoriz, oldVert);
@@ -377,28 +447,52 @@ public class CodeText extends EditText {
     private void mDraw(Canvas canvas){
         Layout layout = getLayout();
         if(layout != null) {
+            int current_line = layout.getLineForOffset(getSelectionStart());
             // highlighting current line
-            highlightLine(layout.getLineForOffset(getSelectionStart()), Color.parseColor(CURRENT_LINE_COLOR), canvas);
+            highlightLine(current_line, Color.parseColor(CURRENT_LINE_COLOR), canvas);
+            // setting position of hints popup
             // drawing line numbers
             int count = getLineCount();
 
             for (int i = 0; i < count; i++) {
-                int baseline = getLineBounds(i, null);
+                int line_baseline = getLineBounds(i, null);
                 String num = Integer.toString(i + 1);
-                canvas.drawText(num, 10 + getScrollX(), baseline, mPaint);
+                canvas.drawText(num, 10 + getScrollX(), line_baseline, mPaint);
             }
             // drawing vertical divider
             int x = getScrollX() + getCompoundPaddingLeft() - 10;
-            int y = Math.max(getLineHeight() * getLineCount(), getHeight());
+            int y = Math.max(getLineHeight() * getLineCount(), getHeight()) + getExtendedPaddingBottom();
             canvas.drawLine(x, 0, x, y, mPaint);
         }
     }
 
     private void highlightLine(int line, int color, Canvas canvas){
+        Rect lineBounds = new Rect();
         highlightPaint.setColor(color);
         getLineBounds(line, lineBounds);
         lineBounds.left = 0;
         canvas.drawRect(lineBounds, highlightPaint);
+    }
+
+    private void setHintsPopupPosition(int y){
+        Rect frame = new Rect();
+        getWindowVisibleDisplayFrame(frame);
+        Rect lineBounds = new Rect();
+        getLineBounds(0, lineBounds);
+        int scrollY = y;
+        y = Math.min(y, 2 * getLineHeight());
+        if(y != popupY || hintsPopup == null){
+            hidePopup();
+            scrollToHints(scrollY);
+            if(popupView.getParent() != null)
+                ((ViewGroup)popupView.getParent()).removeAllViews();
+            hintsPopup = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            hintsPopup.setOutsideTouchable(true);
+            hintsPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+            hintsPopup.setOnDismissListener(() -> hintsPopup = null);
+            popupY = y;
+            hintsPopup.showAsDropDown(this, 0, y);
+        }
     }
 
     private void insertSecondChar(CharSequence text, int start, int lengthBefore, int lengthAfter){

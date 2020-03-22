@@ -19,7 +19,7 @@ public class InsertSymbolMenu extends DefaultMenu<String, InsertSymbolHolder> {
 
     @Override
     public void bind(InsertSymbolHolder vh, String item, int i) {
-        vh.value.setText(item.equals("    ")? "\\t": item);
+        vh.value.setText(item.equals("    ")? "TAB": item);
         vh.value.setOnClickListener(view -> pushItem(new Item<>(Const.SYMBOL_INSERTED, item)));
     }
 

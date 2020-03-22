@@ -289,6 +289,7 @@ public class CodeActivity extends BaseActivity {
                     opened = file;
                     content.setText(string);
                     content.clearHistory();
+                    content.hidePopup();
                     if (project != null) setupActionButton();
                     isOpened.onComplete(true);
                 } else {

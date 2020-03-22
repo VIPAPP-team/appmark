@@ -70,16 +70,14 @@ public class TextUtils {
     }
 
     public static String getWordAtPosition(String string, int position){
-        String selectedChar = Character.toString(string.charAt(position));
-        String selectedWord = "";
         int length = 0;
 
         for(String currentWord: string.split(WORD_SPLITTER)) {
-            length = length + currentWord.length() + 1;
-            if(length > position) {
-                return selectedWord;
+            length = length + currentWord.length();
+            if(length >= position) {
+                return currentWord;
             }
-            selectedWord = currentWord;
+            length += 1;
         }
 
         return "";

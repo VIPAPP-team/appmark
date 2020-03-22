@@ -611,7 +611,7 @@ public class Const {
     // REGEX CONST
     public static final String REFERENCE_REGEX = "(\\?|@).+/";
     public static final String LOCALE_REGEX = "[a-z\\-]*";
-    public static final String WORD_SPLITTER = "([^.\\w]|\\W(?=\\W))";
+    public static final String WORD_SPLITTER = "\\W";
     public static final String IMPORTS_REGEX = "(?:package(.|\\n)*?(?=import)|.+\\{(?:.|\\s)*|import.*\\.|;)";
     public static final String VALUES_REGEX = "values(-[a-z]+)?";
     public static final String PACKAGE_REGEX = "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+";
