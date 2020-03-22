@@ -93,8 +93,9 @@ public class TextUtils {
         while(end < editable.length() && !Character.toString(editable.charAt(end)).matches(WORD_SPLITTER)){
             end++;
         }
-        editable.delete(start + 1, end);
+        editable.delete(pos == 0? 0: start + 1, end);
     }
+    f
 
     public static String insert(String destination, int position, String toInsert){
         return destination.substring(0, position) + toInsert + destination.substring(position);

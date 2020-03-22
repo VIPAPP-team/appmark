@@ -448,6 +448,7 @@ public class CodeText extends EditText {
     int extendedPaddingBottom = 0;
     boolean scrollingToHints = false;
 
+    // FIXME: 22.03.2020 Bad solution
     public void scrollToHints(int y) {
         int maxScroll = computeVerticalScrollRange();
         int availableHeight = getHeight() - super.getCompoundPaddingBottom() - super.getCompoundPaddingTop();
