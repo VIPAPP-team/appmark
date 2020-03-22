@@ -8,6 +8,7 @@ import android.graphics.Color;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
 import android.view.inputmethod.InputMethodManager;
@@ -81,6 +82,18 @@ public class TextUtils {
         }
 
         return "";
+    }
+
+    public static void deleteWordAtPosition(Editable editable, int pos){
+        int start = pos;
+        int end = pos;
+        while(start > 0 && !Character.toString(editable.charAt(start)).matches(WORD_SPLITTER)){
+            start--;
+        }
+        while(end < editable.length() && !Character.toString(editable.charAt(end)).matches(WORD_SPLITTER)){
+            end++;
+        }
+        editable.delete(start + 1, end);
     }
 
     public static String insert(String destination, int position, String toInsert){

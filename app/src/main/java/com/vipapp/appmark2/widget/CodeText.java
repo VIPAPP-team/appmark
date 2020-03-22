@@ -2,7 +2,6 @@ package com.vipapp.appmark2.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import androidx.annotation.NonNull;
@@ -16,16 +15,12 @@ import android.text.InputFilter;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.text.method.ScrollingMovementMethod;
 import android.text.style.LineBackgroundSpan;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.OverScroller;
 import android.widget.PopupWindow;
-import android.widget.Scroller;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.Mapper;
@@ -43,16 +38,22 @@ import com.vipapp.appmark2.util.wrapper.Res;
 import com.vipapp.appmark2.util.wrapper.mLayoutInflater;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
+import static com.vipapp.appmark2.menu.HintsMenu.ARRAY_PUSHED;
+import static com.vipapp.appmark2.menu.HintsMenu.SHOW_POPUP;
+import static com.vipapp.appmark2.menu.HintsMenu.TEXT_CHANGED;
+import static com.vipapp.appmark2.menu.HintsMenu.TEXT_INSERTED;
 import static com.vipapp.appmark2.util.Const.CURRENT_LINE_COLOR;
 import static com.vipapp.appmark2.util.Const.DISTANCE_TO_ZOOM;
 import static com.vipapp.appmark2.util.Const.ERROR_COLOR;
 import static com.vipapp.appmark2.util.Const.HIGHLIGHT_COUNTDOWN;
 import static com.vipapp.appmark2.util.Const.HIGHLIGHT_DEBUG;
+import static com.vipapp.appmark2.util.Const.JAVA_LANGUAGE;
 import static com.vipapp.appmark2.util.Const.LINE_NUMBER_COLOR;
 import static com.vipapp.appmark2.util.Const.MAX_LINES_IN_TEXT_EDITOR;
 import static com.vipapp.appmark2.util.Const.MAX_MAIN_EDITOR_FONT_SIZE;
@@ -65,6 +66,7 @@ import static java.lang.Math.abs;
 public class CodeText extends EditText {
 
     View popupView;
+    RecyclerView popupRecycler;
     PopupWindow hintsPopup;
     int popupY = -1;
 
@@ -79,6 +81,26 @@ public class CodeText extends EditText {
     boolean pasting_second = false;
 
     Canvas canvas;
+
+    private HashMap<Integer, ArrayList<Hint>> hints = new HashMap<Integer, ArrayList<Hint>>(){{
+        put(JAVA_LANGUAGE, new ArrayList<Hint>(){{
+            add(new Hint("public"));
+            add(new Hint("private"));
+            add(new Hint("default"));
+            add(new Hint("protected"));
+            add(new Hint("if"));
+            add(new Hint("else"));
+            add(new Hint("switch"));
+            add(new Hint("void"));
+            add(new Hint("int"));
+            add(new Hint("boolean"));
+            add(new Hint("char"));
+            add(new Hint("class"));
+            add(new Hint("extends"));
+            add(new Hint("implements"));
+            add(new Hint("static"));
+        }});
+    }};
 
     ArrayList<Mapper<Spannable, CharSequence>> highlights = new ArrayList<Mapper<Spannable, CharSequence>>(){{
         // TEXT HIGHLIGHT
@@ -149,6 +171,35 @@ public class CodeText extends EditText {
     @SuppressLint("InflateParams")
     private void setupHintsPopup(){
         popupView = mLayoutInflater.get().inflate(R.layout.hints_popup, null);
+        popupRecycler = popupView.findViewById(R.id.recycler);
+        popupRecycler.addOnPushCallback(item -> {
+            if(item.getType() == TEXT_INSERTED) {
+                if(getSelectionStart() > 0) {
+                    TextUtils.deleteWordAtPosition(getText(), getSelectionStart() - 1);
+                    getText().insert(getSelectionStart(), (String) item.getInstance());
+                }
+            }
+            if(item.getType() == SHOW_POPUP){
+                if((Boolean)item.getInstance()) {
+                    Layout layout = getLayout();
+                    if (layout != null) {
+                        int current_line = layout.getLineForOffset(getSelectionStart());
+                        Rect currentLineBounds = new Rect();
+                        getLineBounds(current_line, currentLineBounds);
+                        int current_baseline = layout.getLineBaseline(current_line);
+                        int current_ascent = layout.getLineAscent(current_line);
+                        float cursor_y = current_baseline + current_ascent + currentLineBounds.bottom - currentLineBounds.top;
+                        setHintsPopupPosition((int) cursor_y);
+                    }
+                } else {
+                    hidePopup();
+                }
+            }
+        });
+    }
+    private void setupHints(){
+        if(hints.containsKey(language))
+            popupRecycler.pushValue(ARRAY_PUSHED, hints.get(language));
     }
     public void hidePopup(){
         if(hintsPopup != null) {
@@ -305,6 +356,7 @@ public class CodeText extends EditText {
 
     public void setLanguage(int language){
         this.language = language;
+        setupHints();
     }
     public int getLanguage(){
         return this.language;
@@ -327,19 +379,8 @@ public class CodeText extends EditText {
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
-        Layout layout = getLayout();
-
-        if(layout != null) {
-            int current_line = layout.getLineForOffset(getSelectionStart());
-            Rect currentLineBounds = new Rect();
-            getLineBounds(current_line, currentLineBounds);
-            int current_baseline = layout.getLineBaseline(current_line);
-            int current_ascent = layout.getLineAscent(current_line);
-            float cursor_y = current_baseline + current_ascent + currentLineBounds.bottom - currentLineBounds.top;
-            if(TextUtils.getCurrentWord(this).trim().equals(""))
-                hidePopup();
-            else setHintsPopupPosition((int)cursor_y);
-        }
+        if(popupRecycler != null)
+            popupRecycler.pushValue(TEXT_CHANGED, TextUtils.getCurrentWord(this).trim());
 
         if(!hasFocus())
             requestFocus();
@@ -615,6 +656,42 @@ public class CodeText extends EditText {
                 canvas.drawLine(i, bottom, i + waveSize, bottom - waveSize, p);
                 canvas.drawLine(i + waveSize, bottom - waveSize, i + doubleWaveSize, bottom, p);
             }
+        }
+    }
+
+    public static class Hint{
+        private int type = 0;
+        private String body;
+        private String insertValue;
+
+        public Hint(String body, String insertValue) {
+            this.body = body;
+            this.insertValue = insertValue;
+        }
+
+        private Hint(String body) {
+            this.body = body;
+            this.insertValue = body + " ";
+        }
+
+        public boolean show(String word){
+            return body.contains(word);
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public void setBody(String body) {
+            this.body = body;
+        }
+
+        public String getInsertValue() {
+            return insertValue;
+        }
+
+        public void setInsertValue(String insertValue) {
+            this.insertValue = insertValue;
         }
     }
 }
