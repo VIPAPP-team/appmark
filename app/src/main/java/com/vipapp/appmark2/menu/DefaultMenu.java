@@ -29,6 +29,10 @@ public abstract class DefaultMenu<ListItemType, ViewHolderType extends RecyclerV
         this.array = arrayList;
         adapter.pushArray(array, need_to_notify);
     }
+    void pushArray(ArrayList<ListItemType> arrayList, boolean need_to_notify, boolean force_notify){
+        adapter.pushArray(arrayList, need_to_notify, force_notify);
+    }
+
     void pushItem(Item item){
         adapter.onPush(item);
     }

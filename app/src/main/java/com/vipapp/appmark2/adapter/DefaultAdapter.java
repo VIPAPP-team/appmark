@@ -48,8 +48,11 @@ public class DefaultAdapter extends RecyclerView.Adapter {
     private void pushArray(ArrayList arrayList){
         pushArray(arrayList, true);
     }
-    public void pushArray(ArrayList arrayList, boolean need_to_notify){
-        if(arrayList != null && !arrayList.equals(list)) {
+    public void pushArray(ArrayList arrayList, boolean need_to_notify) {
+        pushArray(arrayList, need_to_notify, false);
+    }
+    public void pushArray(ArrayList arrayList, boolean need_to_notify, boolean force_notify){
+        if(arrayList != null && (!arrayList.equals(list) || force_notify)) {
             list.clear();
             //noinspection unchecked
             list.addAll(arrayList);

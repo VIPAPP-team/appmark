@@ -1,13 +1,21 @@
 package com.vipapp.appmark2.menu;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableString;
 
 import com.vipapp.appmark2.holder.HintsHolder;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.util.ArrayUtils;
+import com.vipapp.appmark2.util.TextUtils;
 import com.vipapp.appmark2.widget.CodeText;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.regex.Pattern;
+
+import static com.vipapp.appmark2.util.Const.MATCHES_HINT_COLOR;
 
 public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsHolder> {
     public static int ARRAY_PUSHED = 0;
@@ -15,6 +23,7 @@ public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsHolder> {
     public static int TEXT_INSERTED = 2;
     public static int SHOW_POPUP = 3;
 
+    private String word = "";
 
     private ArrayList<CodeText.Hint> hints;
     @Override
@@ -24,8 +33,12 @@ public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsHolder> {
 
     @Override
     public void bind(HintsHolder vh, CodeText.Hint item, int i) {
-        vh.hint_text.setText(item.getBody());
+        Spannable text = new SpannableString(item.getBody());
+        TextUtils.applyPatternUI(Pattern.compile(word, Pattern.LITERAL), MATCHES_HINT_COLOR, text);
+
+        vh.hint_text.setText(text);
         vh.itemView.setOnClickListener(view -> pushItem(new Item<>(TEXT_INSERTED, item.getInsertValue())));
+        vh.hint_icon.setImageResource(item.getImage());
     }
 
     @Override
@@ -38,8 +51,18 @@ public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsHolder> {
         if(item.getType() == TEXT_CHANGED){
             if(hints != null) {
                 String word = (String) item.getInstance();
-                ArrayList<CodeText.Hint> filtered = ArrayUtils.filter(hints, hint -> hint.show(word));
-                pushArray(filtered);
+                this.word = word;
+                ArrayList<CodeText.Hint> filtered = ArrayUtils.filter(hints, hint -> hint.getBody().contains(word));
+                Collections.sort(filtered, (item1, item2) -> {
+                    String body1 = item1.getBody();
+                    String body2 = item2.getBody();
+                    if(body1.startsWith(word) && !body2.startsWith(word))
+                        return -1;
+                    if(body2.startsWith(word) && !body1.startsWith(word))
+                        return 1;
+                    return body1.compareTo(body2);
+                });
+                pushArray(filtered, true, true);
                 pushItem(new Item<>(SHOW_POPUP, filtered.size() > 0 && !word.equals("")));
             }
         }

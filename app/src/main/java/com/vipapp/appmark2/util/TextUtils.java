@@ -95,7 +95,6 @@ public class TextUtils {
         }
         editable.delete(pos == 0? 0: start + 1, end);
     }
-    f
 
     public static String insert(String destination, int position, String toInsert){
         return destination.substring(0, position) + toInsert + destination.substring(position);

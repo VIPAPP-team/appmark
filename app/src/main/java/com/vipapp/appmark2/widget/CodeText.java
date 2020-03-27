@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -84,21 +85,21 @@ public class CodeText extends EditText {
 
     private HashMap<Integer, ArrayList<Hint>> hints = new HashMap<Integer, ArrayList<Hint>>(){{
         put(JAVA_LANGUAGE, new ArrayList<Hint>(){{
-            add(new Hint("public"));
-            add(new Hint("private"));
-            add(new Hint("default"));
-            add(new Hint("protected"));
-            add(new Hint("if"));
-            add(new Hint("else"));
-            add(new Hint("switch"));
-            add(new Hint("void"));
-            add(new Hint("int"));
-            add(new Hint("boolean"));
-            add(new Hint("char"));
-            add(new Hint("class"));
-            add(new Hint("extends"));
-            add(new Hint("implements"));
-            add(new Hint("static"));
+            add(new KeywordHint( "public"));
+            add(new KeywordHint("private"));
+            add(new KeywordHint("default"));
+            add(new KeywordHint("protected"));
+            add(new KeywordHint("if"));
+            add(new KeywordHint("else"));
+            add(new KeywordHint("switch"));
+            add(new KeywordHint("void"));
+            add(new KeywordHint("int"));
+            add(new KeywordHint("boolean"));
+            add(new KeywordHint("char"));
+            add(new KeywordHint("class"));
+            add(new KeywordHint("extends"));
+            add(new KeywordHint("implements"));
+            add(new KeywordHint("static"));
         }});
     }};
 
@@ -661,22 +662,21 @@ public class CodeText extends EditText {
     }
 
     public static class Hint{
-        private int type = 0;
+        @DrawableRes
+        private int image;
         private String body;
         private String insertValue;
 
-        public Hint(String body, String insertValue) {
+        Hint(int image, String body, String insertValue) {
+            this.image = image;
             this.body = body;
             this.insertValue = insertValue;
         }
 
-        private Hint(String body) {
+        private Hint(int image, String body) {
+            this.image = image;
             this.body = body;
             this.insertValue = body + " ";
-        }
-
-        public boolean show(String word){
-            return body.contains(word);
         }
 
         public String getBody() {
@@ -693,6 +693,25 @@ public class CodeText extends EditText {
 
         public void setInsertValue(String insertValue) {
             this.insertValue = insertValue;
+        }
+
+        public int getImage() {
+            return image;
+        }
+
+        public void setImage(int image) {
+            this.image = image;
+        }
+    }
+
+    public static class KeywordHint extends Hint{
+
+        public KeywordHint(String body, String insertValue) {
+            super(R.drawable.keyword, body, insertValue);
+        }
+
+        KeywordHint(String body){
+            super(R.drawable.keyword, body);
         }
     }
 }

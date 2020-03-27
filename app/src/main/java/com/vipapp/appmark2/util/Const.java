@@ -281,6 +281,9 @@ public class Const {
     public static final String XML_TAG_SECOND_COLOR = "#660E7A";
     public static final String ERROR_COLOR = "#ff0000";
     public static final String WARNING_COLOR = "#E69317";
+    public static final String MATCHES_HINT_COLOR = "#6699cc" +
+            "" +
+            "";
 
     public static String[] CODE_EDITOR_SYMBOLS = new String[]{
             "    ", ";", "\"", "{", "}", "(", ")", ",", ".", "=", "[", "]", ":", "#", "<", ">"};
