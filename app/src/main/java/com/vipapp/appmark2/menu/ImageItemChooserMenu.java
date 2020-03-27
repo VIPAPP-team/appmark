@@ -1,15 +1,21 @@
 package com.vipapp.appmark2.menu;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import com.vipapp.appmark2.holder.ChooserHolder;
-import com.vipapp.appmark2.holder.ImageItemChooserHolder;
+import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.item.ImageItem;
 import com.vipapp.appmark2.item.Item;
+import com.vipapp.appmark2.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ImageItemChooserMenu extends DefaultMenu<ImageItem, ImageItemChooserHolder> {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class ImageItemChooserMenu extends DefaultMenu<ImageItem, ImageItemChooserMenu.ImageItemChooserHolder> {
     @Override
     public ArrayList<ImageItem> list(Context context) {
         return null;
@@ -29,5 +35,26 @@ public class ImageItemChooserMenu extends DefaultMenu<ImageItem, ImageItemChoose
     public void onValueReceived(Item item) {
         //noinspection unchecked
         pushArray((ArrayList<ImageItem>)item.getInstance());
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.image_item_default;
+    }
+
+    @Override
+    public ImageItemChooserHolder getViewHolder(ViewGroup parent, int itemType) {
+        return new ImageItemChooserHolder(inflate(parent));
+    }
+
+    static class ImageItemChooserHolder extends RecyclerView.ViewHolder {
+        public TextView title;
+        public ImageView image;
+
+        public ImageItemChooserHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.title);
+            image = itemView.findViewById(R.id.image);
+        }
     }
 }

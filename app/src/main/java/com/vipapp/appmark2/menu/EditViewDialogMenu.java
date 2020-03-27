@@ -1,8 +1,12 @@
 package com.vipapp.appmark2.menu;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.vipapp.appmark2.holder.EditViewDialogHolder;
+import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.item.EditViewDialogItem;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.project.Project;
@@ -11,7 +15,10 @@ import com.vipapp.appmark2.xml.XMLObject;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class EditViewDialogMenu extends DefaultMenu<EditViewDialogItem, EditViewDialogHolder> {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class EditViewDialogMenu extends DefaultMenu<EditViewDialogItem, EditViewDialogMenu.EditViewDialogHolder> {
     public static final int LIST = 2;
     public static final int PARENT = 0;
     public static final int PROJECT = 1;
@@ -52,6 +59,31 @@ public class EditViewDialogMenu extends DefaultMenu<EditViewDialogItem, EditView
             case PARENT:
                 parent = (XMLObject) item.getInstance();
                 break;
+        }
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.edit_view_default;
+    }
+
+    @Override
+    public EditViewDialogHolder getViewHolder(ViewGroup parent, int itemType) {
+        return new EditViewDialogHolder(inflate(parent));
+    }
+
+    static class EditViewDialogHolder extends RecyclerView.ViewHolder {
+        public ImageView icon;
+        public TextView title;
+        public TextView value;
+        public TextView subtitle;
+
+        public EditViewDialogHolder(@NonNull View itemView) {
+            super(itemView);
+            icon = itemView.findViewById(R.id.icon);
+            title = itemView.findViewById(R.id.title);
+            value = itemView.findViewById(R.id.value);
+            subtitle = itemView.findViewById(R.id.subtitle);
         }
     }
 }

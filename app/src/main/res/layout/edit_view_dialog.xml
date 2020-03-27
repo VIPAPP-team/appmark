@@ -25,10 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:default_view="@layout/edit_view_default"
-        app:holder="EditViewDialogHolder"
-        app:menuClass="EditViewDialogMenu"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:menuClass="EditViewDialogMenu" />
 
         <View
             android:id="@+id/divider3"

@@ -4,20 +4,27 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import com.vipapp.appmark2.holder.HintsHolder;
+import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.util.ArrayUtils;
 import com.vipapp.appmark2.util.TextUtils;
 import com.vipapp.appmark2.widget.CodeText;
+import com.vipapp.appmark2.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static com.vipapp.appmark2.util.Const.MATCHES_HINT_COLOR;
 
-public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsHolder> {
+public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsMenu.HintsHolder> {
     public static int ARRAY_PUSHED = 0;
     public static int TEXT_CHANGED = 1;
     public static int TEXT_INSERTED = 2;
@@ -65,6 +72,27 @@ public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsHolder> {
                 pushArray(filtered, true, true);
                 pushItem(new Item<>(SHOW_POPUP, filtered.size() > 0 && !word.equals("")));
             }
+        }
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.hints_default;
+    }
+
+    @Override
+    public HintsHolder getViewHolder(ViewGroup parent, int itemType) {
+        return new HintsHolder(inflate(parent));
+    }
+
+    static class HintsHolder extends RecyclerView.ViewHolder {
+        public ImageView hint_icon;
+        public TextView hint_text;
+
+        public HintsHolder(@NonNull View itemView) {
+            super(itemView);
+            hint_icon = itemView.findViewById(R.id.hint_icon);
+            hint_text = itemView.findViewById(R.id.hint_text);
         }
     }
 }

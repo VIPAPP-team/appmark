@@ -61,9 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:default_view="@layout/strings_default"
-            app:holder="StringsHolder"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:menuClass="StringsMenu" />
 
     </LinearLayout>

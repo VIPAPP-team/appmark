@@ -23,8 +23,5 @@
         android:id="@+id/chooser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:default_view="@layout/image_item_default"
-        app:holder="ImageItemChooserHolder"
-        app:menuClass="ImageItemChooserMenu"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:menuClass="ImageItemChooserMenu"/>
 </LinearLayout>

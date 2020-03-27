@@ -18,8 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:default_view="@layout/image_default"
-            app:holder="ImageHolder"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:menuClass="ImageMenu"
             app:spanCount="3" />

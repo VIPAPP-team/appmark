@@ -4,16 +4,23 @@ package com.vipapp.appmark2.menu;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.vipapp.appmark2.holder.StringsListEditorHolder;
+import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.item.TransformedItem;
+import com.vipapp.appmark2.widget.EditText;
+import com.vipapp.appmark2.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static com.vipapp.appmark2.util.Const.STRINGS_LIST_PUSHED;
 
-public class StringsListEditorMenu extends DefaultMenu<TransformedItem<String, String>, StringsListEditorHolder> {
+public class StringsListEditorMenu extends DefaultMenu<TransformedItem<String, String>, StringsListEditorMenu.StringsListEditorHolder> {
 
     public ArrayList<TransformedItem<String, String>> list(Context context) {
         return null;
@@ -48,5 +55,27 @@ public class StringsListEditorMenu extends DefaultMenu<TransformedItem<String, S
             pushArray(value);
         }
     }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.strings_list_editor_default;
+    }
+
+    @Override
+    public StringsListEditorHolder getViewHolder(ViewGroup parent, int itemType) {
+        return new StringsListEditorHolder(inflate(parent));
+    }
+
+    static class StringsListEditorHolder extends RecyclerView.ViewHolder {
+        public TextView name;
+        public EditText value;
+
+        public StringsListEditorHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.name);
+            value = itemView.findViewById(R.id.value);
+        }
+    }
+
 
 }

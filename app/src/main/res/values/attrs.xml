@@ -4,9 +4,7 @@
         <attr name="font_name" format="string" />
     </declare-styleable>
     <declare-styleable name="RecyclerView">
-        <attr name="default_view" format="reference" />
         <attr name="menuClass" format="string" />
-        <attr name="holder" format="string"/>
         <attr name="adapter" format="string"/>
     </declare-styleable>
 </resources>

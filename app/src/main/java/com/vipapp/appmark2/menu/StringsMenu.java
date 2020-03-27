@@ -5,21 +5,27 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.vipapp.appmark2.R;
-import com.vipapp.appmark2.holder.StringsHolder;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.manager.res.StringsManager;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.ContextUtils;
+import com.vipapp.appmark2.widget.EditText;
 import com.vipapp.appmark2.xml.XMLAttribute;
 import com.vipapp.appmark2.xml.XMLObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class StringsMenu extends DefaultMenu<XMLObject, StringsHolder> {
+
+public class StringsMenu extends DefaultMenu<XMLObject, StringsMenu.StringsHolder> {
 
     private SparseArray<String> strings = new SparseArray<>();
 
@@ -52,6 +58,7 @@ public class StringsMenu extends DefaultMenu<XMLObject, StringsHolder> {
         pushWithAddButton(list, true);
     }
 
+    @Override
     public void bind(StringsHolder vh, XMLObject item, int i) {
         if(item == null){
             vh.add.setVisibility(View.VISIBLE);
@@ -66,6 +73,17 @@ public class StringsMenu extends DefaultMenu<XMLObject, StringsHolder> {
             setCallbacks(vh, i);
         }
     }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.strings_default;
+    }
+
+    @Override
+    public StringsHolder getViewHolder(ViewGroup parent, int itemType) {
+        return new StringsHolder(inflate(parent));
+    }
+
     private void createEmptyString(){
         int pos = manager.getObjects().size();
         strings.put(pos, "");
@@ -137,6 +155,22 @@ public class StringsMenu extends DefaultMenu<XMLObject, StringsHolder> {
 
     private void changeValue(String name, String value, int pos){
         manager.changeValue(strings.get(pos, name), value);
+    }
+
+    static class StringsHolder extends RecyclerView.ViewHolder {
+        public EditText name;
+        public EditText value;
+        public LinearLayout main_linear;
+        public ImageView add;
+
+        public StringsHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.name);
+            value = itemView.findViewById(R.id.value);
+            main_linear = itemView.findViewById(R.id.main_linear);
+            add = itemView.findViewById(R.id.add);
+        }
+
     }
 
 }

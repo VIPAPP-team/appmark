@@ -164,12 +164,8 @@
             android:id="@+id/insert_symbol"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal"
             android:elevation="8dp"
             android:background="@color/colorPrimaryDark"
-            app:default_view="@layout/insert_symbol_default"
-            app:holder="InsertSymbolHolder"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:menuClass="InsertSymbolMenu"
             android:layout_marginTop="5dp"/>
 

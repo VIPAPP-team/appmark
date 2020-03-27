@@ -1,12 +1,19 @@
 package com.vipapp.appmark2.menu;
 
 import android.content.Context;
+
+import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.vipapp.appmark2.adapter.DefaultAdapter;
 import com.vipapp.appmark2.item.Item;
+import com.vipapp.appmark2.util.wrapper.mContext;
+import com.vipapp.appmark2.util.wrapper.mLayoutInflater;
 
 import java.util.ArrayList;
 
@@ -20,7 +27,9 @@ public abstract class DefaultMenu<ListItemType, ViewHolderType extends RecyclerV
     public void onValueReceived(Item item){}
 
     public int getItemViewType(int position){ return 0; }
-    public ViewHolderType getViewHolder(ViewGroup parent, int itemType){ return null; }
+    public RecyclerView.LayoutManager getLayoutManager(){
+        return null;
+    }
 
     void pushArray(ArrayList<ListItemType> arrayList){
         pushArray(arrayList, true);
@@ -55,6 +64,13 @@ public abstract class DefaultMenu<ListItemType, ViewHolderType extends RecyclerV
         return adapter != null? adapter.getRecyclerView(): null;
     }
 
+    public View inflate(ViewGroup viewGroup){
+        return mLayoutInflater.get().inflate(getLayoutResource(), viewGroup, false);
+    }
+
+    @LayoutRes
+    public abstract int getLayoutResource();
+    public abstract ViewHolderType getViewHolder(ViewGroup parent, int itemType);
     public abstract ArrayList<ListItemType> list(Context context);
     public abstract void bind(ViewHolderType vh, ListItemType item, int i);
 }

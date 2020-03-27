@@ -35,7 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:menuClass="SettingsMenu"/>
 
 </LinearLayout>

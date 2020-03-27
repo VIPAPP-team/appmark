@@ -24,8 +24,5 @@
         android:id="@+id/chooser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:default_view="@layout/string_chooser_default"
-        app:holder="ChooserHolder"
-        app:menuClass="ChooserMenu"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:menuClass="ChooserMenu"/>
 </LinearLayout>

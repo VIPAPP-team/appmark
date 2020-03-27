@@ -23,9 +23,6 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:default_view="@layout/code_errors_default"
-        app:holder="CodeErrorHolder"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:menuClass="CodeErrorMenu" />
 
     <com.vipapp.appmark2.widget.TextView

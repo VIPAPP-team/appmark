@@ -23,9 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:default_view="@layout/string_multiple_chooser_default"
-        app:holder="StringMultipleChooserHolder"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:menuClass="StringMultipleChooserMenu" />
 
     <com.vipapp.appmark2.widget.TextView

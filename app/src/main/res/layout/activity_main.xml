@@ -69,9 +69,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
-                app:default_view="@layout/project_default"
-                app:holder="ProjectHolder"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:menuClass="ProjectMenu">
 
             </com.vipapp.appmark2.widget.RecyclerView>
@@ -128,9 +125,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/round_white"
-            app:default_view="@layout/main_menu_default"
-            app:holder="MainMenuHolder"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:menuClass="MainScreenMenu" />
     </LinearLayout>
 

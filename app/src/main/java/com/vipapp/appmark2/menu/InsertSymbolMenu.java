@@ -1,16 +1,24 @@
 package com.vipapp.appmark2.menu;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 
-import com.vipapp.appmark2.holder.InsertSymbolHolder;
+import com.vipapp.appmark2.R;
+import com.vipapp.appmark2.adapter.DefaultAdapter;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.util.Const;
+import com.vipapp.appmark2.util.wrapper.mContext;
+import com.vipapp.appmark2.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class InsertSymbolMenu extends DefaultMenu<String, InsertSymbolHolder> {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class InsertSymbolMenu extends DefaultMenu<String, InsertSymbolMenu.InsertSymbolHolder> {
 
     @Override
     public ArrayList<String> list(Context context) {
@@ -24,8 +32,28 @@ public class InsertSymbolMenu extends DefaultMenu<String, InsertSymbolHolder> {
     }
 
     @Override
+    public int getLayoutResource() {
+        return R.layout.insert_symbol_default;
+    }
+
+    @Override
     public InsertSymbolHolder getViewHolder(ViewGroup parent, int itemType) {
-        return super.getViewHolder(parent, itemType);
+        return new InsertSymbolHolder(inflate(parent));
+    }
+
+    @Override
+    public RecyclerView.LayoutManager getLayoutManager() {
+        LinearLayoutManager manager = new LinearLayoutManager(mContext.get());
+        manager.setOrientation(RecyclerView.HORIZONTAL);
+        return manager;
+    }
+
+    static class InsertSymbolHolder extends RecyclerView.ViewHolder {
+        public TextView value;
+        InsertSymbolHolder(@NonNull View itemView) {
+            super(itemView);
+            value = itemView.findViewById(R.id.value);
+        }
     }
 
 }

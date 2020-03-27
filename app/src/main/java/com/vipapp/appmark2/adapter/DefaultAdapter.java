@@ -14,23 +14,20 @@ import com.vipapp.appmark2.util.ClassUtils;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.wrapper.mActivity;
 import com.vipapp.appmark2.util.wrapper.mContext;
+import com.vipapp.appmark2.util.wrapper.mLayoutInflater;
 
 import java.util.ArrayList;
 
 public class DefaultAdapter extends RecyclerView.Adapter {
 
-    private String viewHolderName;
     private DefaultMenu menu;
     private ArrayList list = new ArrayList();
-    private int xml_source;
     private RecyclerView recyclerView;
 
     private ArrayList<PushCallback<Item>> callbacks = new ArrayList<>();
 
-    public DefaultAdapter(String viewHolderName, DefaultMenu menu, int xml_source){
-        this.viewHolderName = viewHolderName;
+    public DefaultAdapter(DefaultMenu menu){
         this.menu = menu;
-        this.xml_source = xml_source;
         menu.onAdapterReceived(this);
         update();
     }
@@ -38,11 +35,7 @@ public class DefaultAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        if (viewHolderName.equals("")) {
-            return menu.getViewHolder(viewGroup, i);
-        }
-        return (RecyclerView.ViewHolder) ClassUtils.getInstance(viewHolderName, View.class,
-                    mActivity.get().getLayoutInflater().inflate(xml_source, viewGroup, false));
+        return menu.getViewHolder(viewGroup, i);
     }
 
     private void pushArray(ArrayList arrayList){

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.AttributeSet;
 
@@ -43,6 +44,8 @@ public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {
     }
 
     public void init(Context context, AttributeSet attrs){
+        if(getLayoutManager() == null)
+            setLayoutManager(new LinearLayoutManager(context));
         setHasFixedSize(false);
         if (context != null) {
             if (attrs != null) {
@@ -61,9 +64,10 @@ public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {
     }
 
     public void setupFromValues(TypedArray array){
-        //setLayoutManager(RecyclerView.getLayoutManager(array));
         this.array = array;
         adapter = getAdapter(array);
+        LayoutManager manager = adapter.getMenu().getLayoutManager();
+        if(manager != null) setLayoutManager(manager);
         adapter.onRecyclerPushed(this);
         setAdapter(adapter);
     }
@@ -83,28 +87,20 @@ public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {
         adapter.addOnPushCallback(callback);
     }
 
-    public static String getViewHolder(TypedArray array) {
-        String result = array.getString(R.styleable.RecyclerView_holder);
-        return result == null?"":"com.vipapp.appmark2.holder." + result;
-    }
-    public static int getViewId(TypedArray array){
-        return array.getResourceId(R.styleable.RecyclerView_default_view, 0);
-    }
     public static DefaultMenu getMenu(TypedArray array){
         String result = array.getString(R.styleable.RecyclerView_menuClass);
         return result == null? new EmptyMenu():
                 (DefaultMenu) ClassUtils.getInstance("com.vipapp.appmark2.menu." + result);
     }
+
     public static DefaultAdapter getAdapter(TypedArray array){
         String result = array.getString(R.styleable.RecyclerView_adapter);
 
-        String viewHolder = getViewHolder(array);
         DefaultMenu menu = getMenu(array);
-        int viewId = getViewId(array);
 
-        return result == null? new DefaultAdapter(viewHolder, menu, viewId):
+        return result == null? new DefaultAdapter(menu):
                 (DefaultAdapter) ClassUtils.getInstance("com.vipapp.appmark2.adapter." + result,
-                        String.class, DefaultMenu.class, Integer.class, viewHolder, menu, viewId);
+                        DefaultMenu.class, menu);
     }
 
 }

@@ -3,14 +3,18 @@ package com.vipapp.appmark2.menu;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.alert.ImageImportDialog;
 import com.vipapp.appmark2.alert.confirm.DeleteFileDialog;
 import com.vipapp.appmark2.callback.PushCallback;
-import com.vipapp.appmark2.holder.FileHolder;
 import com.vipapp.appmark2.item.FileItem;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.picker.string.FileNamePicker;
@@ -29,7 +33,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class FileMenu extends DefaultMenu<File, FileHolder> {
+public class FileMenu extends DefaultMenu<File, FileMenu.FileHolder> {
 
     private ArrayList<File> files;
 
@@ -171,6 +175,16 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
         }
     }
 
+    @Override
+    public int getLayoutResource() {
+        return R.layout.file_default;
+    }
+
+    @Override
+    public FileHolder getViewHolder(ViewGroup parent, int itemType) {
+        return new FileHolder(inflate(parent));
+    }
+
     private void update(){
         goto_file(current_path);
     }
@@ -235,6 +249,17 @@ public class FileMenu extends DefaultMenu<File, FileHolder> {
         list(null);
         pushArray(files, false);
         notifyInserted(files.indexOf(file));
+    }
+
+    static class FileHolder extends RecyclerView.ViewHolder {
+        public ImageView icon;
+        public TextView name;
+
+        public FileHolder(@NonNull View itemView) {
+            super(itemView);
+            icon = itemView.findViewById(R.id.icon);
+            name = itemView.findViewById(R.id.name);
+        }
     }
 
 }
