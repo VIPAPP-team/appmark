@@ -27,6 +27,9 @@ import com.vipapp.appmark2.server.Server;
 import java.io.File;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.pm.PackageInfoCompat;
+
 import static android.view.View.VISIBLE;
 import static com.vipapp.appmark2.util.Const.PROJECT_MANAGER;
 import static com.vipapp.appmark2.util.Const.STATE_LOADING;
@@ -149,9 +152,9 @@ public class MainActivity extends BaseActivity {
     }
 
     public void checkNewVersion(){
-        Server.getActualVersion(version -> {
-            if(version != null && !version.equals(mAppInfo.get().versionName))
-                Toast.show(String.format(Str.get(R.string.new_version_available), version));
+        Server.getActualCode(code -> {
+            if(code != null && Integer.parseInt(code) > PackageInfoCompat.getLongVersionCode(mAppInfo.get()))
+                Server.getActualVersion(version -> Toast.show(String.format(Str.get(R.string.new_version_available), version)));
         });
     }
 

@@ -47,6 +47,9 @@ public class Server {
     public static void getActualVersion(@NonNull PushCallback<String> callback){
         getAppInfo(info -> callback.onComplete(info == null? null: info.containsKey("version")? info.get("version"): null));
     }
+    public static void getActualCode(@NonNull PushCallback<String> callback){
+        getAppInfo(info -> callback.onComplete(info == null? null: info.containsKey("code")? info.get("code"): null));
+    }
     public static void getChangelog(@NonNull PushCallback<String> callback){
         if(changelog == null) loadAfterCheckServer(SERVER_CHANGELOG, result -> {
             changelog = result;
