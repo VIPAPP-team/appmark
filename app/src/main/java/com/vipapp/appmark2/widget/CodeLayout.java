@@ -3,6 +3,7 @@ package com.vipapp.appmark2.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.Editable;
 import android.text.Layout;
@@ -33,6 +34,7 @@ import androidx.annotation.Nullable;
 
 import static android.view.Gravity.NO_GRAVITY;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.vipapp.appmark2.menu.HintsMenu.ARRAY_PUSHED;
 import static com.vipapp.appmark2.menu.HintsMenu.SHOW_POPUP;
 import static com.vipapp.appmark2.menu.HintsMenu.TEXT_CHANGED;
@@ -142,13 +144,13 @@ public class CodeLayout extends ScrollView {
         addView(horizontalScrollView);
         // creating container
         container = new LinearLayout(getContext());
-        container.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        container.setOrientation(LinearLayout.VERTICAL);
         horizontalScrollView.addView(container);
         container.addView(codeText);
         // adding space to scroll
         View space = new View(getContext());
-        space.setLayoutParams(new LinearLayout.LayoutParams(0, Res.get().getDisplayMetrics().heightPixels));
         container.addView(space);
+        space.setLayoutParams(new LinearLayout.LayoutParams(100, Res.get().getDisplayMetrics().heightPixels));
     }
 
     @SuppressLint("InflateParams")
@@ -190,7 +192,7 @@ public class CodeLayout extends ScrollView {
         y = Math.min(y, 2 * codeText.getLineHeight());
         if(y != popupY || hintsPopup == null){
             hidePopup();
-            setScrollY(scrollY);
+            setScrollY(scrollY - codeText.getLineHeight() * 2);
             if(popupView.getParent() != null)
                 ((ViewGroup)popupView.getParent()).removeAllViews();
             hintsPopup = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
