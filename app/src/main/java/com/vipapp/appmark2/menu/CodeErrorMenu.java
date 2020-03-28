@@ -1,6 +1,5 @@
 package com.vipapp.appmark2.menu;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.activity.CodeActivity;
 import com.vipapp.appmark2.compiler.ErrorsParser;
 import com.vipapp.appmark2.item.Item;
-import com.vipapp.appmark2.util.TextUtils;
 import com.vipapp.appmark2.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,8 +34,8 @@ public class CodeErrorMenu extends DefaultMenu<ErrorsParser.Error, CodeErrorMenu
         vh.error_text.setText(String.format(Locale.getDefault(), "%s(at line %d)", item.getMessage(), item.getLineNumber()));
         vh.itemView.setOnClickListener(view -> {
             activity.openFile(item.getFile(), none -> {
-                activity.content.setSelection(activity.content.getLineEndIndex(item.getLineNumber() - 1) - 1);
-                activity.content.requestFocus();
+                activity.code.setSelection(activity.code.getLineEndIndex(item.getLineNumber() - 1) - 1);
+                activity.code.requestFocus();
             });
             pushItem(null);
         });

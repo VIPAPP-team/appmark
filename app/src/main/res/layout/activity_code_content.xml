@@ -89,18 +89,27 @@
             android:layout_height="1dp"
             android:background="#cecece" />
 
-        <com.vipapp.appmark2.widget.CodeText
+        <com.vipapp.appmark2.widget.CodeLayout
             android:enabled="false"
-            android:id="@+id/content"
+            android:id="@+id/codeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffffff"
+            android:layout_marginBottom="40dp">
+
+        <com.vipapp.appmark2.widget.CodeText
+            android:background="#ffffff"
+            android:enabled="false"
+            android:id="@+id/code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="top|start"
             android:inputType="textMultiLine|textNoSuggestions"
-            android:paddingBottom="40dp"
             android:text="@string/no_opened_file"
             android:textSize="14sp"
             android:textStyle="bold" />
+
+        </com.vipapp.appmark2.widget.CodeLayout>
 
     </LinearLayout>
 

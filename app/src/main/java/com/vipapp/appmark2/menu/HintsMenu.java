@@ -12,6 +12,7 @@ import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.util.ArrayUtils;
 import com.vipapp.appmark2.util.TextUtils;
+import com.vipapp.appmark2.widget.CodeLayout;
 import com.vipapp.appmark2.widget.CodeText;
 import com.vipapp.appmark2.widget.TextView;
 
@@ -24,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.vipapp.appmark2.util.Const.MATCHES_HINT_COLOR;
 
-public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsMenu.HintsHolder> {
+public class HintsMenu extends DefaultMenu<CodeLayout.Hint, HintsMenu.HintsHolder> {
     public static int ARRAY_PUSHED = 0;
     public static int TEXT_CHANGED = 1;
     public static int TEXT_INSERTED = 2;
@@ -32,14 +33,14 @@ public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsMenu.HintsHolder>
 
     private String word = "";
 
-    private ArrayList<CodeText.Hint> hints;
+    private ArrayList<CodeLayout.Hint> hints;
     @Override
-    public ArrayList<CodeText.Hint> list(Context context) {
+    public ArrayList<CodeLayout.Hint> list(Context context) {
         return hints;
     }
 
     @Override
-    public void bind(HintsHolder vh, CodeText.Hint item, int i) {
+    public void bind(HintsHolder vh, CodeLayout.Hint item, int i) {
         Spannable text = new SpannableString(item.getBody());
         TextUtils.applyPatternUI(Pattern.compile(word, Pattern.LITERAL), MATCHES_HINT_COLOR, text);
 
@@ -53,13 +54,13 @@ public class HintsMenu extends DefaultMenu<CodeText.Hint, HintsMenu.HintsHolder>
         super.onValueReceived(item);
         if(item.getType() == ARRAY_PUSHED) {
             //noinspection unchecked
-            hints = (ArrayList<CodeText.Hint>) item.getInstance();
+            hints = (ArrayList<CodeLayout.Hint>) item.getInstance();
         }
         if(item.getType() == TEXT_CHANGED){
             if(hints != null) {
                 String word = (String) item.getInstance();
                 this.word = word;
-                ArrayList<CodeText.Hint> filtered = ArrayUtils.filter(hints, hint -> hint.getBody().contains(word));
+                ArrayList<CodeLayout.Hint> filtered = ArrayUtils.filter(hints, hint -> hint.getBody().contains(word));
                 Collections.sort(filtered, (item1, item2) -> {
                     String body1 = item1.getBody();
                     String body2 = item2.getBody();

@@ -66,13 +66,6 @@ import static java.lang.Math.abs;
 
 public class CodeText extends EditText {
 
-    View popupView;
-    RecyclerView popupRecycler;
-    PopupWindow hintsPopup;
-    int popupY = -1;
-
-    PushCallback<ScrollChange> scroll;
-
     UndoRedoUtils undoRedo;
 
     long time_edited = 0;
@@ -82,26 +75,6 @@ public class CodeText extends EditText {
     boolean pasting_second = false;
 
     Canvas canvas;
-
-    private HashMap<Integer, ArrayList<Hint>> hints = new HashMap<Integer, ArrayList<Hint>>(){{
-        put(JAVA_LANGUAGE, new ArrayList<Hint>(){{
-            add(new KeywordHint( "public"));
-            add(new KeywordHint("private"));
-            add(new KeywordHint("default"));
-            add(new KeywordHint("protected"));
-            add(new KeywordHint("if"));
-            add(new KeywordHint("else"));
-            add(new KeywordHint("switch"));
-            add(new KeywordHint("void"));
-            add(new KeywordHint("int"));
-            add(new KeywordHint("boolean"));
-            add(new KeywordHint("char"));
-            add(new KeywordHint("class"));
-            add(new KeywordHint("extends"));
-            add(new KeywordHint("implements"));
-            add(new KeywordHint("static"));
-        }});
-    }};
 
     ArrayList<Mapper<Spannable, CharSequence>> highlights = new ArrayList<Mapper<Spannable, CharSequence>>(){{
         // TEXT HIGHLIGHT
@@ -148,7 +121,6 @@ public class CodeText extends EditText {
         setFilters();
         setupUndoRedo();
         setupTouchZoom();
-        setupHintsPopup();
         initDraw();
     }
     public void initDraw(){
@@ -169,45 +141,6 @@ public class CodeText extends EditText {
     public void setupUndoRedo(){
         undoRedo = new UndoRedoUtils(this);
     }
-    @SuppressLint("InflateParams")
-    private void setupHintsPopup(){
-        popupView = mLayoutInflater.get().inflate(R.layout.hints_popup, null);
-        popupRecycler = popupView.findViewById(R.id.recycler);
-        popupRecycler.addOnPushCallback(item -> {
-            if(item.getType() == TEXT_INSERTED) {
-                if(getSelectionStart() > 0) {
-                    TextUtils.deleteWordAtPosition(getText(), getSelectionStart() - 1);
-                    getText().insert(getSelectionStart(), (String) item.getInstance());
-                }
-            }
-            if(item.getType() == SHOW_POPUP){
-                if((Boolean)item.getInstance()) {
-                    Layout layout = getLayout();
-                    if (layout != null) {
-                        int current_line = layout.getLineForOffset(getSelectionStart());
-                        Rect currentLineBounds = new Rect();
-                        getLineBounds(current_line, currentLineBounds);
-                        int current_baseline = layout.getLineBaseline(current_line);
-                        int current_ascent = layout.getLineAscent(current_line);
-                        float cursor_y = current_baseline + current_ascent + currentLineBounds.bottom - currentLineBounds.top;
-                        setHintsPopupPosition((int) cursor_y);
-                    }
-                } else {
-                    hidePopup();
-                }
-            }
-        });
-    }
-    private void setupHints(){
-        if(hints.containsKey(language))
-            popupRecycler.pushValue(ARRAY_PUSHED, hints.get(language));
-    }
-    public void hidePopup(){
-        if(hintsPopup != null) {
-            hintsPopup.dismiss();
-            hintsPopup = null;
-        }
-    }
 
     int first_pointer_id = 0;
     int second_pointer_id = 1;
@@ -217,7 +150,6 @@ public class CodeText extends EditText {
 
     private void setupTouchZoom(){
         setOnTouchListener((view, motionEvent) -> {
-            extendedPaddingBottom = 0;
             try {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_CANCEL:
@@ -357,7 +289,6 @@ public class CodeText extends EditText {
 
     public void setLanguage(int language){
         this.language = language;
-        setupHints();
     }
     public int getLanguage(){
         return this.language;
@@ -380,8 +311,6 @@ public class CodeText extends EditText {
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
-        if(popupRecycler != null)
-            popupRecycler.pushValue(TEXT_CHANGED, TextUtils.getCurrentWord(this).trim());
 
         if(!hasFocus())
             requestFocus();
@@ -439,27 +368,11 @@ public class CodeText extends EditText {
     protected void onDraw(Canvas canvas) {
         this.canvas = canvas;
         mDraw(canvas);
-        try{
+        try {
             super.onDraw(canvas);
-        } catch (Exception e){
+        } catch (Exception e) {
             Thread.delay(500, () -> draw(canvas), true);
         }
-    }
-
-    int extendedPaddingBottom = 0;
-    boolean scrollingToHints = false;
-
-    // FIXME: 22.03.2020 Bad solution
-    public void scrollToHints(int y) {
-        int maxScroll = computeVerticalScrollRange();
-        int availableHeight = getHeight() - super.getCompoundPaddingBottom() - super.getCompoundPaddingTop();
-        if (maxScroll - y < availableHeight) {
-            extendedPaddingBottom = availableHeight - maxScroll + y - getLineHeight() * 2;
-            y = maxScroll;
-        }
-        scrollingToHints = true;
-        setScrollY(y);
-        scrollingToHints = false;
     }
 
     Boolean scrollingVertical;
@@ -474,26 +387,12 @@ public class CodeText extends EditText {
             super.scrollTo(x, getScrollY());
     }
 
-    @Override
-    public int getExtendedPaddingBottom() {
-        return super.getExtendedPaddingBottom() + extendedPaddingBottom;
-    }
-
-    @Override
-    protected void onScrollChanged(int horiz, int vert, int oldHoriz, int oldVert) {
-
-        if(scroll != null)
-            scroll.onComplete(new ScrollChange(vert, horiz, oldVert, oldHoriz));
-        super.onScrollChanged(horiz, vert, oldHoriz, oldVert);
-    }
-
     private void mDraw(Canvas canvas){
         Layout layout = getLayout();
         if(layout != null) {
             int current_line = layout.getLineForOffset(getSelectionStart());
             // highlighting current line
             highlightLine(current_line, Color.parseColor(CURRENT_LINE_COLOR), canvas);
-            // setting position of hints popup
             // drawing line numbers
             int count = getLineCount();
 
@@ -515,27 +414,6 @@ public class CodeText extends EditText {
         getLineBounds(line, lineBounds);
         lineBounds.left = 0;
         canvas.drawRect(lineBounds, highlightPaint);
-    }
-
-    private void setHintsPopupPosition(int y){
-        Rect frame = new Rect();
-        getWindowVisibleDisplayFrame(frame);
-        Rect lineBounds = new Rect();
-        getLineBounds(0, lineBounds);
-        int scrollY = y;
-        y = Math.min(y, 2 * getLineHeight());
-        if(y != popupY || hintsPopup == null){
-            hidePopup();
-            scrollToHints(scrollY);
-            if(popupView.getParent() != null)
-                ((ViewGroup)popupView.getParent()).removeAllViews();
-            hintsPopup = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            hintsPopup.setOutsideTouchable(true);
-            hintsPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
-            hintsPopup.setOnDismissListener(() -> hintsPopup = null);
-            popupY = y;
-            hintsPopup.showAsDropDown(this, 0, y);
-        }
     }
 
     private void insertSecondChar(CharSequence text, int start, int lengthBefore, int lengthAfter){
@@ -578,10 +456,6 @@ public class CodeText extends EditText {
             setText(text.subSequence(0, max_lines + 1));
             setSelection(max_lines + 1);
         }
-    }
-
-    public void setOnScrollChangeListener(PushCallback<ScrollChange> listener){
-        this.scroll = listener;
     }
 
     private void upTextSize(float k){
@@ -658,60 +532,6 @@ public class CodeText extends EditText {
                 canvas.drawLine(i, bottom, i + waveSize, bottom - waveSize, p);
                 canvas.drawLine(i + waveSize, bottom - waveSize, i + doubleWaveSize, bottom, p);
             }
-        }
-    }
-
-    public static class Hint{
-        @DrawableRes
-        private int image;
-        private String body;
-        private String insertValue;
-
-        Hint(int image, String body, String insertValue) {
-            this.image = image;
-            this.body = body;
-            this.insertValue = insertValue;
-        }
-
-        private Hint(int image, String body) {
-            this.image = image;
-            this.body = body;
-            this.insertValue = body + " ";
-        }
-
-        public String getBody() {
-            return body;
-        }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
-
-        public String getInsertValue() {
-            return insertValue;
-        }
-
-        public void setInsertValue(String insertValue) {
-            this.insertValue = insertValue;
-        }
-
-        public int getImage() {
-            return image;
-        }
-
-        public void setImage(int image) {
-            this.image = image;
-        }
-    }
-
-    public static class KeywordHint extends Hint{
-
-        public KeywordHint(String body, String insertValue) {
-            super(R.drawable.keyword, body, insertValue);
-        }
-
-        KeywordHint(String body){
-            super(R.drawable.keyword, body);
         }
     }
 }

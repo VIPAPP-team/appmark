@@ -42,6 +42,7 @@ import com.vipapp.appmark2.util.wrapper.Classes;
 import com.vipapp.appmark2.util.wrapper.Res;
 import com.vipapp.appmark2.util.wrapper.mSharedPreferences;
 import com.vipapp.appmark2.util.wrapper.Str;
+import com.vipapp.appmark2.widget.CodeLayout;
 import com.vipapp.appmark2.widget.CodeText;
 import com.vipapp.appmark2.widget.FileActionButton;
 import com.vipapp.appmark2.widget.RecyclerView;
@@ -82,7 +83,8 @@ public class CodeActivity extends BaseActivity {
     // Is action button hidden while scrolling
     boolean floatingPanelHidden = false;
 
-    public CodeText content;
+    public CodeText code;
+    CodeLayout codeLayout;
     DrawerLayout drawerLayout;
     FrameLayout main;
     FrameLayout floatingPanel;
@@ -115,17 +117,17 @@ public class CodeActivity extends BaseActivity {
             // Replace
             none -> {
                 ReplacePicker picker = new ReplacePicker(replaceItem -> {
-                    String text = Objects.requireNonNull(content.getText()).toString();
-                    content.setText(text.replaceAll(replaceItem.getItem1(), replaceItem.getItem2()));
+                    String text = Objects.requireNonNull(code.getText()).toString();
+                    code.setText(text.replaceAll(replaceItem.getItem1(), replaceItem.getItem2()));
                 });
                 picker.show();
             },
             // Project settings
             none -> ProjectSettingsDialog.show(project),
             // Undo
-            none -> content.undo(),
+            none -> code.undo(),
             // Redo
-            none -> content.redo(),
+            none -> code.redo(),
             // Exit
             none -> {
                 clearLastProject();
@@ -147,7 +149,8 @@ public class CodeActivity extends BaseActivity {
         file_recycler = f(R.id.file_recycler);
         insert_symbol = f(R.id.insert_symbol);
         path = f(R.id.path);
-        content = f(R.id.content);
+        code = f(R.id.code);
+        codeLayout = f(R.id.codeLayout);
         main = f(R.id.main);
         actionButton = f(R.id.actionButton);
         stateLayout = f(R.id.stateLayout);
@@ -179,19 +182,19 @@ public class CodeActivity extends BaseActivity {
         });
         insert_symbol.addOnPushCallback(item -> {
             if(item.getType() == SYMBOL_INSERTED){
-                CharSequence contentText = content.getText();
+                CharSequence contentText = code.getText();
                 CharSequence insert = (CharSequence) item.getInstance();
-                int insertPos = content.getSelectionStart();
+                int insertPos = code.getSelectionStart();
                 if(insertPos < contentText.length()){
                     char nextChar = contentText.charAt(insertPos);
                     if(ArrayUtils.in_array(new Character[]{'(', ')', '[', ']', '"', ';', ',', '.'}, nextChar)
                             && ArrayUtils.in_array(new CharSequence[]{"    ", ")", "]", "\"", "'", ";", "."}, insert)){
-                        content.setSelection(content.getSelectionStart() + 1);
+                        code.setSelection(code.getSelectionStart() + 1);
                         return;
                     }
                 }
-                Objects.requireNonNull(content.getText())
-                        .insert(content.getSelectionStart(), insert);
+                Objects.requireNonNull(code.getText())
+                        .insert(code.getSelectionStart(), insert);
             }
         });
         path.setOnClickListener(view -> {
@@ -234,7 +237,7 @@ public class CodeActivity extends BaseActivity {
     public void onBackPressed() {
         // Check settings
         if(mSharedPreferences.getBoolean(UNDO_ON_BACK_PRESSED, DEFAULT_ON_BACK_PRESSED)) {
-            content.undo();
+            code.undo();
         } else {
             clearLastProject();
             super.onBackPressed();
@@ -263,7 +266,7 @@ public class CodeActivity extends BaseActivity {
         if(opened != null) {
             saving = true;
             Thread.start(() -> {
-                FileUtils.writeFileUI(opened, Objects.requireNonNull(content.getText()).toString());
+                FileUtils.writeFileUI(opened, Objects.requireNonNull(code.getText()).toString());
                 saving = false;
                 Thread.ui(() -> callback.onComplete(null));
             });
@@ -284,12 +287,12 @@ public class CodeActivity extends BaseActivity {
     // if file is too large and dialog 'fileTooLarge' is shown isOpened will receive false
     public void readFile(File file, boolean forceOpen, PushCallback<Boolean> isOpened){
         if(file != null && !saving) FileUtils.readFile(file, string -> {
-            if(!string.equals(Objects.requireNonNull(content.getText()).toString()))
+            if(!string.equals(Objects.requireNonNull(code.getText()).toString()))
                 if(string.length() <= MAX_LINES_IN_TEXT_EDITOR * 10000 + 1 || forceOpen){
                     opened = file;
-                    content.setText(string);
-                    content.clearHistory();
-                    content.hidePopup();
+                    code.setText(string);
+                    code.clearHistory();
+                    codeLayout.hidePopup();
                     if (project != null) setupActionButton();
                     isOpened.onComplete(true);
                 } else {
@@ -322,7 +325,7 @@ public class CodeActivity extends BaseActivity {
     }
 
     private void setupActionButtonMoves(){
-        content.setOnScrollChangeListener(scrollChange -> {
+        codeLayout.setOnScrollChangeListener(scrollChange -> {
             boolean scrolledUp = scrollChange.getOldVert() > scrollChange.getVert();
             if(Math.abs(scrollChange.getVert() - scrollChange.getOldVert()) > 10)
                 if(scrolledUp == floatingPanelHidden)
@@ -414,18 +417,18 @@ public class CodeActivity extends BaseActivity {
         });
     }
     public void setupViews(){
-        content.setTextSize(Const.MAIN_EDITOR_FONT_SIZE);
+        code.setTextSize(Const.MAIN_EDITOR_FONT_SIZE);
         file_recycler.pushValue(Const.PATH, project.getSource());
     }
 
     public void lockScreen(){
         LoadingDialog.show();
         LoadingDialog.setTitle(R.string.loading_project);
-        content.setEnabled(false);
+        code.setEnabled(false);
     }
     public void unlockScreen(){
         LoadingDialog.hide();
-        content.setEnabled(true);
+        code.setEnabled(true);
     }
 
     public void onProjectLoad(){
@@ -471,7 +474,7 @@ public class CodeActivity extends BaseActivity {
                 // CodeText setup
                 readFile(file, isOpened -> {
                     if(isOpened) {
-                        content.setLanguage(Language.fromFile(file));
+                        codeLayout.setLanguage(Language.fromFile(file));
                         // View setup
                         title.setText(FileUtils.getFileName(file));
                         underLineErrors();
@@ -491,16 +494,16 @@ public class CodeActivity extends BaseActivity {
         drawerLayout.closeDrawer(GravityCompat.START);
     }
     private void underLineErrors(){
-        content.clearErrors();
+        code.clearErrors();
         try {
             for (ErrorsParser.Error error : errors) {
                 if (error.getFile().equals(opened)) {
                     int line = error.getLineNumber() - 1;
-                    int start = content.getLineStartIndex(line);
-                    int end = content.getLineEndIndex(line);
+                    int start = code.getLineStartIndex(line);
+                    int end = code.getLineEndIndex(line);
                     if(error.getType() == ErrorsParser.Error.TYPE_ERROR)
-                        content.setError(start, end);
-                    else content.setWarning(start, end);
+                        code.setError(start, end);
+                    else code.setWarning(start, end);
                 }
             }
         } catch (Exception ignored){}
@@ -515,7 +518,7 @@ public class CodeActivity extends BaseActivity {
     }
 
     private void setCodeWatcher(){
-        content.addTextChangedListener(new TextWatcher() {
+        code.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
@@ -526,16 +529,16 @@ public class CodeActivity extends BaseActivity {
                         compileProject();
                 });
                 // Make auto imports only when language is JAVA
-                if(content.getLanguage() == JAVA_LANGUAGE) {
+                if(code.getLanguage() == JAVA_LANGUAGE) {
                     // Get current char if it was inserted
                     if (charSequence.length() > start + before) {
                         // If current char is dot when we can parse class to import
                         char current_char = charSequence.charAt(start + before);
                         if (current_char == '.') {
-                            String current_class = TextUtils.replaceLast(TextUtils.getCurrentWord(content), "\\.", "");
+                            String current_class = TextUtils.replaceLast(TextUtils.getCurrentWord(code), "\\.", "");
                             // Check if word is not contains dots
                             if(!current_class.contains(".")) {
-                                List<String> imports = TextUtils.parseImports(Objects.requireNonNull(content.getText()).toString());
+                                List<String> imports = TextUtils.parseImports(Objects.requireNonNull(code.getText()).toString());
                                 // Searching for class import
                                 Classes.get(classItems -> {
                                     // getting only item with current_class name
@@ -567,7 +570,7 @@ public class CodeActivity extends BaseActivity {
         }));
     }
     private void addImport(String Import){
-        Editable editable = content.getText();
+        Editable editable = code.getText();
         editable.insert(editable.toString().indexOf(';') + 1, "\nimport " + Import + ";");
     }
 
@@ -671,7 +674,7 @@ public class CodeActivity extends BaseActivity {
     private void onCompile(){
         Thread.ui(() -> {
             if(errors.size() == 0) {
-                content.clearErrors();
+                code.clearErrors();
                 hideStateLayout();
             }
         });
