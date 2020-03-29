@@ -3,11 +3,13 @@ package com.vipapp.appmark2.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -18,7 +20,9 @@ import android.widget.ScrollView;
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.ScrollChange;
+import com.vipapp.appmark2.util.MathUtils;
 import com.vipapp.appmark2.util.TextUtils;
+import com.vipapp.appmark2.util.ThrowableUtils;
 import com.vipapp.appmark2.util.Toast;
 import com.vipapp.appmark2.util.wrapper.Res;
 import com.vipapp.appmark2.util.wrapper.Window;
@@ -33,13 +37,21 @@ import androidx.annotation.Nullable;
 
 import static android.view.Gravity.NO_GRAVITY;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.vipapp.appmark2.menu.HintsMenu.ARRAY_PUSHED;
 import static com.vipapp.appmark2.menu.HintsMenu.SHOW_POPUP;
 import static com.vipapp.appmark2.menu.HintsMenu.TEXT_CHANGED;
 import static com.vipapp.appmark2.menu.HintsMenu.TEXT_INSERTED;
+import static com.vipapp.appmark2.util.Const.DISTANCE_TO_ZOOM;
+import static com.vipapp.appmark2.util.Const.JAVA_KEYWORDS;
 import static com.vipapp.appmark2.util.Const.JAVA_LANGUAGE;
+import static java.lang.Math.abs;
 
 public class CodeLayout extends ScrollView {
+    private HashMap<Integer, ArrayList<Hint>> hints = new HashMap<Integer, ArrayList<Hint>>(){{
+        put(JAVA_LANGUAGE, new ArrayList<>());
+    }};
+
     PushCallback<ScrollChange> scroll;
 
     View popupView;
@@ -51,25 +63,11 @@ public class CodeLayout extends ScrollView {
     private LinearLayout container;
     private CodeText codeText;
 
-    private HashMap<Integer, ArrayList<Hint>> hints = new HashMap<Integer, ArrayList<Hint>>(){{
-        put(JAVA_LANGUAGE, new ArrayList<Hint>(){{
-            add(new KeywordHint( "public"));
-            add(new KeywordHint("private"));
-            add(new KeywordHint("default"));
-            add(new KeywordHint("protected"));
-            add(new KeywordHint("if"));
-            add(new KeywordHint("else"));
-            add(new KeywordHint("switch"));
-            add(new KeywordHint("void"));
-            add(new KeywordHint("int"));
-            add(new KeywordHint("boolean"));
-            add(new KeywordHint("char"));
-            add(new KeywordHint("class"));
-            add(new KeywordHint("extends"));
-            add(new KeywordHint("implements"));
-            add(new KeywordHint("static"));
-        }});
-    }};
+    int first_pointer_id = 0;
+    int second_pointer_id = 1;
+
+    double startDistance = -1;
+    boolean canTouch = true;
 
     public CodeLayout(Context context) {
         super(context);
@@ -117,7 +115,17 @@ public class CodeLayout extends ScrollView {
     }
 
     private void init(@NonNull Context context, @Nullable AttributeSet attrs){
+        setupHintsList();
         setupHintsPopup();
+        setupTouchZoom();
+    }
+
+    private void setupHintsList(){
+        ArrayList<Hint> javaHints = hints.get(JAVA_LANGUAGE);
+        for(String keyword: JAVA_KEYWORDS) {
+            assert javaHints != null;
+            javaHints.add(new KeywordHint(keyword));
+        }
     }
 
     private void setupWithCodeText(CodeText text){
@@ -142,13 +150,13 @@ public class CodeLayout extends ScrollView {
         addView(horizontalScrollView);
         // creating container
         container = new LinearLayout(getContext());
-        container.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        container.setOrientation(LinearLayout.VERTICAL);
         horizontalScrollView.addView(container);
         container.addView(codeText);
         // adding space to scroll
         View space = new View(getContext());
-        space.setLayoutParams(new LinearLayout.LayoutParams(0, Res.get().getDisplayMetrics().heightPixels));
         container.addView(space);
+        space.setLayoutParams(new LinearLayout.LayoutParams(Res.get().getDisplayMetrics().widthPixels, Res.get().getDisplayMetrics().heightPixels));
     }
 
     @SuppressLint("InflateParams")
@@ -181,6 +189,53 @@ public class CodeLayout extends ScrollView {
         });
     }
 
+    private void setupTouchZoom(){
+        setOnTouchListener((view, motionEvent) -> {
+            // FIXME: 29.03.2020 Remove try-catch block and find the reason of random exceptions
+            try {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_CANCEL:
+                    case MotionEvent.ACTION_UP:
+                        startDistance = -1;
+                        canTouch = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (motionEvent.getPointerCount() == 2) {
+                            int first_pointer_index = motionEvent.findPointerIndex(first_pointer_id);
+                            int second_pointer_index = motionEvent.findPointerIndex(second_pointer_id);
+
+                            float x1 = motionEvent.getX(first_pointer_index);
+                            float y1 = motionEvent.getY(first_pointer_index);
+                            float x2 = motionEvent.getX(second_pointer_index);
+                            float y2 = motionEvent.getY(second_pointer_index);
+
+                            double distance = MathUtils.getDistanceBetween(x1, y1, x2, y2);
+                            startDistance = startDistance == -1 ? distance : startDistance;
+
+                            double difference = distance - startDistance;
+
+                            if (abs(difference) >= DISTANCE_TO_ZOOM) {
+                                float k = (float) difference / DISTANCE_TO_ZOOM;
+                                startDistance = distance;
+                                int linesAbove = getScrollY() / codeText.getLineHeight();
+                                int textHeightBefore = codeText.getLineHeight() * linesAbove;
+                                codeText.upTextSize(k);
+                                int textHeightAfter = codeText.getLineHeight() * linesAbove;
+                                scrollBy(0, textHeightAfter - textHeightBefore);
+                            }
+                            canTouch = false;
+                        }
+                        break;
+                }
+                performClick();
+                return !canTouch;
+            } catch (Exception e) {
+                // Toast.show(ThrowableUtils.toString(e));
+                return true;
+            }
+        });
+    }
+
     private void setHintsPopupPosition(int y){
         Rect frame = new Rect();
         getWindowVisibleDisplayFrame(frame);
@@ -190,7 +245,7 @@ public class CodeLayout extends ScrollView {
         y = Math.min(y, 2 * codeText.getLineHeight());
         if(y != popupY || hintsPopup == null){
             hidePopup();
-            setScrollY(scrollY);
+            setScrollY(scrollY - codeText.getLineHeight() * 2);
             if(popupView.getParent() != null)
                 ((ViewGroup)popupView.getParent()).removeAllViews();
             hintsPopup = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

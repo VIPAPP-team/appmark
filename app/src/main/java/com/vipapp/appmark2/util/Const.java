@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 
+import com.google.common.base.Joiner;
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.item.EditViewDialogItem;
 import com.vipapp.appmark2.item.ImageItem;
@@ -107,6 +108,7 @@ import com.vipapp.appmark2.util.wrapper.mSharedPreferences;
 import com.vipapp.appmark2.util.wrapper.Str;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -232,13 +234,19 @@ public class Const {
     public static final float DISTANCE_TO_ZOOM = 10;
     public static final float TEXT_SIZE_STEP = 0.5f;
 
+    public static final ArrayList<String> JAVA_KEYWORDS = new ArrayList<>(Arrays.asList(
+            "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
+            "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
+            "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
+            "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super",
+            "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while"));
+
     // CODE PATTERNS
     public static final Pattern STRING_PATTERN = Pattern.compile("\".*?\"");
     public static final Pattern INT_PATTERN = Pattern.compile("\\b(?:0x)?[0-9]+(?:.[0-9]+f?)?\\b");
     // JAVA
     public static final Pattern JAVA_KEYWORDS_PATTERN = Pattern.compile(
-            "\\b(this|super|import|package|class|extends|public|protected|private|static|final|int" +
-                    "|void|boolean|new|return|try|catch|true|false|interface|null|throws|throw)\\b");
+            "\\b(" + Joiner.on('|').join(JAVA_KEYWORDS) + ")\\b");
     public static final Pattern COMMENTS_SINGLE_LINE = Pattern.compile("(//)(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$).*");
     public static final Pattern COMMENTS_MULTI_LINE = Pattern.compile("(?:/\\*)(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)(?:.|\\n)*?\\*/");
     public static final Pattern IMPORT_NOT_IMPORTANT = Pattern.compile("(?<=import ).*\\.(?=.*;)");
@@ -281,9 +289,7 @@ public class Const {
     public static final String XML_TAG_SECOND_COLOR = "#660E7A";
     public static final String ERROR_COLOR = "#ff0000";
     public static final String WARNING_COLOR = "#E69317";
-    public static final String MATCHES_HINT_COLOR = "#6699cc" +
-            "" +
-            "";
+    public static final String MATCHES_HINT_COLOR = "#6699cc";
 
     public static String[] CODE_EDITOR_SYMBOLS = new String[]{
             "    ", ";", "\"", "{", "}", "(", ")", ",", ".", "=", "[", "]", ":", "#", "<", ">"};
