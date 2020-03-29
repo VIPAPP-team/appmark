@@ -23,7 +23,7 @@ public class AlertDialog {
         dialog = new android.app.AlertDialog.Builder(mContext.get()).create();
         Window dialog_window = dialog.getWindow();
         if(dialog_window != null) {
-            dialog_window.setBackgroundDrawableResource(R.drawable.round_white);
+            dialog_window.setBackgroundDrawableResource(R.drawable.ripple_round_white);
         }
         setCallbacks();
     }

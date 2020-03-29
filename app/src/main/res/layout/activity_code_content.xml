@@ -130,7 +130,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="bottom|right"
-                android:background="@drawable/round_white"
+                android:background="@drawable/ripple_round_white"
                 android:elevation="2dp"
                 android:gravity="center"
                 android:orientation="vertical"
