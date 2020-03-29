@@ -157,6 +157,8 @@ public class CodeLayout extends ScrollView {
         View space = new View(getContext());
         container.addView(space);
         space.setLayoutParams(new LinearLayout.LayoutParams(Res.get().getDisplayMetrics().widthPixels, Res.get().getDisplayMetrics().heightPixels));
+        // code text setup
+        codeText.setMinWidth(Res.get().getDisplayMetrics().widthPixels);
     }
 
     @SuppressLint("InflateParams")
