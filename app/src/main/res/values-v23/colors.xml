@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#fffafafa</color>
     <color name="statusBarColor">#fffafafa</color>
-    <color name="windowBackground">#fffafafa</color>
 </resources>
