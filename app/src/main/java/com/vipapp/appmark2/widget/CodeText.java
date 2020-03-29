@@ -66,6 +66,8 @@ import static java.lang.Math.abs;
 
 public class CodeText extends EditText {
 
+    CodeLayout codeLayout;
+
     UndoRedoUtils undoRedo;
 
     long time_edited = 0;
@@ -120,7 +122,6 @@ public class CodeText extends EditText {
         highlight();
         setFilters();
         setupUndoRedo();
-        setupTouchZoom();
         initDraw();
     }
     public void initDraw(){
@@ -140,57 +141,6 @@ public class CodeText extends EditText {
     }
     public void setupUndoRedo(){
         undoRedo = new UndoRedoUtils(this);
-    }
-
-    int first_pointer_id = 0;
-    int second_pointer_id = 1;
-
-    double startDistance = -1;
-    boolean canTouch = true;
-
-    private void setupTouchZoom(){
-        setOnTouchListener((view, motionEvent) -> {
-            try {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_CANCEL:
-                    case MotionEvent.ACTION_UP:
-                        scrollingVertical = null;
-                        startDistance = -1;
-                        canTouch = true;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (motionEvent.getPointerCount() == 2) {
-                            int first_pointer_index = motionEvent.findPointerIndex(first_pointer_id);
-                            int second_pointer_index = motionEvent.findPointerIndex(second_pointer_id);
-
-                            float x1 = motionEvent.getX(first_pointer_index);
-                            float y1 = motionEvent.getY(first_pointer_index);
-                            float x2 = motionEvent.getX(second_pointer_index);
-                            float y2 = motionEvent.getY(second_pointer_index);
-
-                            double distance = MathUtils.getDistanceBetween(x1, y1, x2, y2);
-                            startDistance = startDistance == -1 ? distance : startDistance;
-
-                            double difference = distance - startDistance;
-
-                            if (abs(difference) >= DISTANCE_TO_ZOOM) {
-                                float k = (float)difference / DISTANCE_TO_ZOOM;
-                                if (difference > 0)
-                                    upTextSize(k);
-                                else
-                                    downTextSize(k);
-                                startDistance = distance;
-                            }
-                            canTouch = false;
-                        }
-                        break;
-                }
-                performClick();
-                return !canTouch;
-            } catch (Exception ignored){
-                return true;
-            }
-        });
     }
 
     public CharSequence autoIndent(CharSequence source, Spanned dest, int d_start, int d_end){
@@ -294,6 +244,10 @@ public class CodeText extends EditText {
         return this.language;
     }
 
+    private void attachCodeLayout(CodeLayout codeLayout){
+        this.codeLayout = codeLayout;
+    }
+
     public int getTextSizeSp(){
         return (int)(getTextSize() / DisplayUtils.getScaledDensity());
     }
@@ -348,6 +302,18 @@ public class CodeText extends EditText {
     }
 
     @Override
+    public void setSelection(int index) {
+        if(codeLayout == null || codeLayout.canTouch)
+            super.setSelection(index);
+    }
+
+    @Override
+    public void setSelection(int start, int stop) {
+        if(codeLayout == null || codeLayout.canTouch)
+            super.setSelection(start, stop);
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(hasFocus() && getSelectionStart() == getSelectionEnd())
             clearFocus();
@@ -375,22 +341,10 @@ public class CodeText extends EditText {
         }
     }
 
-    Boolean scrollingVertical;
-    @Override
-    public void scrollTo(int x, int y) {
-        if(scrollingVertical == null){
-            scrollingVertical = abs(getScrollY() - y) > abs(getScrollX() - x);
-        }
-        if(scrollingVertical)
-            super.scrollTo(getScrollX(), y);
-        else
-            super.scrollTo(x, getScrollY());
-    }
-
     private void mDraw(Canvas canvas){
         Layout layout = getLayout();
         if(layout != null) {
-            int current_line = layout.getLineForOffset(getSelectionStart());
+            int current_line = getCurrentLine();
             // highlighting current line
             highlightLine(current_line, Color.parseColor(CURRENT_LINE_COLOR), canvas);
             // drawing line numbers
@@ -458,10 +412,10 @@ public class CodeText extends EditText {
         }
     }
 
-    private void upTextSize(float k){
+    public void upTextSize(float k){
         changeTextSize(TEXT_SIZE_STEP * k);
     }
-    private void downTextSize(float k){
+    public void downTextSize(float k){
         changeTextSize(TEXT_SIZE_STEP * k);
     }
     private void changeTextSize(float sizeDifference){
@@ -494,6 +448,11 @@ public class CodeText extends EditText {
             i++;
         }
         return -1;
+    }
+
+    public int getCurrentLine(){
+        Layout l = getLayout();
+        return l == null? -1: l.getLineForOffset(getSelectionStart());
     }
 
     @NonNull
