@@ -43,28 +43,13 @@ import static com.vipapp.appmark2.menu.HintsMenu.SHOW_POPUP;
 import static com.vipapp.appmark2.menu.HintsMenu.TEXT_CHANGED;
 import static com.vipapp.appmark2.menu.HintsMenu.TEXT_INSERTED;
 import static com.vipapp.appmark2.util.Const.DISTANCE_TO_ZOOM;
+import static com.vipapp.appmark2.util.Const.JAVA_KEYWORDS;
 import static com.vipapp.appmark2.util.Const.JAVA_LANGUAGE;
 import static java.lang.Math.abs;
 
 public class CodeLayout extends ScrollView {
     private HashMap<Integer, ArrayList<Hint>> hints = new HashMap<Integer, ArrayList<Hint>>(){{
-        put(JAVA_LANGUAGE, new ArrayList<Hint>(){{
-            add(new KeywordHint( "public"));
-            add(new KeywordHint("private"));
-            add(new KeywordHint("default"));
-            add(new KeywordHint("protected"));
-            add(new KeywordHint("if"));
-            add(new KeywordHint("else"));
-            add(new KeywordHint("switch"));
-            add(new KeywordHint("void"));
-            add(new KeywordHint("int"));
-            add(new KeywordHint("boolean"));
-            add(new KeywordHint("char"));
-            add(new KeywordHint("class"));
-            add(new KeywordHint("extends"));
-            add(new KeywordHint("implements"));
-            add(new KeywordHint("static"));
-        }});
+        put(JAVA_LANGUAGE, new ArrayList<>());
     }};
 
     PushCallback<ScrollChange> scroll;
@@ -130,8 +115,17 @@ public class CodeLayout extends ScrollView {
     }
 
     private void init(@NonNull Context context, @Nullable AttributeSet attrs){
+        setupHintsList();
         setupHintsPopup();
         setupTouchZoom();
+    }
+
+    private void setupHintsList(){
+        ArrayList<Hint> javaHints = hints.get(JAVA_LANGUAGE);
+        for(String keyword: JAVA_KEYWORDS) {
+            assert javaHints != null;
+            javaHints.add(new KeywordHint(keyword));
+        }
     }
 
     private void setupWithCodeText(CodeText text){
