@@ -7,7 +7,6 @@ import com.vipapp.appmark2.item.EditViewDialogItem;
 import com.vipapp.appmark2.picker.ColorPicker;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.util.ColorUtils;
-import com.vipapp.appmark2.util.Toast;
 
 public abstract class ColorEditViewDialogItem extends EditViewDialogItem {
     @Override

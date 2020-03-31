@@ -12,22 +12,23 @@ import com.vipapp.appmark2.util.Thread;
 
 import java.io.File;
 
+import static com.vipapp.appmark2.util.Const.PROJECT_STORAGE;
+
 public class CreateProjectDialog {
     public static void show(PushCallback<Project> onCreateProject, Predicate<String> checkName){
         ProjectPicker picker = new ProjectPicker(project ->
                 startProjectCreating(project.getName(), project.getPackage(), project.getVersionName(),
-                        project.getVersionCode(), project.getIcon(), onCreateProject), checkName);
+                        project.getVersionId(), project.getIcon(), onCreateProject), checkName);
         picker.show();
     }
     private static void startProjectCreating(String app_name, String project_package, String version_name, int version_id, Bitmap icon, PushCallback<Project> onCreateProject){
         //Creating icon file
         Thread.start(() -> {
             String app_name_final = app_name.replace('/', '_');
-            File place = new File(Const.PROJECT_STORAGE, app_name_final + Const.APP_ICON_DEFAULT);
-            ImageUtils.saveBitmap(icon, place);
-            Project.createNew(new File(new File(Const.PROJECT_STORAGE), app_name_final),
-                    app_name, project_package, version_name,
-                    version_id, "MainActivity", 21, onCreateProject);
+            File icon_source = new File(PROJECT_STORAGE, app_name_final + Const.APP_ICON_DEFAULT);
+            ImageUtils.saveBitmap(icon, icon_source);
+            Project.createNew(new File(new File(PROJECT_STORAGE), app_name_final),
+                    new Project.NewProjectConfiguration(app_name, project_package, version_name, version_id), onCreateProject);
         });
     }
 }

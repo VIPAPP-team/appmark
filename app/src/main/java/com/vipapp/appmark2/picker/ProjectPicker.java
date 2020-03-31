@@ -10,11 +10,13 @@ import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.Predicate;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.ProjectItem;
+import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.util.ClassUtils;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.ContextUtils;
 import com.vipapp.appmark2.util.ImageUtils;
 import com.vipapp.appmark2.util.Toast;
+import com.vipapp.appmark2.util.wrapper.Res;
 import com.vipapp.appmark2.widget.EditText;
 import com.vipapp.appmark2.widget.TextView;
 
@@ -25,7 +27,7 @@ import static com.vipapp.appmark2.util.Const.DEFAULT_PACKAGE_NAME;
 import static com.vipapp.appmark2.util.Const.DEFAULT_VERSION_CODE;
 import static com.vipapp.appmark2.util.Const.DEFAULT_VERSION_NAME;
 
-public class ProjectPicker extends DefaultPicker<ProjectItem> {
+public class ProjectPicker extends DefaultPicker<Project.NewProjectConfiguration> {
 
     private Predicate<String> checkName;
 
@@ -38,7 +40,7 @@ public class ProjectPicker extends DefaultPicker<ProjectItem> {
     private EditText version_id;
     private ImageView app_icon;
 
-    public ProjectPicker(PushCallback<ProjectItem> callback, ProjectItem default_values, Predicate<String> checkName) {
+    public ProjectPicker(PushCallback<Project.NewProjectConfiguration> callback, Project.ProjectConfiguration default_values, Predicate<String> checkName) {
         super(callback);
         this.checkName = checkName;
         setView(R.layout.create_project_first);
@@ -47,15 +49,15 @@ public class ProjectPicker extends DefaultPicker<ProjectItem> {
         setCallbacks();
         setValues(default_values);
     }
-    public ProjectPicker(PushCallback<ProjectItem> callback, Predicate<String> checkName){
+    public ProjectPicker(PushCallback<Project.NewProjectConfiguration> callback, Predicate<String> checkName){
         this(callback, null, checkName);
     }
-    public ProjectPicker(PushCallback<ProjectItem> callback){
+    public ProjectPicker(PushCallback<Project.NewProjectConfiguration> callback){
         this(callback, null, null);
     }
 
     private void loadDefaultIcon(){
-        icon = BitmapFactory.decodeResource(ContextUtils.context.getResources(), R.drawable.app_icon_default);
+        icon = BitmapFactory.decodeResource(Res.get(), R.drawable.app_icon_default);
     }
     private void findViews(View v){
         next = v.findViewById(R.id.next);
@@ -88,7 +90,7 @@ public class ProjectPicker extends DefaultPicker<ProjectItem> {
                 }
 
                 int version_id_int = Integer.parseInt(version_id_string);
-                pushItem(new ProjectItem(app_name_str, project_package_str, version_name_str, version_id_int, icon));
+                pushItem(new Project.NewProjectConfiguration(app_name_str, project_package_str, version_name_str, version_id_int, icon));
                 cancel();
             } catch (NumberFormatException e){
                 //Toast.show(R.string.incorrect_version_id);
@@ -107,12 +109,12 @@ public class ProjectPicker extends DefaultPicker<ProjectItem> {
         return project_package.matches(Const.PACKAGE_REGEX);
     }
     @SuppressLint("SetTextI18n")
-    private void setValues(ProjectItem values){
+    private void setValues(Project.ProjectConfiguration values){
         if(values != null){
             app_name.setText(values.getName());
             project_package.setText(values.getPackage());
             version_name.setText(values.getVersionName());
-            version_id.setText(Integer.toString(values.getVersionCode()));
+            version_id.setText(Integer.toString(values.getVersionId()));
             ImageUtils.load(values.getIconFile(), icon -> {
                 this.icon = icon;
                 app_icon.setImageBitmap(icon);

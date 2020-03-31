@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.alert.CreateProjectDialog;
 import com.vipapp.appmark2.alert.LoadableInfoDialog;
+import com.vipapp.appmark2.alert.LoadingDialog;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.OnLoadItem;
 import com.vipapp.appmark2.item.OnProjectEdited;
@@ -27,7 +28,6 @@ import com.vipapp.appmark2.server.Server;
 import java.io.File;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.pm.PackageInfoCompat;
 
 import static android.view.View.VISIBLE;
@@ -164,7 +164,7 @@ public class MainActivity extends BaseActivity {
         if(!path.equals("") && project.exists() && Const.OPEN_LAST_PROJECT){
             // Open CodeActivity
             Intent i = new Intent(this, CodeActivity.class);
-            i.putExtra("project", Project.fromFile(project));
+            i.putExtra("projectFile", project);
             i.putExtra("opened_last", true);
             startActivity(i);
         }

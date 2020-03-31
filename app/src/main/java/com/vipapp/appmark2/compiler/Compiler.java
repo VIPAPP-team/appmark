@@ -1,7 +1,7 @@
 package com.vipapp.appmark2.compiler;
 
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.project.ProjectSettings;
+import com.vipapp.appmark2.project.AIF.ProjectSettings;
 import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.util.wrapper.mAssets;
 import com.vipapp.appmark2.util.wrapper.mContext;

@@ -160,4 +160,8 @@ public class Res extends ThreadLoader{
         return drawables;
     }
 
+    public boolean isValid(){
+        return !(strings == null || colors == null || strings.getObjects() == null || colors.getObjects() == null);
+    }
+
 }

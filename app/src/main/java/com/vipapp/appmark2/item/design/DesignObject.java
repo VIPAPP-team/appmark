@@ -120,10 +120,10 @@ public class DesignObject {
     private void applyAttributes(View v, XMLObject object, Project project, Mapper<BuiltView, View> mapper){
         ArrayList<String> applied = new ArrayList<>();
         for(DesignAttribute attribute: ATTRIBUTES){
-            attribute.apply(v, object, project.getResources());
+            attribute.apply(v, object, project.getRes());
             applied.add(attribute.getName());
         }
-        applyInvokableAttributes(v, object, project.getResources(), applied);
+        applyInvokableAttributes(v, object, project.getRes(), applied);
         if(v instanceof ViewGroup)
             setupChildren((ViewGroup)v, object, project, mapper);
     }
@@ -131,9 +131,9 @@ public class DesignObject {
     public View setupView(XMLObject object, Project project, Mapper<BuiltView, View> mapper) {
         View view = getView();
         applyAttributes(view, object, project, mapper);
-        setupLayoutParams(view, object, project.getResources());
+        setupLayoutParams(view, object, project.getRes());
         view = mapper == null? view: mapper.map(new BuiltView(view, object));
-        setupLayoutParams(view, object, project.getResources());
+        setupLayoutParams(view, object, project.getRes());
         return view;
     }
 

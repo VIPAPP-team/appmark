@@ -7,7 +7,6 @@ import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.EditViewDialogItem;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.util.ClassUtils;
 import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.AlertDialog;
 import com.vipapp.appmark2.widget.EditText;
@@ -17,7 +16,6 @@ import com.vipapp.appmark2.xml.XMLObject;
 import java.util.Objects;
 
 import static com.vipapp.appmark2.util.ClassUtils.getOrDefault;
-import static com.vipapp.appmark2.util.Const.NUMBER_REGEX;
 import static com.vipapp.appmark2.util.Const.SIZE_REGEX;
 
 public abstract class BorderEditViewDialogItem extends EditViewDialogItem {

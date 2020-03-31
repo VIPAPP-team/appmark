@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="%1$s" android:versionName="%4$s" android:versionCode="%5$d">
+    package="%1$s" android:versionName="%3$s" android:versionCode="%4$d">
 
-    <uses-sdk android:minSdkVersion="%6$d"
-            android:targetSdkVersion="%7$d"/>
+    <uses-sdk android:minSdkVersion="%5$d"
+            android:targetSdkVersion="%6$d"/>
 
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@drawable/ic_launcher"
-        android:label="%2$s"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".%3$s">
+        <activity android:name=".%2$s">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -1,28 +1,21 @@
 package com.vipapp.appmark2.project;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.vipapp.appmark2.callback.PushCallback;
+import com.vipapp.appmark2.exception.AIFParseException;
 import com.vipapp.appmark2.exception.IncorrectAIFName;
+import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.FileUtils;
 import com.vipapp.appmark2.util.Json;
 import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.util.ThreadLoader;
-import com.vipapp.appmark2.util.ThrowableUtils;
-import com.vipapp.appmark2.util.Toast;
-
-import org.json.JSONException;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
-import static com.vipapp.appmark2.util.Const.LOAD_TIME;
+import static com.vipapp.appmark2.util.Const.PROJECT_STORAGE;
 
 @SuppressWarnings("WeakerAccess")
 public class AIF extends ThreadLoader {
@@ -40,11 +33,29 @@ public class AIF extends ThreadLoader {
 
     private String path;
 
-    AIF(@NonNull String path) {
+    /**
+     * @param source - project source where aif need be located in (Need be child of project storage)
+     */
+    public static void generateDefaultUI(File source, String projectPackage){
+        File aifSource = new File(source, "project.aif");
+        FileUtils.refresh(aifSource, false);
+
+        HashMap<String, String> info = new HashMap<>();
+        info.put("aif_version", String.valueOf(AIF_VERSION));
+        info.putAll(new DefaultProjectSettings(source, projectPackage).getHashMap());
+
+        new AIF(info, aifSource.getAbsolutePath()).loadUI();
+    }
+
+    public AIF(@NonNull File file){
+        this(file.getAbsolutePath());
+    }
+
+    public AIF(@NonNull String path) {
         this.path = path;
     }
 
-    AIF(HashMap<String, String> metadata, String path) {
+    public AIF(HashMap<String, String> metadata, String path) {
         this.info = metadata;
         this.path = path;
     }
@@ -63,9 +74,7 @@ public class AIF extends ThreadLoader {
             if(text.equals("")) throw new RuntimeException();
             return Json.stringHashMap(text);
         } catch (Exception e){
-            HashMap<String, String> result = new HashMap<>();
-            result.put(VERSION, "1");
-            return result;
+            throw new AIFParseException();
         }
     }
 
@@ -96,10 +105,10 @@ public class AIF extends ThreadLoader {
 
     private void add_default_project_settings() {
         info.putAll(new DefaultProjectSettings(
-                project.getSource(), project.getPackage(project.getSource())).getHashMap());
+                project.getSource(), project.getPackage()).getHashMap());
     }
 
-    public void update_aif(){
+    public void update(){
         String versionStr = info.get(VERSION);
         int version = versionStr == null? 0: Integer.parseInt(versionStr);
         if (version != AIF_VERSION) {
@@ -131,20 +140,16 @@ public class AIF extends ThreadLoader {
         return path == null? aif: new File(project.getSource(), path);
     }
 
-    @Nullable
-    public ProjectSettings getProjectSettings(){
-        try {
-            ProjectSettings settings = new ProjectSettings();
-            for (String str : ProjectSettings.getAvailableKeys()) {
-                settings.put(str, info.get(str));
-            }
-            return settings;
-        } catch (Exception e){
-            return null;
+    @NonNull
+    public ProjectSettings getSettings(){
+        ProjectSettings settings = new ProjectSettings();
+        for (String str : ProjectSettings.getAvailableKeys()) {
+            settings.put(str, info.get(str));
         }
+        return settings;
     }
 
-    public void saveProjectSettings(ProjectSettings settings) {
+    public void setProjectSettings(ProjectSettings settings) {
         for (String str : ProjectSettings.getAvailableKeys()) {
             info.put(str, settings.get(str));
         }
@@ -164,11 +169,38 @@ public class AIF extends ThreadLoader {
             add_warnings();
             writeAif();
         }
+    }
 
-        if(info == null) {
-            // MAGIC CODE, IDK WHY INFO MAY BE NULL, BUT RECURSION SAVES
-            load();
+    public static class ProjectSettings {
+
+        private static String[] available_keys = {"src", "res", "assets", "manifest", "build"};
+
+        private HashMap<String, String> settings = new HashMap<>();
+
+        public ProjectSettings(){}
+        public ProjectSettings(String src, String res, String assets, String manifest, String build) {
+            put("src", src);
+            put("res", res);
+            put("assets", assets);
+            put("manifest", manifest);
+            put("build", build);
         }
+
+        public String get(String name){
+            return settings.get(name);
+        }
+
+        public void put(String name, String value){
+            settings.put(name, value);
+        }
+
+        public static String[] getAvailableKeys() {
+            return available_keys;
+        }
+        public HashMap<String, String> getHashMap() {
+            return settings;
+        }
+
     }
 
 }

@@ -1,11 +1,9 @@
 package com.vipapp.appmark2.item;
 
-import android.graphics.Bitmap;
 import android.view.View;
 
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.project.Project;
-import com.vipapp.appmark2.util.Toast;
 import com.vipapp.appmark2.xml.XMLObject;
 
 import androidx.annotation.DrawableRes;

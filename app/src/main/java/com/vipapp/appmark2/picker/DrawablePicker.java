@@ -6,7 +6,6 @@ import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.alert.ImageImportDialog;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.ImageItem;
-import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.project.Drawables;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.project.Res;
@@ -43,7 +42,7 @@ public class DrawablePicker extends DefaultPicker<String> {
         super(callback);
         this.project = project;
         chooser.setTitle(R.string.select_drawable);
-        loadDrawables(project.getResources());
+        loadDrawables(project.getRes());
     }
 
     private void loadDrawables(Res res){

@@ -3,12 +3,14 @@ package com.vipapp.appmark2.util;
 import android.content.Intent;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.project.Project;
+import com.vipapp.appmark2.util.wrapper.mAssets;
 import com.vipapp.appmark2.util.wrapper.mContext;
 
 import org.apache.commons.io.IOUtils;
@@ -75,7 +77,7 @@ public class FileUtils {
         StringBuilder returnable = new StringBuilder();
         try {
             BufferedReader br = new BufferedReader(
-                    new InputStreamReader(ContextUtils.context.getAssets().open(filename)));
+                    new InputStreamReader(mAssets.get().open(filename)));
             String line;
 
             while((line = br.readLine()) != null){
@@ -83,9 +85,7 @@ public class FileUtils {
             }
 
             br.close();
-        } catch (IOException e) {
-            return null;
-        }
+        } catch (IOException ignored) {}
         return returnable.toString();
     }
 
@@ -246,9 +246,10 @@ public class FileUtils {
     public static String getDefaultTextForFile(File file, Project project){
         if(isFileValues(file.getParentFile(), project)) {
             String default_file_path = "texts/values_default_texts/" + file.getName();
+            Toast.show(default_file_path);
             String default_text = readAssetsUI(default_file_path);
 
-            if(default_text != null)
+            if(!default_text.equals(""))
                 return default_text;
 
             return readAssetsUI("texts/default_values.xml");
@@ -266,7 +267,7 @@ public class FileUtils {
         String default_text = readAssetsUI(path_to_default);
 
         if(ext.equals("java"))
-            return String.format(default_text, project.getPackage(file), getFileName(file));
+            return String.format(default_text, project.getFilePackage(file), getFileName(file));
 
         return default_text;
     }

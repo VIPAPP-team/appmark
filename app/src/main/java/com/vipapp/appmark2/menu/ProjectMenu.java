@@ -1,5 +1,6 @@
 package com.vipapp.appmark2.menu;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -29,6 +30,10 @@ import static com.vipapp.appmark2.util.Const.PROJECT_MANAGER;
 
 public class ProjectMenu extends DefaultMenu<Project, ProjectMenu.ProjectHolder>{
 
+    public int[] stringRes = new int[]{
+
+    };
+
     private ProjectManager manager;
 
     public ArrayList<Project> list(Context context){
@@ -36,15 +41,16 @@ public class ProjectMenu extends DefaultMenu<Project, ProjectMenu.ProjectHolder>
             manager.exec(this::pushArray);
         return null;
     }
+    @SuppressLint("SetTextI18n")
     public void bind(ProjectHolder vh, Project item, int i) {
-        if(item.isSupported()) {
+        if(item.isValid()) {
             if (item.getName() == null ||
                     item.getPackage() == null ||
                     item.getVersionName() == null)
                 Toast.show(String.format(
-                        Str.get(R.string.xml_error), item.getAndroidManifestFile().getAbsolutePath()));
+                        Str.get(R.string.xml_error), item.getManifestFile().getAbsolutePath()));
 
-            vh.name.setText(item.getName());
+            vh.name.setText(item.localizeString(item.getName()));
             vh.packag.setText(item.getPackage());
             vh.version_name.setText(item.getVersionName());
             vh.edit.setVisibility(item.getManifest().isCorrect() ? View.VISIBLE : View.GONE);
@@ -54,7 +60,7 @@ public class ProjectMenu extends DefaultMenu<Project, ProjectMenu.ProjectHolder>
             vh.name.setText(R.string.project_broken);
             vh.packag.setText(item.getSource().getAbsolutePath());
             vh.icon.setImageBitmap(null);
-            vh.version_name.setText(null);
+            vh.version_name.setText(Integer.toString(item.getError()));
         }
     }
 
@@ -65,11 +71,17 @@ public class ProjectMenu extends DefaultMenu<Project, ProjectMenu.ProjectHolder>
         });
         vh.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(mActivity.get(), CodeActivity.class);
-            intent.putExtra("project", item);
+            intent.putExtra("projectFile", item.getSource());
             mActivity.get().startActivity(intent);
         });
-        vh.delete.setOnClickListener(view -> DeleteProject.show(item, i));
-        vh.edit.setOnClickListener(view -> EditProject.show(item, i));
+        vh.delete.setOnClickListener(view -> {
+            int index = manager.getObjects().indexOf(item);
+            DeleteProject.show(item, index);
+        });
+        vh.edit.setOnClickListener(view -> {
+            int index = manager.getObjects().indexOf(item);
+            EditProject.show(item, index);
+        });
         vh.close.setOnClickListener(view -> hideView(vh));
     }
 

@@ -2,9 +2,11 @@ package com.vipapp.appmark2.project;
 
 import androidx.annotation.Nullable;
 
+import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.util.CallableThreadLoader;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.FileUtils;
+import com.vipapp.appmark2.util.Thread;
 import com.vipapp.appmark2.xml.XMLObject;
 
 import java.io.File;
@@ -33,11 +35,10 @@ public class AndroidManifest extends CallableThreadLoader {
         return new AndroidManifest(file);
     }
 
-    public void generateNewUI(String project_package, String app_name, String version_name, int version_id, String first_activity, int minSDK){
+    public void generateNewUI(String project_package, String version_name, int version_id, String first_activity, int minSDK, int targetSDK){
         String manifest = FileUtils.readAssetsUI("texts/default_manifest.xml");
-        assert manifest != null;
-        manifest = String.format(manifest, project_package, app_name, first_activity, version_name,
-                                version_id, minSDK, 25);
+        manifest = String.format(manifest, project_package, first_activity, version_name,
+                                version_id, minSDK, targetSDK);
         text = manifest;
         FileUtils.writeFileUI(this.source, manifest);
     }
@@ -68,6 +69,16 @@ public class AndroidManifest extends CallableThreadLoader {
             assert parsed_manifest != null;
             FileUtils.writeFileUI(source, parsed_manifest.toString());
         } catch (Exception ignored) {}
+    }
+
+    public void save(PushCallback<Void> onSave){
+        Thread.start(() -> {
+            saveUI();
+            if(onSave != null) onSave.onComplete(null);
+        });
+    }
+    public void save(){
+        save(null);
     }
 
     @Nullable
@@ -128,7 +139,7 @@ public class AndroidManifest extends CallableThreadLoader {
     public File getIcon(){
         try{
             assert parsed_application != null;
-            return project.getResources().get(parsed_application.getNamedAttribute(Const.APP_ICON).getValue());
+            return project.getRes().get(parsed_application.getNamedAttribute(Const.APP_ICON).getValue());
         } catch (Exception e) {
             return null;
         }

@@ -15,12 +15,12 @@ public abstract class CallableThreadLoader {
     protected CallableThreadLoader() {
     }
 
-    public final void reload() {
+    public void reload() {
         reload(null);
     }
 
 
-    public final void reload(@Nullable PushCallback<Void> callback) {
+    public void reload(@Nullable PushCallback<Void> callback) {
         if(!running) {
             this.running = true;
             Thread.start(() -> {

@@ -13,7 +13,6 @@ import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.xml.XMLObject;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

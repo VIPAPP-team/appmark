@@ -397,8 +397,8 @@ public class CodeActivity extends BaseActivity {
     }
 
     public void setupProject(){
-        project = (Project) getIntent().getSerializableExtra("project");
-        project.exec(none -> {
+        Project.fromFile((File) getIntent().getSerializableExtra("projectFile"), project -> {
+            this.project = project;
             unlockScreen();
             onProjectLoad();
         });

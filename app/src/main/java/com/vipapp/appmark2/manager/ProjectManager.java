@@ -25,8 +25,9 @@ public class ProjectManager extends DefaultManager<Project> {
 
     public boolean existsWithName(String name){
         for(Project project: getObjects()){
-            if(project.isSupported() && project.getName().equals(name))
+            if(project.isValid() && project.getName().equals(name)) {
                 return true;
+            }
         }
         return false;
     }
@@ -40,12 +41,13 @@ public class ProjectManager extends DefaultManager<Project> {
         ArrayList<Project> projects = new ArrayList<>();
         File[] files = project_directory.listFiles();
         for(File file: files){
-            if(Project.notProject(file))
-                continue;
-            Project project = Project.fromFile(file);
-            project.exec(none -> loaded[0]++);
-            loaded[1]++;
-            projects.add(project);
+            if(file.isDirectory()) {
+                loaded[0]++;
+                Project.fromFile(file, project -> {
+                    loaded[1]++;
+                    projects.add(project);
+                });
+            }
         }
 
         while(loaded[0] != loaded[1]) {

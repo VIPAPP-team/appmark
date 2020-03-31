@@ -1,8 +1,5 @@
 package com.vipapp.appmark2.item.editviewdialogitem;
 
-import android.graphics.Bitmap;
-import android.view.View;
-
 import com.vipapp.appmark2.R;
 import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.EditViewDialogItem;

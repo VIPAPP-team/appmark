@@ -18,12 +18,10 @@ import com.vipapp.appmark2.callback.PushCallback;
 import com.vipapp.appmark2.item.FileItem;
 import com.vipapp.appmark2.item.Item;
 import com.vipapp.appmark2.picker.string.FileNamePicker;
-import com.vipapp.appmark2.picker.ImagePicker;
 import com.vipapp.appmark2.picker.StringChooser;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.util.Const;
 import com.vipapp.appmark2.util.FileUtils;
-import com.vipapp.appmark2.util.ImageUtils;
 import com.vipapp.appmark2.util.TextUtils;
 import com.vipapp.appmark2.util.Toast;
 

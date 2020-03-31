@@ -1,14 +1,12 @@
 package com.vipapp.appmark2.project;
 
-import com.vipapp.appmark2.project.ProjectSettings;
 import com.vipapp.appmark2.util.Const;
 
 import java.io.File;
 
-@SuppressWarnings("WeakerAccess")
-public class DefaultProjectSettings extends ProjectSettings {
+class DefaultProjectSettings extends AIF.ProjectSettings {
 
-    public DefaultProjectSettings(File dir, String project_package) {
+    DefaultProjectSettings(File dir, String project_package) {
         File java = new File(dir, Const.getJavaDir(project_package));
         File res = new File(dir, Const.RES);
         File assets = new File(dir, Const.ASSETS);

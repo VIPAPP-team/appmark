@@ -1,9 +1,7 @@
 package com.vipapp.appmark2.activity;
 
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -13,28 +11,17 @@ import com.vipapp.appmark2.alert.EditViewDialog;
 import com.vipapp.appmark2.callback.Mapper;
 import com.vipapp.appmark2.item.BuiltView;
 import com.vipapp.appmark2.item.Item;
-import com.vipapp.appmark2.item.widget.DefaultWidget;
-import com.vipapp.appmark2.picker.ImageItemChooser;
 import com.vipapp.appmark2.picker.StringChooser;
 import com.vipapp.appmark2.project.Project;
 import com.vipapp.appmark2.util.ArrayUtils;
-import com.vipapp.appmark2.util.ClassUtils;
 import com.vipapp.appmark2.util.DisplayUtils;
 import com.vipapp.appmark2.util.FileUtils;
-import com.vipapp.appmark2.util.Toast;
-import com.vipapp.appmark2.util.wrapper.Str;
 import com.vipapp.appmark2.widget.DesignView;
-import com.vipapp.appmark2.widget.EditText;
 import com.vipapp.appmark2.widget.TextView;
 import com.vipapp.appmark2.xml.XMLObject;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_MOVE;
-import static android.view.MotionEvent.ACTION_UP;
-import static com.vipapp.appmark2.util.Const.WIDGETS;
 
 public class ViewDesignActivity extends BaseActivity{
 
