@@ -3,6 +3,7 @@ package com.vipapp.appmark2.alert;
 import androidx.annotation.StringRes;
 
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -26,6 +27,7 @@ public class LoadableInfoDialog extends AlertDialog {
         findViews(getView());
         setCallbacks(callback);
         this.title.setText(title);
+        this.content.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public LoadableInfoDialog(@StringRes int title_res, PushCallback<PushCallback<String>> callback){
