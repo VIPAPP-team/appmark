@@ -34,7 +34,9 @@ public class CodeErrorMenu extends DefaultMenu<ErrorsParser.Error, CodeErrorMenu
         vh.error_text.setText(String.format(Locale.getDefault(), "%s(at line %d)", item.getMessage(), item.getLineNumber()));
         vh.itemView.setOnClickListener(view -> {
             activity.openFile(item.getFile(), none -> {
-                activity.code.setSelection(activity.code.getLineEndIndex(item.getLineNumber() - 1) - 1);
+                try {
+                    activity.code.setSelection(activity.code.getLineEndIndex(item.getLineNumber() - 1) - 1);
+                } catch (IndexOutOfBoundsException ignored){}
                 activity.code.requestFocus();
             });
             pushItem(null);
@@ -62,10 +64,10 @@ public class CodeErrorMenu extends DefaultMenu<ErrorsParser.Error, CodeErrorMenu
     }
 
     static class CodeErrorHolder extends RecyclerView.ViewHolder {
-        public ImageView error_icon;
-        public TextView error_text;
+        ImageView error_icon;
+        TextView error_text;
 
-        public CodeErrorHolder(@NonNull View itemView) {
+        CodeErrorHolder(@NonNull View itemView) {
             super(itemView);
             error_icon = itemView.findViewById(R.id.error_icon);
             error_text = itemView.findViewById(R.id.error_text);
