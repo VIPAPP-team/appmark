@@ -1,11 +1,12 @@
-# appmark
-Mobile Android IDE
-Android app where you can build your own apps using Java
+# AppMark
 
-Links:
+Free open source mobile android IDE
 
-project: https://github.com/orgs/VIPAPP-team/projects/1
-support: https://unikalni4elovek.000webhostapp.com/donate
-contact: t.me/y9san9
-
-SOURCE DIRECTORY: appmark/app/src/main/java/com/vipapp/appmark2 <br>
+Features:
+- DesignLite (https://vipapp.site/designlite)
+- Convenient code editor
+- Visual strings editor
+- Visual layout editor
+- APK Compiler
+- Gradle (soon)
+- Hints (soon)
